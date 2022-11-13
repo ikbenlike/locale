@@ -10,7 +10,7 @@ inc/locale.bragi.hpp: inc/locale.bragi
 	bragi -l stdc++ $< $@
 
 src/bison_charmap.cpp: src/bison_charmap.ypp
-	bison $< -o $@ --debug --header=inc/bison_charmap.hpp
+	bison $< -o $@ --header=inc/bison_charmap.hpp
 
 src/bison_locale.cpp: src/bison_locale.ypp
 	bison $< -o $@ --header=inc/bison_locale.hpp

@@ -47,3 +47,16 @@ std::optional<unsigned long> Lexer::parse_num(std::string s, int radix) noexcept
     }
     return result;
 }
+
+
+void Lexer::set_comment(uint8_t c){
+    m_comment_char = c;
+}
+
+void Lexer::set_escape(uint8_t c){
+    m_escape_char = c;
+}
+
+void Lexer::set_name(std::string s){
+    m_name = s;
+}

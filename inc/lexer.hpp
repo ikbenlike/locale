@@ -29,7 +29,9 @@ public:
         m_max_size = size;
     }
 
-    virtual int get_token() = 0;
+    void set_comment(uint8_t c);
+    void set_escape(uint8_t c);
+    void set_name(std::string s);
 };
 
 #endif

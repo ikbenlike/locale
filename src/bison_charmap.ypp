@@ -3,29 +3,25 @@
 #include <cstdint>
 #include "util.hpp"
 #include "charmap.hpp"
-#define CHARMAP_STYPE char*
-#define CHARMAP_DEBUG 1
-void charmap_error(const char *s);
-int charmap_lex();
 %}
 
 %require "3.2"
-%define api.prefix {charmap_}
+%language "c++"
 
-%union {
-    std::string str;
-    uint8_t val;
-}
+%define parse.trace
 
-%token CONFIG
-%token CHARACTER_NAME
-%token CHARACTER_HEX
-%token CHARACTER_DEC
-%token CHARACTER_OCT
-%token NUMBER
-%token EOFT
+%define api.token.constructor
+%define api.prefix {charmap_parser}
+%define api.value.type variant
+
+%token <std::string> CONFIG
+%token <std::string> CHARACTER_NAME
+%token <uint8_t> CHARACTER_HEX
+%token <uint8_t> CHARACTER_DEC
+%token <uint8_t> CHARACTER_OCT
+%token <uint8_t> NUMBER
 %token EOL
-%token TEXT
+%token <std::string> TEXT
 %token CHARMAP
 %token END
 %token RANGE
@@ -33,9 +29,15 @@ int charmap_lex();
 %token WIDTH
 %token WIDTH_DEFAULT
 
+%code {
+    namespace charmap_parser {
+        parser::symbol_type charmap_parserlex();
+    }
+}
+
 %%
 
-file : charmap_file EOFT { YYACCEPT; } ;
+file : charmap_file YYEOF { YYACCEPT; } ;
 
 charmap_file
  :
@@ -52,13 +54,10 @@ prelude
  ;
 
 configs
- : CONFIG config_value EOL
- | configs CONFIG config_value EOL
- ;
-
-config_value
- : TEXT
- | NUMBER
+ : CONFIG TEXT EOL { charmap::set_config($1, $2); }
+ | CONFIG NUMBER EOL { charmap::set_config($1, $2); }
+ | configs CONFIG TEXT EOL { charmap::set_config($2, $3); }
+ | configs CONFIG NUMBER EOL { charmap::set_config($2, $3); }
  ;
 
 charmap
@@ -133,14 +132,13 @@ thing
 
 %%
 
-void charmap_error(const char *s){
-    bison_error_printer(s);
-}
+namespace charmap_parser {
+    parser::symbol_type charmap_parserlex(){
+        auto l = charmap::get_lexer();
+        return l->get_token();
+    }
 
-int charmap_lex(){
-    auto l = charmap::get_lexer();
-    if(l == nullptr)
-        return CHARMAP_error;
-
-    return l->get_token();
+    void parser::error(const std::string& m){
+        std::cerr << m << std::endl;
+    }
 }
