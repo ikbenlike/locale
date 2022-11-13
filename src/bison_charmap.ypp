@@ -1,0 +1,146 @@
+%{
+#include <string>
+#include <cstdint>
+#include "util.hpp"
+#include "charmap.hpp"
+#define CHARMAP_STYPE char*
+#define CHARMAP_DEBUG 1
+void charmap_error(const char *s);
+int charmap_lex();
+%}
+
+%require "3.2"
+%define api.prefix {charmap_}
+
+%union {
+    std::string str;
+    uint8_t val;
+}
+
+%token CONFIG
+%token CHARACTER_NAME
+%token CHARACTER_HEX
+%token CHARACTER_DEC
+%token CHARACTER_OCT
+%token NUMBER
+%token EOFT
+%token EOL
+%token TEXT
+%token CHARMAP
+%token END
+%token RANGE
+%token RANGE_GNU
+%token WIDTH
+%token WIDTH_DEFAULT
+
+%%
+
+file : charmap_file EOFT { YYACCEPT; } ;
+
+charmap_file
+ :
+ | charmap
+ | prelude charmap
+ | charmap default_width
+ | prelude charmap default_width
+ | charmap default_width width_section
+ | prelude charmap default_width width_section
+ ;
+
+prelude
+ : configs
+ ;
+
+configs
+ : CONFIG config_value EOL
+ | configs CONFIG config_value EOL
+ ;
+
+config_value
+ : TEXT
+ | NUMBER
+ ;
+
+charmap
+ : CHARMAP definitions END CHARMAP EOL
+ ;
+
+definitions
+ : definition EOL
+ | definitions definition EOL
+ ;
+
+definition
+ : CHARACTER_NAME value_list anything EOL
+ | CHARACTER_NAME RANGE CHARACTER_NAME value_list anything EOL
+ | CHARACTER_NAME RANGE_GNU CHARACTER_NAME value_list anything EOL
+ ;
+
+value_list
+ : hex_list
+ | dec_list
+ | oct_list
+ ;
+
+hex_list
+ : CHARACTER_HEX
+ | hex_list CHARACTER_HEX
+ ;
+
+dec_list
+ : CHARACTER_DEC
+ | dec_list CHARACTER_DEC
+ ;
+
+oct_list
+ : CHARACTER_OCT
+ | oct_list CHARACTER_OCT
+ ;
+
+default_width
+ : WIDTH_DEFAULT NUMBER EOL ;
+
+width_section
+ : WIDTH width_definitions END WIDTH EOL ;
+
+width_definitions
+ : width_definition
+ | width_definitions width_definition
+ ;
+
+width_definition
+ : CHARACTER_NAME NUMBER EOL
+ | CHARACTER_NAME RANGE CHARACTER_NAME NUMBER EOL
+ ;
+
+anything
+ : thing
+ | anything thing
+ ;
+
+thing
+ : CONFIG
+ | CHARACTER_NAME
+ | NUMBER
+ | TEXT
+ | CHARMAP
+ | END
+ | RANGE
+ | RANGE_GNU
+ | WIDTH
+ | WIDTH_DEFAULT
+ ;
+
+%%
+
+void charmap_error(const char *s){
+    bison_error_printer(s);
+}
+
+int charmap_lex(){
+    auto l = charmap::get_lexer();
+    if(l == nullptr)
+        return CHARMAP_error;
+
+    return l->get_token();
+}

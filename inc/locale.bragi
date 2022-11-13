@@ -1,0 +1,93 @@
+//namespace "mlibc";
+
+struct pair {
+    string left;
+    string right;
+}
+
+struct lc_ctype {
+    string[] upper;
+    string[] lower;
+    string[] alpha;
+    string[] digit;
+    string[] alnum;
+    string[] space;
+    string[] cntrl;
+    string[] punct;
+    string[] graph;
+    string[] print;
+    string[] xdigit;
+    string[] blank;
+    pair[] toupper;
+    pair[] tolower;
+}
+
+struct lc_collate {
+    string[] collate;
+}
+
+struct lc_time {
+    string[] day;
+    string[] abday;
+    string[] mon;
+    string[] abmon;
+    string[] am_pm;
+    string[] alt_digits;
+    string d_t_fmt;
+    string d_fmt;
+    string t_fmt;
+    string t_fmt_ampm;
+    string date_fmt;
+    string era;
+    string era_d_fmt;
+    string era_t_fmt;
+    string era_d_t_fmt;
+}
+
+struct lc_numeric {
+    string decimal_point;
+    string thousands_sep;
+    string grouping;
+}
+
+struct lc_messages {
+    string yesexpr;
+    string noexpr;
+    string yesstr;
+    string nostr;
+}
+
+struct lc_monetary {
+    string int_curr_symbol;
+    string currency_symbol;
+    string mon_decimal_point;
+    string mon_thousands_sep;
+    string mon_grouping;
+    string positive_sign;
+    string negative_sign;
+    byte int_frac_digits;
+    byte frac_digits;
+    byte p_cs_precedes;
+    byte p_sep_by_space;
+    byte n_cs_precedes;
+    byte n_sep_by_space;
+    byte p_sign_posn;
+    byte n_sign_posn;
+    byte int_p_cs_precedes;
+    byte int_p_sep_by_space;
+    byte int_n_cs_precedes;
+    byte int_n_sep_by_space;
+    byte int_p_sign_posn;
+    byte int_n_sign_posn;
+}
+
+message Locale 1 {
+head(8):
+tail:
+    lc_ctype section_ctype;
+    lc_collate section_collate;
+    lc_time section_time;
+    lc_numeric section_numeric;
+    lc_messages section_messages;
+    lc_monetary section_monetary;
+}
