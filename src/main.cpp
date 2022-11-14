@@ -33,4 +33,13 @@ int main(int argc, char **argv){
     else {
         std::cout << "memory exhausted" << std::endl;
     }
+
+    auto o_def = charmap::get_definition("U0041");
+    if(!o_def.has_value()){
+        std::cout << "Character not found" << std::endl;
+        return 1;
+    }
+
+    auto def = *o_def;
+    std::cout << def.bytes[0] << std::endl;
 }

@@ -2,6 +2,8 @@
 #include <cctype>
 #include <stdexcept>
 #include <iostream>
+#include <vector>
+#include <map>
 
 #include "lexer.hpp"
 #include "charmap.hpp"
@@ -11,7 +13,6 @@
 namespace charmap {
 
 charmap_parser::parser::symbol_type CharmapLexer::get_token(){
-    std::cout << "get token" << std::endl;
     for(uint8_t next = peek(0); isblank(next); next = peek(0)){
         read();
     }
@@ -36,7 +37,7 @@ charmap_parser::parser::symbol_type CharmapLexer::get_token(){
         return charmap_parser::parser::make_CHARMAP_PARSEREOF();
     }
     else if(peek(0) == '<'){
-        token += read();
+        read();
         bool escaped = false;
         for(uint8_t c = peek(0); true; c = peek(0)){
             if(c == '\n' || c == '\0'){
@@ -49,7 +50,7 @@ charmap_parser::parser::symbol_type CharmapLexer::get_token(){
                 continue;
             }
             else if(c == '>' && !escaped){
-                token += read();
+                read();
                 break;
             }
 
@@ -62,11 +63,11 @@ charmap_parser::parser::symbol_type CharmapLexer::get_token(){
             return charmap_parser::parser::make_CHARMAP_PARSERerror();
         }
 
-        if(token == "<code_set_name>" ||
-           token == "<mb_cur_max>"    ||
-           token == "<mb_cur_min>"    || 
-           token == "<escape_char>"   ||
-           token == "<comment_char>"){
+        if(token == "code_set_name" ||
+           token == "mb_cur_max"    ||
+           token == "mb_cur_min"    || 
+           token == "escape_char"   ||
+           token == "comment_char"){
             return charmap_parser::parser::make_CONFIG(token);
         }
 
@@ -99,7 +100,7 @@ charmap_parser::parser::symbol_type CharmapLexer::get_token(){
         }
         else {
             error("Expected 'd', 'x', or an octal digit.");
-            return charmap_parser::parser::make_CHARMAP_PARSEREOF();
+            return charmap_parser::parser::make_CHARMAP_PARSERerror();
         }
 
         size_t i = 0;
@@ -109,12 +110,12 @@ charmap_parser::parser::symbol_type CharmapLexer::get_token(){
 
         if(token.size() < 2 || token.size() > upper_bound){
             error("Decimal character literal can only contain two or three digits.");
-            return charmap_parser::parser::make_CHARMAP_PARSEREOF();
+            return charmap_parser::parser::make_CHARMAP_PARSERerror();
         }
 
         auto o_num = parse_num(token, radix);
         if(!o_num.has_value()){
-            return charmap_parser::parser::make_CHARMAP_PARSEREOF();
+            return charmap_parser::parser::make_CHARMAP_PARSERerror();
         }
 
         return type((uint8_t)*o_num);
@@ -134,15 +135,15 @@ charmap_parser::parser::symbol_type CharmapLexer::get_token(){
 
         auto o_num = parse_num(token, 10);
         if(!o_num.has_value()){
-            return charmap_parser::parser::make_CHARMAP_PARSEREOF();
+            return charmap_parser::parser::make_CHARMAP_PARSERerror();
         }
 
         return charmap_parser::parser::make_NUMBER((uint8_t)*o_num);
     }
-    else if(isalpha(peek(0))){
+    else if(!isspace(peek(0))){
         do {
             token += read();
-        } while(!isspace(peek(0))); //loop until whitespace instead
+        } while(!isspace(peek(0)) && peek(0) != '\0');
 
         if(token == "CHARMAP"){
             return charmap_parser::parser::make_CHARMAP();
@@ -165,11 +166,9 @@ charmap_parser::parser::symbol_type CharmapLexer::get_token(){
         m_line++;
         return charmap_parser::parser::make_EOL();
     }
-    else {
-        return charmap_parser::parser::make_CHARMAP_PARSEREOF();
-    }
 
-    return charmap_parser::parser::make_CHARMAP_PARSEREOF();
+    error("The parser entered an unknown state. This is a bug.");
+    return charmap_parser::parser::make_CHARMAP_PARSERerror();
 }
 
 void CharmapLexer::set_cur_max(size_t i){
@@ -178,6 +177,14 @@ void CharmapLexer::set_cur_max(size_t i){
 
 void CharmapLexer::set_cur_min(size_t i){
     m_cur_min = i;
+}
+
+void CharmapLexer::set_width_default(size_t i){
+    m_width_default = i;
+}
+
+size_t CharmapLexer::get_width_default(){
+    return m_width_default;
 }
 
 CharmapLexer *lexer = nullptr;
@@ -191,30 +198,70 @@ CharmapLexer *get_lexer(){
 }
 
 int parse(){
-    //charmap_debug = 1;
     charmap_parser::parser parser;
+    //parser.set_debug_level(true);
     return parser.parse();
 }
 
 void set_config(std::string conf, std::string value){
-    if(conf == "<code_set_name>"){
+    if(conf == "code_set_name"){
         lexer->set_name(value);
     }
-    else if(conf == "<escape_char>"){
+    else if(conf == "escape_char"){
         lexer->set_escape(value[0]);
     }
-    else if(conf == "<comment_char>"){
+    else if(conf == "comment_char"){
         lexer->set_comment(value[0]);
     }
 }
 
 void set_config(std::string conf, uint8_t value){
-    if(conf == "<mb_cur_max>"){
+    if(conf == "mb_cur_max"){
         lexer->set_cur_max(value);
     }
-    else if(conf == "<mb_cur_min>"){
+    else if(conf == "mb_cur_min"){
         lexer->set_cur_min(value);
     }
+}
+
+void set_width_default(uint8_t value){
+    lexer->set_width_default(value);
+}
+
+std::vector<uint8_t> current_value;
+std::vector<CharacterDefinition> definitions;
+std::map<std::string, size_t> definition_map;
+
+void add_to_value(uint8_t val){
+    current_value.push_back(val);
+}
+
+void save_definition(std::string name){
+    CharacterDefinition def = {
+        .name = name,
+        .bytes = current_value,
+        .width_set = false
+    };
+    current_value = {};
+
+    definitions.push_back(def);
+    definition_map[name] = definitions.size() - 1;
+}
+
+std::optional<CharacterDefinition> get_definition(std::string name){
+    if(!definition_map.contains(name))
+        return {};
+
+    size_t index = definition_map[name];
+    return definitions[index];
+}
+
+void save_range_definition(std::string start, std::string end){
+
+}
+
+void save_range_gnu_definition(std::string start, std::string end){
+
 }
 
 } //namespace charmap

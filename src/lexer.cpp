@@ -14,7 +14,7 @@ uint8_t Lexer::read(){
 }
 
 uint8_t Lexer::peek(size_t i){
-    if(m_index + 1 < m_max_size)
+    if(m_index + i < m_max_size)
         return m_buffer[m_index + i];
 
     return '\0';

@@ -19,8 +19,6 @@ protected:
     uint8_t read();
     uint8_t peek(size_t i);
     bool is_finished();
-    void error(std::string err);
-    void error(size_t line, size_t column, std::string err);
     std::optional<unsigned long> parse_num(std::string s, int radix) noexcept;
 public:
     Lexer(std::string name, uint8_t *buffer, size_t size){
@@ -28,6 +26,9 @@ public:
         m_buffer = buffer;
         m_max_size = size;
     }
+
+    void error(std::string err);
+    void error(size_t line, size_t column, std::string err);
 
     void set_comment(uint8_t c);
     void set_escape(uint8_t c);

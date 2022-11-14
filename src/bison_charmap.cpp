@@ -605,8 +605,68 @@ namespace charmap_parser {
 #line 606 "src/bison_charmap.cpp"
     break;
 
+  case 20: // definition: CHARACTER_NAME value_list anything
+#line 75 "src/bison_charmap.ypp"
+                                      { charmap::save_definition(yystack_[2].value.as < std::string > ()); }
+#line 612 "src/bison_charmap.cpp"
+    break;
 
-#line 610 "src/bison_charmap.cpp"
+  case 21: // definition: CHARACTER_NAME RANGE CHARACTER_NAME value_list anything
+#line 76 "src/bison_charmap.ypp"
+                                                           { charmap::save_range_definition(yystack_[4].value.as < std::string > (), yystack_[2].value.as < std::string > ()); }
+#line 618 "src/bison_charmap.cpp"
+    break;
+
+  case 22: // definition: CHARACTER_NAME RANGE_GNU CHARACTER_NAME value_list anything
+#line 77 "src/bison_charmap.ypp"
+                                                               { charmap::save_range_gnu_definition(yystack_[4].value.as < std::string > (), yystack_[2].value.as < std::string > ()); }
+#line 624 "src/bison_charmap.cpp"
+    break;
+
+  case 26: // hex_list: CHARACTER_HEX
+#line 87 "src/bison_charmap.ypp"
+                 { charmap::add_to_value(yystack_[0].value.as < uint8_t > ()); }
+#line 630 "src/bison_charmap.cpp"
+    break;
+
+  case 27: // hex_list: hex_list CHARACTER_HEX
+#line 88 "src/bison_charmap.ypp"
+                          { charmap::add_to_value(yystack_[0].value.as < uint8_t > ()); }
+#line 636 "src/bison_charmap.cpp"
+    break;
+
+  case 28: // dec_list: CHARACTER_DEC
+#line 92 "src/bison_charmap.ypp"
+                 { charmap::add_to_value(yystack_[0].value.as < uint8_t > ()); }
+#line 642 "src/bison_charmap.cpp"
+    break;
+
+  case 29: // dec_list: dec_list CHARACTER_DEC
+#line 93 "src/bison_charmap.ypp"
+                          { charmap::add_to_value(yystack_[0].value.as < uint8_t > ()); }
+#line 648 "src/bison_charmap.cpp"
+    break;
+
+  case 30: // oct_list: CHARACTER_OCT
+#line 97 "src/bison_charmap.ypp"
+                 { charmap::add_to_value(yystack_[0].value.as < uint8_t > ()); }
+#line 654 "src/bison_charmap.cpp"
+    break;
+
+  case 31: // oct_list: oct_list CHARACTER_OCT
+#line 98 "src/bison_charmap.ypp"
+                          { charmap::add_to_value(yystack_[0].value.as < uint8_t > ()); }
+#line 660 "src/bison_charmap.cpp"
+    break;
+
+  case 32: // default_width: WIDTH_DEFAULT NUMBER EOL
+#line 102 "src/bison_charmap.ypp"
+                            { charmap::set_width_default(yystack_[1].value.as < uint8_t > ()); }
+#line 666 "src/bison_charmap.cpp"
+    break;
+
+
+#line 670 "src/bison_charmap.cpp"
 
             default:
               break;
@@ -795,116 +855,112 @@ namespace charmap_parser {
 
 
 
-  const signed char parser::yypact_ninf_ = -52;
+  const signed char parser::yypact_ninf_ = -60;
 
   const signed char parser::yytable_ninf_ = -1;
 
   const signed char
   parser::yypact_[] =
   {
-      62,    -5,     0,    15,    19,    27,    49,    38,    60,    65,
-      57,    63,    71,   -52,   -52,    38,     8,    58,    66,   -52,
-     -52,   -52,   -52,   -52,    68,    78,    45,    79,    77,    80,
-      74,    81,   -52,    66,    82,    83,    84,    85,   -52,    72,
-      72,   -52,   -52,   -52,   -52,   -52,   -52,   -52,   -52,   -52,
-     -52,    -2,   -52,   -52,   -52,   -52,    86,   -52,   -52,   -52,
-     -52,   -52,     9,    64,   -52,    45,    45,   -52,   -52,   -52,
-      87,    90,    73,   -52,    17,    31,   -52,    89,    91,   -52,
-     -52,    92,   -52,   -52
+      17,    -5,   -60,    12,     4,     7,    20,    26,    23,    25,
+      38,    37,   -60,   -60,    23,    32,   -60,    40,    34,   -60,
+     -60,    10,    18,    41,    34,    42,    43,    44,    45,   -60,
+     -60,   -60,   -60,    51,    52,    -2,    53,    54,    50,    48,
+      55,   -60,   -60,   -60,   -60,   -60,    57,    31,    31,   -60,
+     -60,   -60,   -60,   -60,   -60,   -60,   -60,   -60,   -60,    -2,
+     -60,   -60,   -60,   -60,    56,   -60,    19,    21,   -60,    -2,
+      -2,   -60,   -60,    58,    59,    47,   -60,    -2,    -2,   -60,
+      60,    61,    62,   -60,   -60
   };
 
   const signed char
   parser::yydefact_[] =
   {
-       3,     0,     0,     0,     0,     0,    10,     4,     0,     0,
-       0,     0,     0,     1,     2,     5,     0,     0,     6,    12,
-      11,    24,    26,    28,     0,     0,     0,    21,    22,    23,
-       0,     0,    16,     7,     0,     0,     0,     0,     8,     0,
-       0,    38,    39,    40,    41,    42,    43,    44,    45,    46,
-      47,     0,    36,    25,    27,    29,     0,    17,     9,    14,
-      13,    30,     0,     0,    32,     0,     0,    18,    37,    15,
-       0,     0,     0,    33,     0,     0,    34,     0,     0,    19,
-      20,     0,    31,    35
+       3,     0,    15,     0,     0,     0,     0,    10,     4,     0,
+       0,     0,     1,     2,     5,     0,    16,     0,     6,    12,
+      11,     0,     0,     0,     7,     0,     0,     0,     0,     8,
+      26,    28,    30,     0,     0,     0,    23,    24,    25,     0,
+       0,    18,     9,    14,    13,    32,     0,     0,     0,    40,
+      41,    42,    43,    44,    45,    46,    47,    48,    49,    20,
+      38,    27,    29,    31,     0,    19,     0,     0,    34,     0,
+       0,    39,    17,     0,     0,     0,    35,    21,    22,    36,
+       0,     0,     0,    33,    37
   };
 
   const signed char
   parser::yypgoto_[] =
   {
-     -52,   -52,   -52,   -52,   -52,    93,   -52,    75,    -3,   -52,
-     -52,   -52,    88,    69,   -52,    36,   -15,   -51
+     -60,   -60,   -60,   -60,   -60,    63,   -60,    64,    -4,   -60,
+     -60,   -60,    65,    49,   -60,    -1,   -24,   -59
   };
 
   const signed char
   parser::yydefgoto_[] =
   {
-       0,     3,     4,     5,     6,     7,    11,    12,    26,    27,
-      28,    29,    18,    38,    63,    64,    51,    52
+       0,     4,     5,     6,     7,     8,    22,    23,    35,    36,
+      37,    38,    18,    29,    67,    68,    59,    60
   };
 
   const signed char
   parser::yytable_[] =
   {
-      68,    41,    42,     8,    10,     9,    43,    67,    44,    45,
-      46,    47,    48,    49,    50,    13,    34,    70,    35,    14,
-      41,    42,    71,    68,    68,    43,    79,    44,    45,    46,
-      47,    48,    49,    50,    41,    42,    65,    66,     2,    43,
-      80,    44,    45,    46,    47,    48,    49,    50,    41,    42,
-      74,    75,    16,    43,    17,    44,    45,    46,    47,    48,
-      49,    50,    21,    22,    23,     1,    36,    10,    62,    19,
-      24,    25,    39,     2,    20,    30,    72,    21,    22,    23,
-      32,    37,    40,    54,    53,    56,    31,    55,    78,    62,
-      57,    59,    60,    61,    77,    69,    76,    81,    15,    73,
-      82,    83,    58,    33
+      71,    49,    50,     9,    12,    10,    51,    13,    52,    53,
+      54,    55,    56,    57,    58,    30,    31,    32,    71,    71,
+       1,    11,    21,    33,    34,    66,     2,    73,     3,    15,
+      39,     3,    74,    75,    19,    16,    30,    31,    32,    17,
+      25,    21,    26,    69,    70,    77,    78,    20,    27,    28,
+      41,    43,    44,    45,    46,    47,    48,    63,    61,    64,
+      62,    66,    81,    80,    65,    72,    76,    79,    82,    14,
+      83,    84,     0,    42,     0,     0,     0,     0,     0,    24,
+       0,     0,     0,     0,     0,     0,    40
   };
 
   const signed char
   parser::yycheck_[] =
   {
-      51,     3,     4,     8,     4,    10,     8,     9,    10,    11,
-      12,    13,    14,    15,    16,     0,     8,     8,    10,     0,
-       3,     4,    13,    74,    75,     8,     9,    10,    11,    12,
-      13,    14,    15,    16,     3,     4,    39,    40,    11,     8,
-       9,    10,    11,    12,    13,    14,    15,    16,     3,     4,
-      65,    66,     3,     8,    16,    10,    11,    12,    13,    14,
-      15,    16,     5,     6,     7,     3,     8,     4,     4,     9,
-      13,    14,     4,    11,     9,    12,    12,     5,     6,     7,
-       9,    15,     4,     6,     5,    11,    11,     7,    15,     4,
-       9,     9,     9,     9,     4,     9,     9,     8,     5,    63,
-       9,     9,    33,    15
+      59,     3,     4,     8,     0,    10,     8,     0,    10,    11,
+      12,    13,    14,    15,    16,     5,     6,     7,    77,    78,
+       3,     9,     4,    13,    14,     4,     9,     8,    11,     3,
+      12,    11,    13,    12,     9,     9,     5,     6,     7,    16,
+       8,     4,    10,    47,    48,    69,    70,     9,     8,    15,
+       9,     9,     9,     9,     9,     4,     4,     7,     5,    11,
+       6,     4,    15,     4,     9,     9,    67,     9,     8,     6,
+       9,     9,    -1,    24,    -1,    -1,    -1,    -1,    -1,    14,
+      -1,    -1,    -1,    -1,    -1,    -1,    22
   };
 
   const signed char
   parser::yystos_[] =
   {
-       0,     3,    11,    18,    19,    20,    21,    22,     8,    10,
-       4,    23,    24,     0,     0,    22,     3,    16,    29,     9,
-       9,     5,     6,     7,    13,    14,    25,    26,    27,    28,
-      12,    24,     9,    29,     8,    10,     8,    15,    30,     4,
-       4,     3,     4,     8,    10,    11,    12,    13,    14,    15,
-      16,    33,    34,     5,     6,     7,    11,     9,    30,     9,
-       9,     9,     4,    31,    32,    25,    25,     9,    34,     9,
-       8,    13,    12,    32,    33,    33,     9,     4,    15,     9,
-       9,     8,     9,     9
+       0,     3,     9,    11,    18,    19,    20,    21,    22,     8,
+      10,     9,     0,     0,    22,     3,     9,    16,    29,     9,
+       9,     4,    23,    24,    29,     8,    10,     8,    15,    30,
+       5,     6,     7,    13,    14,    25,    26,    27,    28,    12,
+      24,     9,    30,     9,     9,     9,     9,     4,     4,     3,
+       4,     8,    10,    11,    12,    13,    14,    15,    16,    33,
+      34,     5,     6,     7,    11,     9,     4,    31,    32,    25,
+      25,    34,     9,     8,    13,    12,    32,    33,    33,     9,
+       4,    15,     8,     9,     9
   };
 
   const signed char
   parser::yyr1_[] =
   {
        0,    17,    18,    19,    19,    19,    19,    19,    19,    19,
-      20,    21,    21,    21,    21,    22,    23,    23,    24,    24,
-      24,    25,    25,    25,    26,    26,    27,    27,    28,    28,
-      29,    30,    31,    31,    32,    32,    33,    33,    34,    34,
-      34,    34,    34,    34,    34,    34,    34,    34
+      20,    21,    21,    21,    21,    21,    21,    22,    23,    23,
+      24,    24,    24,    25,    25,    25,    26,    26,    27,    27,
+      28,    28,    29,    30,    31,    31,    32,    32,    33,    33,
+      34,    34,    34,    34,    34,    34,    34,    34,    34,    34
   };
 
   const signed char
   parser::yyr2_[] =
   {
        0,     2,     2,     0,     1,     2,     2,     3,     3,     4,
-       1,     3,     3,     4,     4,     5,     2,     3,     4,     6,
-       6,     1,     1,     1,     1,     2,     1,     2,     1,     2,
-       3,     5,     1,     2,     3,     5,     1,     2,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1
+       1,     3,     3,     4,     4,     1,     2,     6,     2,     3,
+       3,     5,     5,     1,     1,     1,     1,     2,     1,     2,
+       1,     2,     3,     6,     1,     2,     3,     5,     1,     2,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1
   };
 
 
@@ -930,10 +986,10 @@ namespace charmap_parser {
   parser::yyrline_[] =
   {
        0,    40,    40,    43,    44,    45,    46,    47,    48,    49,
-      53,    57,    58,    59,    60,    64,    68,    69,    73,    74,
-      75,    79,    80,    81,    85,    86,    90,    91,    95,    96,
-     100,   103,   106,   107,   111,   112,   116,   117,   121,   122,
-     123,   124,   125,   126,   127,   128,   129,   130
+      53,    57,    58,    59,    60,    61,    62,    66,    70,    71,
+      75,    76,    77,    81,    82,    83,    87,    88,    92,    93,
+      97,    98,   102,   105,   108,   109,   113,   114,   118,   119,
+     123,   124,   125,   126,   127,   128,   129,   130,   131,   132
   };
 
   void
@@ -965,9 +1021,9 @@ namespace charmap_parser {
 
 
 } // charmap_parser
-#line 969 "src/bison_charmap.cpp"
+#line 1025 "src/bison_charmap.cpp"
 
-#line 133 "src/bison_charmap.ypp"
+#line 135 "src/bison_charmap.ypp"
 
 
 namespace charmap_parser {
