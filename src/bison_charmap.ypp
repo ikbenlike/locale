@@ -44,7 +44,9 @@ charmap_file
  | charmap
  | prelude charmap
  | charmap default_width
+ | charmap width_section
  | prelude charmap default_width
+ | prelude charmap width_section
  | charmap default_width width_section
  | prelude charmap default_width width_section
  ;
@@ -62,8 +64,13 @@ configs
  | configs EOL
  ;
 
+newlines
+ : EOL
+ | newlines EOL
+ ;
+
 charmap
- : CHARMAP EOL definitions END CHARMAP EOL
+ : CHARMAP EOL definitions END CHARMAP newlines
  ;
 
 definitions
@@ -73,8 +80,8 @@ definitions
 
 definition
  : CHARACTER_NAME value_list anything { charmap::save_definition($1); }
- | CHARACTER_NAME RANGE CHARACTER_NAME value_list anything { charmap::save_range_definition($1, $3); }
- | CHARACTER_NAME RANGE_GNU CHARACTER_NAME value_list anything { charmap::save_range_gnu_definition($1, $3); }
+ | CHARACTER_NAME RANGE CHARACTER_NAME value_list anything { charmap::save_range_definition($1, $3, 10); }
+ | CHARACTER_NAME RANGE_GNU CHARACTER_NAME value_list anything { charmap::save_range_definition($1, $3, 16); }
  ;
 
 value_list
@@ -110,8 +117,8 @@ width_definitions
  ;
 
 width_definition
- : CHARACTER_NAME NUMBER EOL
- | CHARACTER_NAME RANGE CHARACTER_NAME NUMBER EOL
+ : CHARACTER_NAME NUMBER EOL { charmap::set_character_width($1, $2); }
+ | CHARACTER_NAME RANGE CHARACTER_NAME NUMBER EOL { charmap::set_character_range_width($1, $3, $4); }
  ;
 
 anything

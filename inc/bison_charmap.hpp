@@ -489,19 +489,20 @@ namespace charmap_parser {
         S_charmap_file = 19,                     // charmap_file
         S_prelude = 20,                          // prelude
         S_configs = 21,                          // configs
-        S_charmap = 22,                          // charmap
-        S_definitions = 23,                      // definitions
-        S_definition = 24,                       // definition
-        S_value_list = 25,                       // value_list
-        S_hex_list = 26,                         // hex_list
-        S_dec_list = 27,                         // dec_list
-        S_oct_list = 28,                         // oct_list
-        S_default_width = 29,                    // default_width
-        S_width_section = 30,                    // width_section
-        S_width_definitions = 31,                // width_definitions
-        S_width_definition = 32,                 // width_definition
-        S_anything = 33,                         // anything
-        S_thing = 34                             // thing
+        S_newlines = 22,                         // newlines
+        S_charmap = 23,                          // charmap
+        S_definitions = 24,                      // definitions
+        S_definition = 25,                       // definition
+        S_value_list = 26,                       // value_list
+        S_hex_list = 27,                         // hex_list
+        S_dec_list = 28,                         // dec_list
+        S_oct_list = 29,                         // oct_list
+        S_default_width = 30,                    // default_width
+        S_width_section = 31,                    // width_section
+        S_width_definitions = 32,                // width_definitions
+        S_width_definition = 33,                 // width_definition
+        S_anything = 34,                         // anything
+        S_thing = 35                             // thing
       };
     };
 
@@ -1352,8 +1353,8 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 86,     ///< Last index in yytable_.
-      yynnts_ = 18,  ///< Number of nonterminal symbols.
+      yylast_ = 84,     ///< Last index in yytable_.
+      yynnts_ = 19,  ///< Number of nonterminal symbols.
       yyfinal_ = 12 ///< Termination state number.
     };
 
@@ -1541,7 +1542,7 @@ switch (yykind)
 
 
 } // charmap_parser
-#line 1545 "inc/bison_charmap.hpp"
+#line 1546 "inc/bison_charmap.hpp"
 
 
 

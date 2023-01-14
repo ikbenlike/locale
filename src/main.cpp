@@ -26,6 +26,7 @@ int main(int argc, char **argv){
     int r = charmap::parse();
     if(r == 0){
         std::cout << "parsing successful" << std::endl;
+        charmap::finalize();
     }
     else if(r == 1){
         std::cout << "parsing failed" << std::endl;
@@ -41,5 +42,6 @@ int main(int argc, char **argv){
     }
 
     auto def = *o_def;
-    std::cout << def.bytes[0] << std::endl;
+    std::cout << "value: " << def.bytes[0] << std::endl;
+    std::cout << "width: " << def.width << std::endl;
 }

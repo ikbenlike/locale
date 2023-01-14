@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <sstream>
 
 #include "lexer.hpp"
 #include "charmap.hpp"
@@ -256,12 +257,106 @@ std::optional<CharacterDefinition> get_definition(std::string name){
     return definitions[index];
 }
 
-void save_range_definition(std::string start, std::string end){
+std::string parse_range_int(std::string name, int base){
+    auto digitp = &isdigit;
+    if(base == 16)
+        digitp = &isxdigit;
 
+    size_t begin = 0;
+    for(size_t i = name.size() - 1; i >= 0; i--){
+        if(!digitp(name[i])){
+            begin = i + 1;
+            break;
+        }
+    }
+
+    return name.substr(begin);
 }
 
-void save_range_gnu_definition(std::string start, std::string end){
+std::string parse_range_name(std::string name, size_t int_size){
+    return name.substr(0, name.size() - int_size);
+}
 
+std::string produce_range_name(std::string name, size_t i, size_t base, size_t ndigits){
+    std::ostringstream stream;
+    if(base == 16)
+        stream << std::uppercase << std::hex;
+    stream << i;
+    auto digits = stream.str();
+    if(digits.size() - 1 < ndigits){
+        digits = std::string(ndigits - digits.size(), '0') + digits;
+    }
+    return name + digits;
+}
+
+//This function does not consider the case where carry is true
+//but the end of the vector is reached. It is assumed the user
+//defines characters with enough bytes to hold their value;
+//however, this might be considered a bug.
+std::vector<uint8_t> produce_range_value(std::vector<uint8_t> val){
+    bool carry = false;
+    for(auto it = val.rbegin(); it != val.rend(); it++){
+        if(it == val.rbegin() || carry){
+            if(*it == 0xFF){
+                carry = true;
+                *it = 0;
+                continue;
+            }
+            (*it)++;
+            carry = false;
+        }
+    }
+    return val;
+}
+
+void save_range_definition(std::string start, std::string end, int base){
+    std::string start_number_string = parse_range_int(start, base);
+    std::string end_number_string = parse_range_int(end, base);
+    size_t ndigits = start_number_string.size();
+    std::string name = parse_range_name(start, ndigits);
+    size_t start_number = std::stoull(start_number_string, nullptr, base);
+    size_t end_number = std::stoull(end_number_string, nullptr, base);
+    std::vector<uint8_t> val = current_value;
+
+    for(size_t i = start_number; i <= end_number; i++){
+        std::string full_name = produce_range_name(name, i, base, ndigits);
+        save_definition(full_name);
+        val = produce_range_value(val);
+        current_value = val;
+    }
+}
+
+void set_character_width(std::string name, size_t width){
+    if(!definition_map.contains(name))
+        return; //TODO: error reporting
+
+    size_t index = definition_map[name];
+    definitions[index].width = width;
+    definitions[index].width_set = true;
+}
+
+void set_character_range_width(std::string start, std::string end, size_t width){
+    if(!definition_map.contains(start) || !definition_map.contains(end))
+        return;
+
+    size_t start_index = definition_map[start];
+    size_t end_index = definition_map[end];
+    for(size_t i = start_index; i <= end_index; i++){
+        definitions[i].width = width;
+        definitions[i].width_set = true;
+    }
+}
+
+void finalize(){
+    auto width = lexer->get_width_default();
+    for(auto it = definitions.begin(); it < definitions.end(); it++){
+        if(!it->width_set){
+            it->width_set = true;
+            it->width = width;
+        }
+    }
+    delete lexer;
+    lexer = nullptr;
 }
 
 } //namespace charmap

@@ -35,12 +35,13 @@ int parse();
 void set_config(std::string conf, std::string value);
 void set_config(std::string conf, uint8_t value);
 void set_width_default(uint8_t value);
-
 void add_to_value(uint8_t val);
 void save_definition(std::string name);
 std::optional<CharacterDefinition> get_definition(std::string name);
-void save_range_definition(std::string start, std::string end);
-void save_range_gnu_definition(std::string start, std::string end);
+void save_range_definition(std::string start, std::string end, int base);
+void set_character_width(std::string name, size_t width);
+void set_character_range_width(std::string start, std::string end, size_t width);
+void finalize();
 
 } //namespace charmap
 
