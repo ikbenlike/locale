@@ -14,20 +14,8 @@
 namespace charmap {
 
 charmap_parser::parser::symbol_type CharmapLexer::get_token(){
-    for(uint8_t next = peek(0); isblank(next); next = peek(0)){
-        read();
-    }
-
-    if(m_column == 1){    
-        for(uint8_t comment = peek(0); comment == m_comment_char; comment = peek(0)){
-            for(uint8_t c = comment; c != '\0'; c = peek(0)){
-                read();
-                if(c == '\n')
-                    break;
-            }
-            m_line++;
-        }
-    }
+    skip_blanks();
+    skip_comments();
 
     size_t old_line = m_line;
     size_t old_column = m_column;
@@ -38,28 +26,13 @@ charmap_parser::parser::symbol_type CharmapLexer::get_token(){
         return charmap_parser::parser::make_CHARMAP_PARSEREOF();
     }
     else if(peek(0) == '<'){
-        read();
-        bool escaped = false;
-        for(uint8_t c = peek(0); true; c = peek(0)){
-            if(c == '\n' || c == '\0'){
-                error("Expected a character name, got unexpected EOF or linebreak.");
-                return charmap_parser::parser::make_CHARMAP_PARSERerror();
-            }
-            else if(!escaped && c == m_escape_char){
-                escaped = true;
-                read();
-                continue;
-            }
-            else if(c == '>' && !escaped){
-                read();
-                break;
-            }
-
-            token += read();
-            escaped = false;
+        auto o_token = read_character_name();
+        if(!o_token.has_value()){
+            return charmap_parser::parser::make_CHARMAP_PARSERerror();
         }
+        token = *o_token;
 
-        if(token.size() <= 2){
+        if(token.empty()){
             error("Expected characters between '<' and '>'.");
             return charmap_parser::parser::make_CHARMAP_PARSERerror();
         }
@@ -104,7 +77,6 @@ charmap_parser::parser::symbol_type CharmapLexer::get_token(){
             return charmap_parser::parser::make_CHARMAP_PARSERerror();
         }
 
-        size_t i = 0;
         while(char_test(peek(0))){
             token += read();
         }
@@ -168,7 +140,7 @@ charmap_parser::parser::symbol_type CharmapLexer::get_token(){
         return charmap_parser::parser::make_EOL();
     }
 
-    error("The parser entered an unknown state. This is a bug.");
+    error("The character map parser entered an unknown state. This is a bug.");
     return charmap_parser::parser::make_CHARMAP_PARSERerror();
 }
 

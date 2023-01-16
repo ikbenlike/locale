@@ -8,7 +8,7 @@ class Lexer {
 protected:
     uint8_t *m_buffer = nullptr;
     size_t m_index = 0;
-    size_t m_line = 0;
+    size_t m_line = 1;
     size_t m_column = 1;
     size_t m_max_size = 0;
     std::string m_name;
@@ -20,6 +20,9 @@ protected:
     uint8_t peek(size_t i);
     bool is_finished();
     std::optional<unsigned long> parse_num(std::string s, int radix) noexcept;
+    void skip_blanks();
+    void skip_comments();
+    std::optional<std::string> read_character_name();
 public:
     Lexer(std::string name, uint8_t *buffer, size_t size){
         m_name = name;

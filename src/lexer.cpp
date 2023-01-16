@@ -48,6 +48,52 @@ std::optional<unsigned long> Lexer::parse_num(std::string s, int radix) noexcept
     return result;
 }
 
+void Lexer::skip_blanks(){
+    for(uint8_t next = peek(0); isblank(next); next = peek(0)){
+        read();
+    }
+}
+
+void Lexer::skip_comments(){
+    if(m_column == 1){    
+        for(uint8_t comment = peek(0); comment == m_comment_char; comment = peek(0)){
+            for(uint8_t c = comment; c != '\0'; c = peek(0)){
+                read();
+                if(c == '\n')
+                    break;
+            }
+            m_line++;
+        }
+    }
+}
+
+std::optional<std::string> Lexer::read_character_name(){
+    if(peek(0) != '<')
+        return {};
+
+    std::string token = "";
+    read();
+    bool escaped = false;
+    for(uint8_t c = peek(0); true; c = peek(0)){
+        if(c == '\n' || c == '\0'){
+            error("Expected a character name, got unexpected EOF or linebreak.");
+            return {};
+        }
+        else if(!escaped && c == m_escape_char){
+            escaped = true;
+            read();
+            continue;
+        }
+        else if(c == '>' && !escaped){
+            read();
+            break;
+        }
+
+        token += read();
+        escaped = false;
+    }
+    return token;
+}
 
 void Lexer::set_comment(uint8_t c){
     m_comment_char = c;

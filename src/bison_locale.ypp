@@ -1,53 +1,59 @@
 %{
+#include <string>
+#include <cstdint>
 #include "util.hpp"
-void locale_error(const char *s);
-int locale_lex();
+#include "locale.hpp"
 %}
 
 %require "3.2"
-%define api.prefix {locale_}
+%language "c++"
 
-%token CONFIG
-%token CHARACTER_NAME
-%token CHARACTER_LITERAL
+%define parse.trace
+
+%define api.token.constructor
+%define api.prefix {locale_parser}
+%define api.value.type variant
+
+%token <std::string> CONFIG
+%token <std::string> CHARACTER_NAME
+%token <uint8_t> CHARACTER_LITERAL
 %token EOL
-%token EOFT
-%token STRING
+%token <std::string> STRING
 %token NUMBER
 %token SEMICOLON
 %token BRACKET_OPEN
 %token BRACKET_CLOSE
 %token COMMA
-%token TEXT
-%token LC_CTYPE
-%token LC_COLLATE
-%token LC_MESSAGES
-%token LC_MONETARY
-%token LC_NUMERIC
-%token LC_TIME
-%token LC_ADDRESS
-%token LC_IDENTIFICATION
-%token LC_MEASUREMENT
-%token LC_NAME
-%token LC_PAPER
-%token LC_TELEPHONE
-%token FIELD_CTYPE_PAIRS
-%token FIELD_CTYPE_CHARS
-%token FIELD_COLLATE
-%token FIELD_MESSAGES
-%token FIELD_MONETARY_STRING
-%token FIELD_MONETARY_SINGLE_BYTE
-%token FIELD_MONETARY_BYTES
-%token FIELD_NUMERIC_STRING
-%token FIELD_NUMERIC_BYTES
-%token FIELD_TIME_STRING
-%token FIELD_TIME_MULTIPLE_STRINGS
-%token FIELD_ADDRESS
-%token FIELD_IDENTIFICATION
-%token FIELD_MEASUREMENT
-%token FIELD_NAME
-%token FIELD_PAPER
-%token FIELD_TELEPHONE
+%token <std::string> TEXT
+%token T_LC_CTYPE
+%token T_LC_COLLATE
+%token T_LC_MESSAGES
+%token T_LC_MONETARY
+%token T_LC_NUMERIC
+%token T_LC_TIME
+%token T_LC_ADDRESS
+%token T_LC_IDENTIFICATION
+%token T_LC_MEASUREMENT
+%token T_LC_NAME
+%token T_LC_PAPER
+%token T_LC_TELEPHONE
+%token <std::string> FIELD_CTYPE_PAIRS
+%token <std::string> FIELD_CTYPE_CHARS
+%token <std::string> FIELD_COLLATE
+%token <std::string> FIELD_MESSAGES
+%token <std::string> FIELD_MONETARY_STRING
+%token <std::string> FIELD_MONETARY_SINGLE_BYTE
+%token <std::string> FIELD_MONETARY_BYTES
+%token <std::string> FIELD_NUMERIC_STRING
+%token <std::string> FIELD_NUMERIC_BYTES
+%token <std::string> FIELD_TIME_STRING
+%token <std::string> FIELD_TIME_MULTIPLE_STRINGS
+%token <std::string> FIELD_ADDRESS
+%token <std::string> FIELD_IDENTIFICATION
+%token <std::string> FIELD_MEASUREMENT
+%token <std::string> FIELD_NAME
+%token <std::string> FIELD_PAPER
+%token <std::string> FIELD_TELEPHONE
 %token COPY
 %token END
 %token ESCAPE
@@ -59,9 +65,15 @@ int locale_lex();
 %token IGNORE
 %token POSITION
 
+%code {
+    namespace locale_parser {
+        parser::symbol_type locale_parserlex();
+    }
+}
+
 %%
 
-file : locale_file EOFT { YYACCEPT; }
+file : locale_file YYEOF { YYACCEPT; }
 
 locale_file
  :
@@ -87,8 +99,8 @@ sections
  ;
 
 section_ctype
- : LC_CTYPE EOL COPY STRING EOL END LC_CTYPE EOL 
- | LC_CTYPE EOL definitions_ctype END LC_CTYPE EOL
+ : T_LC_CTYPE EOL COPY STRING EOL END T_LC_CTYPE EOL 
+ | T_LC_CTYPE EOL definitions_ctype END T_LC_CTYPE EOL
  ;
 
 definitions_ctype
@@ -111,8 +123,8 @@ field_ctype_single_pair_value
  : BRACKET_OPEN character_value COMMA character_value BRACKET_CLOSE ;
 
 section_collate
- : LC_COLLATE EOL COPY STRING EOL END LC_COLLATE EOL
- | LC_COLLATE EOL collate_start definitions_collate ORDER_END END LC_COLLATE EOL
+ : T_LC_COLLATE EOL COPY STRING EOL END T_LC_COLLATE EOL
+ | T_LC_COLLATE EOL collate_start definitions_collate ORDER_END END T_LC_COLLATE EOL
  ;
 
 collate_start
@@ -153,8 +165,8 @@ collate_char_specifier
  ;
 
 section_monetary
- : LC_MONETARY EOL COPY STRING EOL END LC_MONETARY EOL
- | LC_MONETARY EOL definitions_monetary END LC_MONETARY EOL
+ : T_LC_MONETARY EOL COPY STRING EOL END T_LC_MONETARY EOL
+ | T_LC_MONETARY EOL definitions_monetary END T_LC_MONETARY EOL
  ;
 
 definitions_monetary
@@ -169,8 +181,8 @@ single_definition_monetary
  ;
 
 section_numeric
- : LC_NUMERIC EOL COPY STRING EOL END LC_NUMERIC EOL
- | LC_NUMERIC EOL definitions_numeric END LC_NUMERIC EOL
+ : T_LC_NUMERIC EOL COPY STRING EOL END T_LC_NUMERIC EOL
+ | T_LC_NUMERIC EOL definitions_numeric END T_LC_NUMERIC EOL
  ;
 
 field_chars_value
@@ -190,8 +202,8 @@ single_definition_numeric
  ;
 
 section_time
- : LC_TIME EOL COPY STRING EOL END LC_TIME EOL
- | LC_TIME EOL definitions_time END LC_TIME EOL
+ : T_LC_TIME EOL COPY STRING EOL END T_LC_TIME EOL
+ | T_LC_TIME EOL definitions_time END T_LC_TIME EOL
  ;
 
 definitions_time
@@ -205,8 +217,8 @@ single_definition_time
  ;
 
 section_messages
- : LC_MESSAGES EOL COPY STRING EOL END LC_MESSAGES EOL
- | LC_MESSAGES EOL definitions_messages END LC_MESSAGES EOL
+ : T_LC_MESSAGES EOL COPY STRING EOL END T_LC_MESSAGES EOL
+ | T_LC_MESSAGES EOL definitions_messages END T_LC_MESSAGES EOL
  ;
 
 definitions_messages
@@ -241,10 +253,13 @@ character_literals
 
 %%
 
-void locale_error(const char *s){
-    bison_error_printer(s);
-}
+namespace locale_parser {
+    parser::symbol_type locale_parserlex(){
+        auto l = locale::get_lexer();
+        return l->get_token();
+    }
 
-int locale_lex(){
-    return 0;
+    void parser::error(const std::string& m){
+        std::cerr << m << std::endl;
+    }
 }

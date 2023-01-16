@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -std=c++20 -Iinc
-sources = src/main.cpp src/bison_charmap.cpp src/bison_locale.cpp src/lexer.cpp src/util.cpp src/charmap.cpp
+sources = src/main.cpp src/bison_charmap.cpp src/bison_locale.cpp src/lexer.cpp src/util.cpp src/charmap.cpp src/locale.cpp
 includes = $(wildcard inc/*.hpp)
 
 localedef: $(sources) $(includes)
