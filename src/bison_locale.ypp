@@ -81,12 +81,17 @@ locale_file
  | sections
  ;
 
+newlines
+ : EOL
+ | newlines EOL
+ ;
+
 prelude
  : configs ;
 
 configs
- : CONFIG TEXT EOL
- | configs CONFIG TEXT EOL
+ : CONFIG TEXT newlines { locale::set_config($1, $2); }
+ | configs CONFIG TEXT newlines { locale::set_config($2, $3); }
  ;
 
 sections
@@ -99,8 +104,8 @@ sections
  ;
 
 section_ctype
- : T_LC_CTYPE EOL COPY STRING EOL END T_LC_CTYPE EOL 
- | T_LC_CTYPE EOL definitions_ctype END T_LC_CTYPE EOL
+ : T_LC_CTYPE EOL COPY STRING EOL END T_LC_CTYPE newlines 
+ | T_LC_CTYPE EOL definitions_ctype END T_LC_CTYPE newlines
  ;
 
 definitions_ctype
@@ -109,8 +114,8 @@ definitions_ctype
  ;
 
 single_definition_ctype
- : FIELD_CTYPE_PAIRS field_ctype_pairs_value EOL
- | FIELD_CTYPE_CHARS field_chars_value EOL
+ : FIELD_CTYPE_PAIRS field_ctype_pairs_value newlines
+ | FIELD_CTYPE_CHARS field_chars_value newlines
  ;
 
 field_ctype_pairs_value
@@ -123,8 +128,8 @@ field_ctype_single_pair_value
  : BRACKET_OPEN character_value COMMA character_value BRACKET_CLOSE ;
 
 section_collate
- : T_LC_COLLATE EOL COPY STRING EOL END T_LC_COLLATE EOL
- | T_LC_COLLATE EOL collate_start definitions_collate ORDER_END END T_LC_COLLATE EOL
+ : T_LC_COLLATE EOL COPY STRING EOL END T_LC_COLLATE newlines
+ | T_LC_COLLATE EOL collate_start definitions_collate ORDER_END END T_LC_COLLATE newlines
  ;
 
 collate_start
@@ -165,8 +170,8 @@ collate_char_specifier
  ;
 
 section_monetary
- : T_LC_MONETARY EOL COPY STRING EOL END T_LC_MONETARY EOL
- | T_LC_MONETARY EOL definitions_monetary END T_LC_MONETARY EOL
+ : T_LC_MONETARY EOL COPY STRING EOL END T_LC_MONETARY newlines
+ | T_LC_MONETARY EOL definitions_monetary END T_LC_MONETARY newlines
  ;
 
 definitions_monetary
@@ -202,8 +207,8 @@ single_definition_numeric
  ;
 
 section_time
- : T_LC_TIME EOL COPY STRING EOL END T_LC_TIME EOL
- | T_LC_TIME EOL definitions_time END T_LC_TIME EOL
+ : T_LC_TIME EOL COPY STRING EOL END T_LC_TIME newlines
+ | T_LC_TIME EOL definitions_time END T_LC_TIME newlines
  ;
 
 definitions_time
@@ -217,8 +222,8 @@ single_definition_time
  ;
 
 section_messages
- : T_LC_MESSAGES EOL COPY STRING EOL END T_LC_MESSAGES EOL
- | T_LC_MESSAGES EOL definitions_messages END T_LC_MESSAGES EOL
+ : T_LC_MESSAGES EOL COPY STRING EOL END T_LC_MESSAGES newlines
+ | T_LC_MESSAGES EOL definitions_messages END T_LC_MESSAGES newlines
  ;
 
 definitions_messages

@@ -574,39 +574,40 @@ namespace locale_parser {
         S_YYACCEPT = 53,                         // $accept
         S_file = 54,                             // file
         S_locale_file = 55,                      // locale_file
-        S_prelude = 56,                          // prelude
-        S_configs = 57,                          // configs
-        S_sections = 58,                         // sections
-        S_section_ctype = 59,                    // section_ctype
-        S_definitions_ctype = 60,                // definitions_ctype
-        S_single_definition_ctype = 61,          // single_definition_ctype
-        S_field_ctype_pairs_value = 62,          // field_ctype_pairs_value
-        S_field_ctype_single_pair_value = 63,    // field_ctype_single_pair_value
-        S_section_collate = 64,                  // section_collate
-        S_collate_start = 65,                    // collate_start
-        S_order_operands = 66,                   // order_operands
-        S_order_operand = 67,                    // order_operand
-        S_definitions_collate = 68,              // definitions_collate
-        S_single_definition_collate = 69,        // single_definition_collate
-        S_collate_char_specifiers = 70,          // collate_char_specifiers
-        S_collate_char_specifier = 71,           // collate_char_specifier
-        S_section_monetary = 72,                 // section_monetary
-        S_definitions_monetary = 73,             // definitions_monetary
-        S_single_definition_monetary = 74,       // single_definition_monetary
-        S_section_numeric = 75,                  // section_numeric
-        S_field_chars_value = 76,                // field_chars_value
-        S_definitions_numeric = 77,              // definitions_numeric
-        S_single_definition_numeric = 78,        // single_definition_numeric
-        S_section_time = 79,                     // section_time
-        S_definitions_time = 80,                 // definitions_time
-        S_single_definition_time = 81,           // single_definition_time
-        S_section_messages = 82,                 // section_messages
-        S_definitions_messages = 83,             // definitions_messages
-        S_single_definition_messages = 84,       // single_definition_messages
-        S_character_value = 85,                  // character_value
-        S_field_bytes_value = 86,                // field_bytes_value
-        S_field_strings_value = 87,              // field_strings_value
-        S_character_literals = 88                // character_literals
+        S_newlines = 56,                         // newlines
+        S_prelude = 57,                          // prelude
+        S_configs = 58,                          // configs
+        S_sections = 59,                         // sections
+        S_section_ctype = 60,                    // section_ctype
+        S_definitions_ctype = 61,                // definitions_ctype
+        S_single_definition_ctype = 62,          // single_definition_ctype
+        S_field_ctype_pairs_value = 63,          // field_ctype_pairs_value
+        S_field_ctype_single_pair_value = 64,    // field_ctype_single_pair_value
+        S_section_collate = 65,                  // section_collate
+        S_collate_start = 66,                    // collate_start
+        S_order_operands = 67,                   // order_operands
+        S_order_operand = 68,                    // order_operand
+        S_definitions_collate = 69,              // definitions_collate
+        S_single_definition_collate = 70,        // single_definition_collate
+        S_collate_char_specifiers = 71,          // collate_char_specifiers
+        S_collate_char_specifier = 72,           // collate_char_specifier
+        S_section_monetary = 73,                 // section_monetary
+        S_definitions_monetary = 74,             // definitions_monetary
+        S_single_definition_monetary = 75,       // single_definition_monetary
+        S_section_numeric = 76,                  // section_numeric
+        S_field_chars_value = 77,                // field_chars_value
+        S_definitions_numeric = 78,              // definitions_numeric
+        S_single_definition_numeric = 79,        // single_definition_numeric
+        S_section_time = 80,                     // section_time
+        S_definitions_time = 81,                 // definitions_time
+        S_single_definition_time = 82,           // single_definition_time
+        S_section_messages = 83,                 // section_messages
+        S_definitions_messages = 84,             // definitions_messages
+        S_single_definition_messages = 85,       // single_definition_messages
+        S_character_value = 86,                  // character_value
+        S_field_bytes_value = 87,                // field_bytes_value
+        S_field_strings_value = 88,              // field_strings_value
+        S_character_literals = 89                // character_literals
       };
     };
 
@@ -1800,7 +1801,7 @@ switch (yykind)
 
 #if LOCALE_PARSERDEBUG
     // YYRLINE[YYN] -- Source line where rule number YYN was defined.
-    static const unsigned char yyrline_[];
+    static const short yyrline_[];
     /// Report on the debug stream that the rule \a r is going to be reduced.
     virtual void yy_reduce_print_ (int r) const;
     /// Print the state stack on the debug stream.
@@ -2027,8 +2028,8 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 208,     ///< Last index in yytable_.
-      yynnts_ = 36,  ///< Number of nonterminal symbols.
+      yylast_ = 219,     ///< Last index in yytable_.
+      yynnts_ = 37,  ///< Number of nonterminal symbols.
       yyfinal_ = 26 ///< Termination state number.
     };
 
@@ -2249,7 +2250,7 @@ switch (yykind)
 
 
 } // locale_parser
-#line 2253 "inc/bison_locale.hpp"
+#line 2254 "inc/bison_locale.hpp"
 
 
 
