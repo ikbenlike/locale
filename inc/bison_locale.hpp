@@ -382,6 +382,9 @@ namespace locale_parser {
     /// An auxiliary type to compute the largest semantic type.
     union union_type
     {
+      // NUMBER
+      char dummy1[sizeof (int16_t)];
+
       // CONFIG
       // CHARACTER_NAME
       // STRING
@@ -403,10 +406,10 @@ namespace locale_parser {
       // FIELD_NAME
       // FIELD_PAPER
       // FIELD_TELEPHONE
-      char dummy1[sizeof (std::string)];
+      char dummy2[sizeof (std::string)];
 
       // CHARACTER_LITERAL
-      char dummy2[sizeof (uint8_t)];
+      char dummy3[sizeof (uint8_t)];
     };
 
     /// The size of the largest semantic type.
@@ -577,37 +580,38 @@ namespace locale_parser {
         S_newlines = 56,                         // newlines
         S_prelude = 57,                          // prelude
         S_configs = 58,                          // configs
-        S_sections = 59,                         // sections
-        S_section_ctype = 60,                    // section_ctype
-        S_definitions_ctype = 61,                // definitions_ctype
-        S_single_definition_ctype = 62,          // single_definition_ctype
-        S_field_ctype_pairs_value = 63,          // field_ctype_pairs_value
-        S_field_ctype_single_pair_value = 64,    // field_ctype_single_pair_value
-        S_section_collate = 65,                  // section_collate
-        S_collate_start = 66,                    // collate_start
-        S_order_operands = 67,                   // order_operands
-        S_order_operand = 68,                    // order_operand
-        S_definitions_collate = 69,              // definitions_collate
-        S_single_definition_collate = 70,        // single_definition_collate
-        S_collate_char_specifiers = 71,          // collate_char_specifiers
-        S_collate_char_specifier = 72,           // collate_char_specifier
-        S_section_monetary = 73,                 // section_monetary
-        S_definitions_monetary = 74,             // definitions_monetary
-        S_single_definition_monetary = 75,       // single_definition_monetary
-        S_section_numeric = 76,                  // section_numeric
-        S_field_chars_value = 77,                // field_chars_value
-        S_definitions_numeric = 78,              // definitions_numeric
-        S_single_definition_numeric = 79,        // single_definition_numeric
-        S_section_time = 80,                     // section_time
-        S_definitions_time = 81,                 // definitions_time
-        S_single_definition_time = 82,           // single_definition_time
-        S_section_messages = 83,                 // section_messages
-        S_definitions_messages = 84,             // definitions_messages
-        S_single_definition_messages = 85,       // single_definition_messages
-        S_character_value = 86,                  // character_value
-        S_field_bytes_value = 87,                // field_bytes_value
-        S_field_strings_value = 88,              // field_strings_value
-        S_character_literals = 89                // character_literals
+        S_section = 59,                          // section
+        S_sections = 60,                         // sections
+        S_section_ctype = 61,                    // section_ctype
+        S_definitions_ctype = 62,                // definitions_ctype
+        S_single_definition_ctype = 63,          // single_definition_ctype
+        S_field_ctype_pairs_value = 64,          // field_ctype_pairs_value
+        S_field_ctype_single_pair_value = 65,    // field_ctype_single_pair_value
+        S_section_collate = 66,                  // section_collate
+        S_collate_start = 67,                    // collate_start
+        S_order_operands = 68,                   // order_operands
+        S_order_operand = 69,                    // order_operand
+        S_definitions_collate = 70,              // definitions_collate
+        S_single_definition_collate = 71,        // single_definition_collate
+        S_collate_char_specifiers = 72,          // collate_char_specifiers
+        S_collate_char_specifier = 73,           // collate_char_specifier
+        S_section_monetary = 74,                 // section_monetary
+        S_definitions_monetary = 75,             // definitions_monetary
+        S_single_definition_monetary = 76,       // single_definition_monetary
+        S_section_numeric = 77,                  // section_numeric
+        S_field_chars_value = 78,                // field_chars_value
+        S_definitions_numeric = 79,              // definitions_numeric
+        S_single_definition_numeric = 80,        // single_definition_numeric
+        S_section_time = 81,                     // section_time
+        S_definitions_time = 82,                 // definitions_time
+        S_single_definition_time = 83,           // single_definition_time
+        S_section_messages = 84,                 // section_messages
+        S_definitions_messages = 85,             // definitions_messages
+        S_single_definition_messages = 86,       // single_definition_messages
+        S_character_value = 87,                  // character_value
+        S_field_bytes_value = 88,                // field_bytes_value
+        S_field_strings_value = 89,              // field_strings_value
+        S_character_literals = 90                // character_literals
       };
     };
 
@@ -642,6 +646,10 @@ namespace locale_parser {
       {
         switch (this->kind ())
     {
+      case symbol_kind::S_NUMBER: // NUMBER
+        value.move< int16_t > (std::move (that.value));
+        break;
+
       case symbol_kind::S_CONFIG: // CONFIG
       case symbol_kind::S_CHARACTER_NAME: // CHARACTER_NAME
       case symbol_kind::S_STRING: // STRING
@@ -688,6 +696,18 @@ namespace locale_parser {
 #else
       basic_symbol (typename Base::kind_type t)
         : Base (t)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, int16_t&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const int16_t& v)
+        : Base (t)
+        , value (v)
       {}
 #endif
 
@@ -739,6 +759,10 @@ namespace locale_parser {
         // Value type destructor.
 switch (yykind)
     {
+      case symbol_kind::S_NUMBER: // NUMBER
+        value.template destroy< int16_t > ();
+        break;
+
       case symbol_kind::S_CONFIG: // CONFIG
       case symbol_kind::S_CHARACTER_NAME: // CHARACTER_NAME
       case symbol_kind::S_STRING: // STRING
@@ -861,6 +885,14 @@ switch (yykind)
 #else
       symbol_type (int tok)
         : super_type (token_kind_type (tok))
+#endif
+      {}
+#if 201103L <= YY_CPLUSPLUS
+      symbol_type (int tok, int16_t v)
+        : super_type (token_kind_type (tok), std::move (v))
+#else
+      symbol_type (int tok, const int16_t& v)
+        : super_type (token_kind_type (tok), v)
 #endif
       {}
 #if 201103L <= YY_CPLUSPLUS
@@ -1052,16 +1084,16 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_NUMBER ()
+      make_NUMBER (int16_t v)
       {
-        return symbol_type (token::NUMBER);
+        return symbol_type (token::NUMBER, std::move (v));
       }
 #else
       static
       symbol_type
-      make_NUMBER ()
+      make_NUMBER (const int16_t& v)
       {
-        return symbol_type (token::NUMBER);
+        return symbol_type (token::NUMBER, v);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -2028,9 +2060,9 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 219,     ///< Last index in yytable_.
-      yynnts_ = 37,  ///< Number of nonterminal symbols.
-      yyfinal_ = 26 ///< Termination state number.
+      yylast_ = 227,     ///< Last index in yytable_.
+      yynnts_ = 38,  ///< Number of nonterminal symbols.
+      yyfinal_ = 27 ///< Termination state number.
     };
 
 
@@ -2098,6 +2130,10 @@ switch (yykind)
   {
     switch (this->kind ())
     {
+      case symbol_kind::S_NUMBER: // NUMBER
+        value.copy< int16_t > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_CONFIG: // CONFIG
       case symbol_kind::S_CHARACTER_NAME: // CHARACTER_NAME
       case symbol_kind::S_STRING: // STRING
@@ -2157,6 +2193,10 @@ switch (yykind)
     super_type::move (s);
     switch (this->kind ())
     {
+      case symbol_kind::S_NUMBER: // NUMBER
+        value.move< int16_t > (YY_MOVE (s.value));
+        break;
+
       case symbol_kind::S_CONFIG: // CONFIG
       case symbol_kind::S_CHARACTER_NAME: // CHARACTER_NAME
       case symbol_kind::S_STRING: // STRING
@@ -2250,7 +2290,7 @@ switch (yykind)
 
 
 } // locale_parser
-#line 2254 "inc/bison_locale.hpp"
+#line 2294 "inc/bison_locale.hpp"
 
 
 

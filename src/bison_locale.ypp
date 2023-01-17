@@ -19,7 +19,7 @@
 %token <uint8_t> CHARACTER_LITERAL
 %token EOL
 %token <std::string> STRING
-%token NUMBER
+%token <int16_t> NUMBER
 %token SEMICOLON
 %token BRACKET_OPEN
 %token BRACKET_CLOSE
@@ -73,7 +73,7 @@
 
 %%
 
-file : locale_file YYEOF { YYACCEPT; }
+file : locale_file YYEOF { YYACCEPT; } ;
 
 locale_file
  :
@@ -94,13 +94,18 @@ configs
  | configs CONFIG TEXT newlines { locale::set_config($2, $3); }
  ;
 
+section
+ : section_ctype { if(locale::had_section_ctype()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
+ | section_collate { if(locale::had_section_collate()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
+ | section_monetary { if(locale::had_section_monetary()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
+ | section_numeric { if(locale::had_section_numeric()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
+ | section_time { if(locale::had_section_time()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
+ | section_messages { if(locale::had_section_messages()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
+ ;
+
 sections
- : section_ctype
- | section_collate
- | section_monetary
- | section_numeric
- | section_time
- | section_messages
+ : section
+ | sections section
  ;
 
 section_ctype
@@ -129,7 +134,7 @@ field_ctype_single_pair_value
 
 section_collate
  : T_LC_COLLATE EOL COPY STRING EOL END T_LC_COLLATE newlines
- | T_LC_COLLATE EOL collate_start definitions_collate ORDER_END END T_LC_COLLATE newlines
+ | T_LC_COLLATE EOL collate_start definitions_collate ORDER_END EOL END T_LC_COLLATE newlines
  ;
 
 collate_start
@@ -150,12 +155,13 @@ order_operand
 
 definitions_collate
  : single_definition_collate
- | definitions_collate EOL single_definition_collate
+ | definitions_collate single_definition_collate
  ;
 
 single_definition_collate
  : CHARACTER_NAME EOL
  | CHARACTER_NAME collate_char_specifiers EOL
+ | UNDEFINED EOL
  ;
 
 collate_char_specifiers
@@ -186,8 +192,8 @@ single_definition_monetary
  ;
 
 section_numeric
- : T_LC_NUMERIC EOL COPY STRING EOL END T_LC_NUMERIC EOL
- | T_LC_NUMERIC EOL definitions_numeric END T_LC_NUMERIC EOL
+ : T_LC_NUMERIC EOL COPY STRING EOL END T_LC_NUMERIC newlines
+ | T_LC_NUMERIC EOL definitions_numeric END T_LC_NUMERIC newlines
  ;
 
 field_chars_value
