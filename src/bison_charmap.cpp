@@ -53,7 +53,7 @@
 
 
 // Unqualified %code blocks.
-#line 32 "src/bison_charmap.ypp"
+#line 34 "src/bison_charmap.ypp"
 
     namespace charmap_parser {
         parser::symbol_type charmap_parserlex();
@@ -205,6 +205,13 @@ namespace charmap_parser {
         value.YY_MOVE_OR_COPY< std::string > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_value_list: // value_list
+      case symbol_kind::S_hex_list: // hex_list
+      case symbol_kind::S_dec_list: // dec_list
+      case symbol_kind::S_oct_list: // oct_list
+        value.YY_MOVE_OR_COPY< std::vector<uint8_t> > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_CHARACTER_HEX: // CHARACTER_HEX
       case symbol_kind::S_CHARACTER_DEC: // CHARACTER_DEC
       case symbol_kind::S_CHARACTER_OCT: // CHARACTER_OCT
@@ -231,6 +238,13 @@ namespace charmap_parser {
       case symbol_kind::S_CHARACTER_NAME: // CHARACTER_NAME
       case symbol_kind::S_TEXT: // TEXT
         value.move< std::string > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_value_list: // value_list
+      case symbol_kind::S_hex_list: // hex_list
+      case symbol_kind::S_dec_list: // dec_list
+      case symbol_kind::S_oct_list: // oct_list
+        value.move< std::vector<uint8_t> > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_CHARACTER_HEX: // CHARACTER_HEX
@@ -261,6 +275,13 @@ namespace charmap_parser {
         value.copy< std::string > (that.value);
         break;
 
+      case symbol_kind::S_value_list: // value_list
+      case symbol_kind::S_hex_list: // hex_list
+      case symbol_kind::S_dec_list: // dec_list
+      case symbol_kind::S_oct_list: // oct_list
+        value.copy< std::vector<uint8_t> > (that.value);
+        break;
+
       case symbol_kind::S_CHARACTER_HEX: // CHARACTER_HEX
       case symbol_kind::S_CHARACTER_DEC: // CHARACTER_DEC
       case symbol_kind::S_CHARACTER_OCT: // CHARACTER_OCT
@@ -285,6 +306,13 @@ namespace charmap_parser {
       case symbol_kind::S_CHARACTER_NAME: // CHARACTER_NAME
       case symbol_kind::S_TEXT: // TEXT
         value.move< std::string > (that.value);
+        break;
+
+      case symbol_kind::S_value_list: // value_list
+      case symbol_kind::S_hex_list: // hex_list
+      case symbol_kind::S_dec_list: // dec_list
+      case symbol_kind::S_oct_list: // oct_list
+        value.move< std::vector<uint8_t> > (that.value);
         break;
 
       case symbol_kind::S_CHARACTER_HEX: // CHARACTER_HEX
@@ -554,6 +582,13 @@ namespace charmap_parser {
         yylhs.value.emplace< std::string > ();
         break;
 
+      case symbol_kind::S_value_list: // value_list
+      case symbol_kind::S_hex_list: // hex_list
+      case symbol_kind::S_dec_list: // dec_list
+      case symbol_kind::S_oct_list: // oct_list
+        yylhs.value.emplace< std::vector<uint8_t> > ();
+        break;
+
       case symbol_kind::S_CHARACTER_HEX: // CHARACTER_HEX
       case symbol_kind::S_CHARACTER_DEC: // CHARACTER_DEC
       case symbol_kind::S_CHARACTER_OCT: // CHARACTER_OCT
@@ -576,109 +611,127 @@ namespace charmap_parser {
           switch (yyn)
             {
   case 2: // file: charmap_file $end
-#line 40 "src/bison_charmap.ypp"
+#line 42 "src/bison_charmap.ypp"
                           { YYACCEPT; }
-#line 582 "src/bison_charmap.cpp"
+#line 617 "src/bison_charmap.cpp"
     break;
 
   case 13: // configs: CONFIG TEXT EOL
-#line 59 "src/bison_charmap.ypp"
+#line 61 "src/bison_charmap.ypp"
                    { charmap::set_config(yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::string > ()); }
-#line 588 "src/bison_charmap.cpp"
+#line 623 "src/bison_charmap.cpp"
     break;
 
   case 14: // configs: CONFIG NUMBER EOL
-#line 60 "src/bison_charmap.ypp"
+#line 62 "src/bison_charmap.ypp"
                      { charmap::set_config(yystack_[2].value.as < std::string > (), yystack_[1].value.as < uint8_t > ()); }
-#line 594 "src/bison_charmap.cpp"
+#line 629 "src/bison_charmap.cpp"
     break;
 
   case 15: // configs: configs CONFIG TEXT EOL
-#line 61 "src/bison_charmap.ypp"
+#line 63 "src/bison_charmap.ypp"
                            { charmap::set_config(yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::string > ()); }
-#line 600 "src/bison_charmap.cpp"
+#line 635 "src/bison_charmap.cpp"
     break;
 
   case 16: // configs: configs CONFIG NUMBER EOL
-#line 62 "src/bison_charmap.ypp"
+#line 64 "src/bison_charmap.ypp"
                              { charmap::set_config(yystack_[2].value.as < std::string > (), yystack_[1].value.as < uint8_t > ()); }
-#line 606 "src/bison_charmap.cpp"
+#line 641 "src/bison_charmap.cpp"
     break;
 
   case 24: // definition: CHARACTER_NAME value_list anything
-#line 82 "src/bison_charmap.ypp"
-                                      { charmap::save_definition(yystack_[2].value.as < std::string > ()); }
-#line 612 "src/bison_charmap.cpp"
+#line 84 "src/bison_charmap.ypp"
+                                      { charmap::save_definition(yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::vector<uint8_t> > ()); }
+#line 647 "src/bison_charmap.cpp"
     break;
 
   case 25: // definition: CHARACTER_NAME RANGE CHARACTER_NAME value_list anything
-#line 83 "src/bison_charmap.ypp"
-                                                           { charmap::save_range_definition(yystack_[4].value.as < std::string > (), yystack_[2].value.as < std::string > (), 10); }
-#line 618 "src/bison_charmap.cpp"
+#line 85 "src/bison_charmap.ypp"
+                                                           { charmap::save_range_definition(yystack_[4].value.as < std::string > (), yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::vector<uint8_t> > (), 10); }
+#line 653 "src/bison_charmap.cpp"
     break;
 
   case 26: // definition: CHARACTER_NAME RANGE_GNU CHARACTER_NAME value_list anything
-#line 84 "src/bison_charmap.ypp"
-                                                               { charmap::save_range_definition(yystack_[4].value.as < std::string > (), yystack_[2].value.as < std::string > (), 16); }
-#line 624 "src/bison_charmap.cpp"
+#line 86 "src/bison_charmap.ypp"
+                                                               { charmap::save_range_definition(yystack_[4].value.as < std::string > (), yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::vector<uint8_t> > (), 16); }
+#line 659 "src/bison_charmap.cpp"
+    break;
+
+  case 27: // value_list: hex_list
+#line 90 "src/bison_charmap.ypp"
+   { yylhs.value.as < std::vector<uint8_t> > () = yystack_[0].value.as < std::vector<uint8_t> > (); }
+#line 665 "src/bison_charmap.cpp"
+    break;
+
+  case 28: // value_list: dec_list
+#line 91 "src/bison_charmap.ypp"
+   { yylhs.value.as < std::vector<uint8_t> > () = yystack_[0].value.as < std::vector<uint8_t> > (); }
+#line 671 "src/bison_charmap.cpp"
+    break;
+
+  case 29: // value_list: oct_list
+#line 92 "src/bison_charmap.ypp"
+   { yylhs.value.as < std::vector<uint8_t> > () = yystack_[0].value.as < std::vector<uint8_t> > (); }
+#line 677 "src/bison_charmap.cpp"
     break;
 
   case 30: // hex_list: CHARACTER_HEX
-#line 94 "src/bison_charmap.ypp"
-                 { charmap::add_to_value(yystack_[0].value.as < uint8_t > ()); }
-#line 630 "src/bison_charmap.cpp"
+#line 96 "src/bison_charmap.ypp"
+                 { yylhs.value.as < std::vector<uint8_t> > () = std::vector<uint8_t>{yystack_[0].value.as < uint8_t > ()}; }
+#line 683 "src/bison_charmap.cpp"
     break;
 
   case 31: // hex_list: hex_list CHARACTER_HEX
-#line 95 "src/bison_charmap.ypp"
-                          { charmap::add_to_value(yystack_[0].value.as < uint8_t > ()); }
-#line 636 "src/bison_charmap.cpp"
+#line 97 "src/bison_charmap.ypp"
+                          { yystack_[1].value.as < std::vector<uint8_t> > ().push_back(yystack_[0].value.as < uint8_t > ()); yylhs.value.as < std::vector<uint8_t> > () = yystack_[1].value.as < std::vector<uint8_t> > (); }
+#line 689 "src/bison_charmap.cpp"
     break;
 
   case 32: // dec_list: CHARACTER_DEC
-#line 99 "src/bison_charmap.ypp"
-                 { charmap::add_to_value(yystack_[0].value.as < uint8_t > ()); }
-#line 642 "src/bison_charmap.cpp"
+#line 101 "src/bison_charmap.ypp"
+                 { yylhs.value.as < std::vector<uint8_t> > () = std::vector<uint8_t>{yystack_[0].value.as < uint8_t > ()}; }
+#line 695 "src/bison_charmap.cpp"
     break;
 
   case 33: // dec_list: dec_list CHARACTER_DEC
-#line 100 "src/bison_charmap.ypp"
-                          { charmap::add_to_value(yystack_[0].value.as < uint8_t > ()); }
-#line 648 "src/bison_charmap.cpp"
+#line 102 "src/bison_charmap.ypp"
+                          { yystack_[1].value.as < std::vector<uint8_t> > ().push_back(yystack_[0].value.as < uint8_t > ()); yylhs.value.as < std::vector<uint8_t> > () = yystack_[1].value.as < std::vector<uint8_t> > (); }
+#line 701 "src/bison_charmap.cpp"
     break;
 
   case 34: // oct_list: CHARACTER_OCT
-#line 104 "src/bison_charmap.ypp"
-                 { charmap::add_to_value(yystack_[0].value.as < uint8_t > ()); }
-#line 654 "src/bison_charmap.cpp"
+#line 106 "src/bison_charmap.ypp"
+                 { yylhs.value.as < std::vector<uint8_t> > () = std::vector<uint8_t>{yystack_[0].value.as < uint8_t > ()}; }
+#line 707 "src/bison_charmap.cpp"
     break;
 
   case 35: // oct_list: oct_list CHARACTER_OCT
-#line 105 "src/bison_charmap.ypp"
-                          { charmap::add_to_value(yystack_[0].value.as < uint8_t > ()); }
-#line 660 "src/bison_charmap.cpp"
+#line 107 "src/bison_charmap.ypp"
+                          { yystack_[1].value.as < std::vector<uint8_t> > ().push_back(yystack_[0].value.as < uint8_t > ()); yylhs.value.as < std::vector<uint8_t> > () = yystack_[1].value.as < std::vector<uint8_t> > (); }
+#line 713 "src/bison_charmap.cpp"
     break;
 
   case 36: // default_width: WIDTH_DEFAULT NUMBER EOL
-#line 109 "src/bison_charmap.ypp"
+#line 111 "src/bison_charmap.ypp"
                             { charmap::set_width_default(yystack_[1].value.as < uint8_t > ()); }
-#line 666 "src/bison_charmap.cpp"
+#line 719 "src/bison_charmap.cpp"
     break;
 
   case 40: // width_definition: CHARACTER_NAME NUMBER EOL
-#line 120 "src/bison_charmap.ypp"
+#line 122 "src/bison_charmap.ypp"
                              { charmap::set_character_width(yystack_[2].value.as < std::string > (), yystack_[1].value.as < uint8_t > ()); }
-#line 672 "src/bison_charmap.cpp"
+#line 725 "src/bison_charmap.cpp"
     break;
 
   case 41: // width_definition: CHARACTER_NAME RANGE CHARACTER_NAME NUMBER EOL
-#line 121 "src/bison_charmap.ypp"
+#line 123 "src/bison_charmap.ypp"
                                                   { charmap::set_character_range_width(yystack_[4].value.as < std::string > (), yystack_[2].value.as < std::string > (), yystack_[1].value.as < uint8_t > ()); }
-#line 678 "src/bison_charmap.cpp"
+#line 731 "src/bison_charmap.cpp"
     break;
 
 
-#line 682 "src/bison_charmap.cpp"
+#line 735 "src/bison_charmap.cpp"
 
             default:
               break;
@@ -999,12 +1052,12 @@ namespace charmap_parser {
   const unsigned char
   parser::yyrline_[] =
   {
-       0,    40,    40,    43,    44,    45,    46,    47,    48,    49,
-      50,    51,    55,    59,    60,    61,    62,    63,    64,    68,
-      69,    73,    77,    78,    82,    83,    84,    88,    89,    90,
-      94,    95,    99,   100,   104,   105,   109,   112,   115,   116,
-     120,   121,   125,   126,   130,   131,   132,   133,   134,   135,
-     136,   137,   138,   139
+       0,    42,    42,    45,    46,    47,    48,    49,    50,    51,
+      52,    53,    57,    61,    62,    63,    64,    65,    66,    70,
+      71,    75,    79,    80,    84,    85,    86,    90,    91,    92,
+      96,    97,   101,   102,   106,   107,   111,   114,   117,   118,
+     122,   123,   127,   128,   132,   133,   134,   135,   136,   137,
+     138,   139,   140,   141
   };
 
   void
@@ -1036,9 +1089,9 @@ namespace charmap_parser {
 
 
 } // charmap_parser
-#line 1040 "src/bison_charmap.cpp"
+#line 1093 "src/bison_charmap.cpp"
 
-#line 142 "src/bison_charmap.ypp"
+#line 144 "src/bison_charmap.ypp"
 
 
 namespace charmap_parser {

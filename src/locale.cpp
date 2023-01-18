@@ -37,7 +37,6 @@ locale_parser::parser::symbol_type LocaleLexer::get_token(){
             return locale_parser::parser::make_LOCALE_PARSERerror();
         }
 
-        std::cout << "name: " << token << std::endl;
         return locale_parser::parser::make_CHARACTER_NAME(token);
     }
     else if(peek(0) == m_escape_char){
@@ -307,7 +306,7 @@ LocaleLexer *get_lexer(){
 
 int parse(){
     locale_parser::parser parser;
-    parser.set_debug_level(true);
+    //parser.set_debug_level(true);
     return parser.parse();
 }
 

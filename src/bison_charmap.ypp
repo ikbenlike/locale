@@ -29,6 +29,8 @@
 %token WIDTH
 %token WIDTH_DEFAULT
 
+%type <std::vector<uint8_t>> value_list hex_list oct_list dec_list
+
 %code {
     namespace charmap_parser {
         parser::symbol_type charmap_parserlex();
@@ -79,9 +81,9 @@ definitions
  ;
 
 definition
- : CHARACTER_NAME value_list anything { charmap::save_definition($1); }
- | CHARACTER_NAME RANGE CHARACTER_NAME value_list anything { charmap::save_range_definition($1, $3, 10); }
- | CHARACTER_NAME RANGE_GNU CHARACTER_NAME value_list anything { charmap::save_range_definition($1, $3, 16); }
+ : CHARACTER_NAME value_list anything { charmap::save_definition($1, $2); }
+ | CHARACTER_NAME RANGE CHARACTER_NAME value_list anything { charmap::save_range_definition($1, $3, $4, 10); }
+ | CHARACTER_NAME RANGE_GNU CHARACTER_NAME value_list anything { charmap::save_range_definition($1, $3, $4, 16); }
  ;
 
 value_list
@@ -91,18 +93,18 @@ value_list
  ;
 
 hex_list
- : CHARACTER_HEX { charmap::add_to_value($1); }
- | hex_list CHARACTER_HEX { charmap::add_to_value($2); }
+ : CHARACTER_HEX { $$ = std::vector<uint8_t>{$1}; }
+ | hex_list CHARACTER_HEX { $1.push_back($2); $$ = $1; }
  ;
 
 dec_list
- : CHARACTER_DEC { charmap::add_to_value($1); }
- | dec_list CHARACTER_DEC { charmap::add_to_value($2); }
+ : CHARACTER_DEC { $$ = std::vector<uint8_t>{$1}; }
+ | dec_list CHARACTER_DEC { $1.push_back($2); $$ = $1; }
  ;
 
 oct_list
- : CHARACTER_OCT { charmap::add_to_value($1); }
- | oct_list CHARACTER_OCT { charmap::add_to_value($2); }
+ : CHARACTER_OCT { $$ = std::vector<uint8_t>{$1}; }
+ | oct_list CHARACTER_OCT { $1.push_back($2); $$ = $1; }
  ;
 
 default_width

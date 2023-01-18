@@ -387,11 +387,17 @@ namespace charmap_parser {
       // TEXT
       char dummy1[sizeof (std::string)];
 
+      // value_list
+      // hex_list
+      // dec_list
+      // oct_list
+      char dummy2[sizeof (std::vector<uint8_t>)];
+
       // CHARACTER_HEX
       // CHARACTER_DEC
       // CHARACTER_OCT
       // NUMBER
-      char dummy2[sizeof (uint8_t)];
+      char dummy3[sizeof (uint8_t)];
     };
 
     /// The size of the largest semantic type.
@@ -543,6 +549,13 @@ namespace charmap_parser {
         value.move< std::string > (std::move (that.value));
         break;
 
+      case symbol_kind::S_value_list: // value_list
+      case symbol_kind::S_hex_list: // hex_list
+      case symbol_kind::S_dec_list: // dec_list
+      case symbol_kind::S_oct_list: // oct_list
+        value.move< std::vector<uint8_t> > (std::move (that.value));
+        break;
+
       case symbol_kind::S_CHARACTER_HEX: // CHARACTER_HEX
       case symbol_kind::S_CHARACTER_DEC: // CHARACTER_DEC
       case symbol_kind::S_CHARACTER_OCT: // CHARACTER_OCT
@@ -578,6 +591,18 @@ namespace charmap_parser {
       {}
 #else
       basic_symbol (typename Base::kind_type t, const std::string& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, std::vector<uint8_t>&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const std::vector<uint8_t>& v)
         : Base (t)
         , value (v)
       {}
@@ -623,6 +648,13 @@ switch (yykind)
       case symbol_kind::S_CHARACTER_NAME: // CHARACTER_NAME
       case symbol_kind::S_TEXT: // TEXT
         value.template destroy< std::string > ();
+        break;
+
+      case symbol_kind::S_value_list: // value_list
+      case symbol_kind::S_hex_list: // hex_list
+      case symbol_kind::S_dec_list: // dec_list
+      case symbol_kind::S_oct_list: // oct_list
+        value.template destroy< std::vector<uint8_t> > ();
         break;
 
       case symbol_kind::S_CHARACTER_HEX: // CHARACTER_HEX
@@ -1426,6 +1458,13 @@ switch (yykind)
         value.copy< std::string > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_value_list: // value_list
+      case symbol_kind::S_hex_list: // hex_list
+      case symbol_kind::S_dec_list: // dec_list
+      case symbol_kind::S_oct_list: // oct_list
+        value.copy< std::vector<uint8_t> > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_CHARACTER_HEX: // CHARACTER_HEX
       case symbol_kind::S_CHARACTER_DEC: // CHARACTER_DEC
       case symbol_kind::S_CHARACTER_OCT: // CHARACTER_OCT
@@ -1468,6 +1507,13 @@ switch (yykind)
       case symbol_kind::S_CHARACTER_NAME: // CHARACTER_NAME
       case symbol_kind::S_TEXT: // TEXT
         value.move< std::string > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_value_list: // value_list
+      case symbol_kind::S_hex_list: // hex_list
+      case symbol_kind::S_dec_list: // dec_list
+      case symbol_kind::S_oct_list: // oct_list
+        value.move< std::vector<uint8_t> > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_CHARACTER_HEX: // CHARACTER_HEX
@@ -1542,7 +1588,7 @@ switch (yykind)
 
 
 } // charmap_parser
-#line 1546 "inc/bison_charmap.hpp"
+#line 1592 "inc/bison_charmap.hpp"
 
 
 

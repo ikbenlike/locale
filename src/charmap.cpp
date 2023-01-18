@@ -201,21 +201,15 @@ void set_width_default(uint8_t value){
     lexer->set_width_default(value);
 }
 
-std::vector<uint8_t> current_value;
 std::vector<CharacterDefinition> definitions;
 std::map<std::string, size_t> definition_map;
 
-void add_to_value(uint8_t val){
-    current_value.push_back(val);
-}
-
-void save_definition(std::string name){
+void save_definition(std::string name, std::vector<uint8_t> value){
     CharacterDefinition def = {
         .name = name,
-        .bytes = current_value,
+        .bytes = value,
         .width_set = false
     };
-    current_value = {};
 
     definitions.push_back(def);
     definition_map[name] = definitions.size() - 1;
@@ -281,20 +275,18 @@ std::vector<uint8_t> produce_range_value(std::vector<uint8_t> val){
     return val;
 }
 
-void save_range_definition(std::string start, std::string end, int base){
+void save_range_definition(std::string start, std::string end, std::vector<uint8_t> value, int base){
     std::string start_number_string = parse_range_int(start, base);
     std::string end_number_string = parse_range_int(end, base);
     size_t ndigits = start_number_string.size();
     std::string name = parse_range_name(start, ndigits);
     size_t start_number = std::stoull(start_number_string, nullptr, base);
     size_t end_number = std::stoull(end_number_string, nullptr, base);
-    std::vector<uint8_t> val = current_value;
 
     for(size_t i = start_number; i <= end_number; i++){
         std::string full_name = produce_range_name(name, i, base, ndigits);
-        save_definition(full_name);
-        val = produce_range_value(val);
-        current_value = val;
+        save_definition(full_name, value);
+        value = produce_range_value(value);
     }
 }
 
