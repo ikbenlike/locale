@@ -6,8 +6,10 @@
 #include <map>
 #include <sstream>
 
+#include "locale.bragi.hpp"
 #include "lexer.hpp"
 #include "locale.hpp"
+#include "charmap.hpp"
 #include "bison_locale.hpp"
 #include "util.hpp"
 
@@ -37,7 +39,14 @@ locale_parser::parser::symbol_type LocaleLexer::get_token(){
             return locale_parser::parser::make_LOCALE_PARSERerror();
         }
 
-        return locale_parser::parser::make_CHARACTER_NAME(token);
+        auto o_def = charmap::get_definition(token);
+        if(!o_def.has_value()){
+            error("Character with name '" + token + "' not found.");
+            return locale_parser::parser::make_LOCALE_PARSERerror();
+        }
+        auto val = o_def->bytes;
+
+        return locale_parser::parser::make_CHARACTER_NAME(std::string(val.begin(), val.end()));
     }
     else if(peek(0) == m_escape_char){
         size_t radix = 10;
@@ -317,48 +326,6 @@ void set_config(std::string conf, std::string value){
     else if(conf == "escape_char"){
         lexer->set_escape(value[0]);
     }
-}
-
-bool had_section_ctype(){
-    static bool h = false;
-    bool t = h;
-    h = true;
-    return t;
-}
-
-bool had_section_collate(){
-    static bool h = false;
-    bool t = h;
-    h = true;
-    return t;
-}
-
-bool had_section_monetary(){
-    static bool h = false;
-    bool t = h;
-    h = true;
-    return t;
-}
-
-bool had_section_numeric(){
-    static bool h = false;
-    bool t = h;
-    h = true;
-    return t;
-}
-
-bool had_section_time(){
-    static bool h = false;
-    bool t = h;
-    h = true;
-    return t;
-}
-
-bool had_section_messages(){
-    static bool h = false;
-    bool t = h;
-    h = true;
-    return t;
 }
 
 } //namespace locale
