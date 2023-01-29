@@ -1,5 +1,6 @@
 %{
 #include <string>
+#include <vector>
 #include <cstdint>
 #include "util.hpp"
 #include "charmap.hpp"

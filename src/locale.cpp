@@ -328,4 +328,95 @@ void set_config(std::string conf, std::string value){
     }
 }
 
+lc_ctype *set_field(lc_ctype *category, std::string field, std::vector<std::string> value){
+    size_t current_size = 0;
+    void (lc_ctype::* setter)(std::vector<std::string>) = &lc_ctype::set_upper;
+    if(field == "upper"){
+        current_size = category->upper_size();
+        setter = &lc_ctype::set_upper;
+    }
+    else if(field == "lower"){
+        current_size = category->lower_size();
+        setter = &lc_ctype::set_lower;
+    }
+    else if(field == "alpha"){
+        current_size = category->alpha_size();
+        setter = &lc_ctype::set_alpha;
+    }
+    else if(field == "digit"){
+        current_size = category->digit_size();
+        setter = &lc_ctype::set_digit;
+    }
+    else if(field == "alnum"){
+        current_size = category->alnum_size();
+        setter = &lc_ctype::set_alnum;
+    }
+    else if(field == "space"){
+        current_size = category->space_size();
+        setter = &lc_ctype::set_space;
+    }
+    else if(field == "cntrl"){
+        current_size = category->cntrl_size();
+        setter = &lc_ctype::set_cntrl;
+    }
+    else if(field == "punct"){
+        current_size = category->punct_size();
+        setter = &lc_ctype::set_punct;
+    }
+    else if(field == "graph"){
+        current_size = category->graph_size();
+        setter = &lc_ctype::set_graph;
+    }
+    else if(field == "print"){
+        current_size = category->print_size();
+        setter = &lc_ctype::set_print;
+    }
+    else if(field == "xdigit"){
+        current_size = category->xdigit_size();
+        setter = &lc_ctype::set_xdigit;
+    }
+    else if(field == "blank"){
+        current_size = category->blank_size();
+        setter = &lc_ctype::set_blank;
+    }
+    else {
+        lexer->error("Incorrect field '" + field + "'. This is a bug.");
+        return nullptr;
+    }
+
+    if(current_size){
+        lexer->error("Redefining field '" + field + "' in LC_CTYPE.");
+        return nullptr;
+    }
+
+    (category->*setter)(value);
+    return category;
+}
+
+lc_ctype *set_field(lc_ctype *category, std::string field, std::vector<pair> value){
+    size_t current_size = 0;
+    void (lc_ctype::* setter)(std::vector<pair>) = &lc_ctype::set_toupper;
+
+    if(field == "toupper"){
+        current_size = category->toupper_size();
+        setter = &lc_ctype::set_toupper;
+    }
+    else if(field == "tolower"){
+        current_size = category->tolower_size();
+        setter = &lc_ctype::set_tolower;
+    }
+    else {
+        lexer->error("Incorrect field '" + field + "'. This is a bug.");
+        return nullptr;
+    }
+
+    if(current_size){
+        lexer->error("Redefining field '" + field + "' in LC_CTYPE.");
+        return nullptr;
+    }
+
+    (category->*setter)(value);
+    return category;
+}
+
 } //namespace locale

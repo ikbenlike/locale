@@ -3,6 +3,7 @@
 #include <cstdint>
 #include "util.hpp"
 #include "locale.hpp"
+#include "locale.bragi.hpp"
 %}
 
 %require "3.2"
@@ -65,6 +66,19 @@
 %token IGNORE
 %token POSITION
 
+%type <pair> field_ctype_single_pair_value
+%type <std::vector<pair>> field_ctype_pairs_value
+%type <std::string> character_literals character_value
+%type <std::vector<int16_t>> field_bytes_value
+%type <std::vector<std::string>> field_chars_value field_strings_value
+%type <lc_ctype *> section_ctype
+%type <lc_collate *> section_collate
+%type <lc_time *> section_time
+%type <lc_numeric *> section_numeric
+%type <lc_messages *> section_messages
+%type <lc_monetary *> section_monetary
+%type <Locale *> sections
+
 %code {
     namespace locale_parser {
         parser::symbol_type locale_parserlex();
@@ -95,12 +109,12 @@ configs
  ;
 
 section
- : section_ctype { if(locale::had_section_ctype()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
- | section_collate { if(locale::had_section_collate()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
- | section_monetary { if(locale::had_section_monetary()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
- | section_numeric { if(locale::had_section_numeric()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
- | section_time { if(locale::had_section_time()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
- | section_messages { if(locale::had_section_messages()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
+ : section_ctype
+ | section_collate
+ | section_monetary
+ | section_numeric
+ | section_time
+ | section_messages
  ;
 
 sections
@@ -109,7 +123,7 @@ sections
  ;
 
 section_ctype
- : T_LC_CTYPE EOL COPY STRING EOL END T_LC_CTYPE newlines 
+ : T_LC_CTYPE EOL COPY STRING EOL END T_LC_CTYPE newlines { $$ = new lc_ctype; }
  | T_LC_CTYPE EOL definitions_ctype END T_LC_CTYPE newlines
  ;
 
@@ -124,13 +138,19 @@ single_definition_ctype
  ;
 
 field_ctype_pairs_value
- : field_ctype_single_pair_value
- | field_ctype_pairs_value SEMICOLON field_ctype_single_pair_value
- | field_ctype_pairs_value SEMICOLON ESCAPE EOL field_ctype_single_pair_value
+ : field_ctype_single_pair_value { $$ = std::vector<pair>{$1}; }
+ | field_ctype_pairs_value SEMICOLON field_ctype_single_pair_value { $1.push_back($3); $$ = $1; }
+ | field_ctype_pairs_value SEMICOLON ESCAPE EOL field_ctype_single_pair_value { $1.push_back($5); $$ = $1; }
  ;
 
 field_ctype_single_pair_value
- : BRACKET_OPEN character_value COMMA character_value BRACKET_CLOSE ;
+ : BRACKET_OPEN character_value COMMA character_value BRACKET_CLOSE
+ {
+    auto p = pair{};
+    p.set_left($2);
+    p.set_right($4);
+    $$ = p;
+ };
 
 section_collate
  : T_LC_COLLATE EOL COPY STRING EOL END T_LC_COLLATE newlines
@@ -197,9 +217,9 @@ section_numeric
  ;
 
 field_chars_value
- : character_value
- | field_chars_value SEMICOLON character_value
- | field_chars_value SEMICOLON ESCAPE EOL character_value
+ : character_value { $$ = std::vector<std::string>{$1}; }
+ | field_chars_value SEMICOLON character_value { $1.push_back($3);  }
+ | field_chars_value SEMICOLON ESCAPE EOL character_value { $1.push_back($5); $$ = $1; }
  ;
 
 definitions_numeric
@@ -246,20 +266,20 @@ character_value
  ;
 
 field_bytes_value
- : NUMBER
- | field_bytes_value SEMICOLON NUMBER
- | field_bytes_value SEMICOLON ESCAPE EOL NUMBER
+ : NUMBER { $$ = std::vector<int16_t>{$1}; }
+ | field_bytes_value SEMICOLON NUMBER { $1.push_back($3); $$ = $1; }
+ | field_bytes_value SEMICOLON ESCAPE EOL NUMBER { $1.push_back($5); $$ = $1; }
  ;
 
 field_strings_value
- : STRING
- | field_strings_value SEMICOLON STRING
- | field_strings_value SEMICOLON ESCAPE EOL STRING
+ : STRING { $$ = std::vector<std::string>{$1}; }
+ | field_strings_value SEMICOLON STRING { $1.push_back($3); $$ = $1; }
+ | field_strings_value SEMICOLON ESCAPE EOL STRING { $1.push_back($5); $$ = $1; }
  ;
 
 character_literals
- : CHARACTER_LITERAL
- | character_literals CHARACTER_LITERAL
+ : CHARACTER_LITERAL { $$ = std::string{(char)$1}; }
+ | character_literals CHARACTER_LITERAL { $1.push_back((char)$2); $$ = $1; }
  ;
 
 %%

@@ -3,6 +3,7 @@
 
 #include <optional>
 #include "lexer.hpp"
+#include "locale.bragi.hpp"
 #include "bison_locale.hpp"
 
 namespace locale {
@@ -17,12 +18,9 @@ void init(std::string name, uint8_t *buffer, size_t size);
 LocaleLexer *get_lexer();
 int parse();
 void set_config(std::string conf, std::string value);
-bool had_section_ctype();
-bool had_section_collate();
-bool had_section_monetary();
-bool had_section_numeric();
-bool had_section_time();
-bool had_section_messages();
+
+lc_ctype *set_field(lc_ctype *category, std::string field, std::vector<std::string> value);
+lc_ctype *set_field(lc_ctype *category, std::string field, std::vector<pair> value);
 
 } //namespace locale
 

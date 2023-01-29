@@ -4,6 +4,7 @@
 #include <cerrno>
 #include <cstdint>
 
+#include "locale.bragi.hpp"
 #include "util.hpp"
 #include "charmap.hpp"
 #include "locale.hpp"

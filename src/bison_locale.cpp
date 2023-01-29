@@ -45,21 +45,22 @@
 #include <cstdint>
 #include "util.hpp"
 #include "locale.hpp"
+#include "locale.bragi.hpp"
 
-#line 50 "src/bison_locale.cpp"
+#line 51 "src/bison_locale.cpp"
 
 
 #include "bison_locale.hpp"
 
 
 // Unqualified %code blocks.
-#line 68 "src/bison_locale.ypp"
+#line 82 "src/bison_locale.ypp"
 
     namespace locale_parser {
         parser::symbol_type locale_parserlex();
     }
 
-#line 63 "src/bison_locale.cpp"
+#line 64 "src/bison_locale.cpp"
 
 
 #ifndef YY_
@@ -132,7 +133,7 @@
 #define YYRECOVERING()  (!!yyerrstatus_)
 
 namespace locale_parser {
-#line 136 "src/bison_locale.cpp"
+#line 137 "src/bison_locale.cpp"
 
   /// Build a parser object.
   parser::parser ()
@@ -199,8 +200,40 @@ namespace locale_parser {
   {
     switch (that.kind ())
     {
+      case symbol_kind::S_sections: // sections
+        value.YY_MOVE_OR_COPY< Locale * > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_NUMBER: // NUMBER
         value.YY_MOVE_OR_COPY< int16_t > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_section_collate: // section_collate
+        value.YY_MOVE_OR_COPY< lc_collate * > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_section_ctype: // section_ctype
+        value.YY_MOVE_OR_COPY< lc_ctype * > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_section_messages: // section_messages
+        value.YY_MOVE_OR_COPY< lc_messages * > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_section_monetary: // section_monetary
+        value.YY_MOVE_OR_COPY< lc_monetary * > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_section_numeric: // section_numeric
+        value.YY_MOVE_OR_COPY< lc_numeric * > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_section_time: // section_time
+        value.YY_MOVE_OR_COPY< lc_time * > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_field_ctype_single_pair_value: // field_ctype_single_pair_value
+        value.YY_MOVE_OR_COPY< pair > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_CONFIG: // CONFIG
@@ -224,7 +257,22 @@ namespace locale_parser {
       case symbol_kind::S_FIELD_NAME: // FIELD_NAME
       case symbol_kind::S_FIELD_PAPER: // FIELD_PAPER
       case symbol_kind::S_FIELD_TELEPHONE: // FIELD_TELEPHONE
+      case symbol_kind::S_character_value: // character_value
+      case symbol_kind::S_character_literals: // character_literals
         value.YY_MOVE_OR_COPY< std::string > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_field_bytes_value: // field_bytes_value
+        value.YY_MOVE_OR_COPY< std::vector<int16_t> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_field_ctype_pairs_value: // field_ctype_pairs_value
+        value.YY_MOVE_OR_COPY< std::vector<pair> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_field_chars_value: // field_chars_value
+      case symbol_kind::S_field_strings_value: // field_strings_value
+        value.YY_MOVE_OR_COPY< std::vector<std::string> > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_CHARACTER_LITERAL: // CHARACTER_LITERAL
@@ -246,8 +294,40 @@ namespace locale_parser {
   {
     switch (that.kind ())
     {
+      case symbol_kind::S_sections: // sections
+        value.move< Locale * > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_NUMBER: // NUMBER
         value.move< int16_t > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_section_collate: // section_collate
+        value.move< lc_collate * > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_section_ctype: // section_ctype
+        value.move< lc_ctype * > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_section_messages: // section_messages
+        value.move< lc_messages * > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_section_monetary: // section_monetary
+        value.move< lc_monetary * > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_section_numeric: // section_numeric
+        value.move< lc_numeric * > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_section_time: // section_time
+        value.move< lc_time * > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_field_ctype_single_pair_value: // field_ctype_single_pair_value
+        value.move< pair > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_CONFIG: // CONFIG
@@ -271,7 +351,22 @@ namespace locale_parser {
       case symbol_kind::S_FIELD_NAME: // FIELD_NAME
       case symbol_kind::S_FIELD_PAPER: // FIELD_PAPER
       case symbol_kind::S_FIELD_TELEPHONE: // FIELD_TELEPHONE
+      case symbol_kind::S_character_value: // character_value
+      case symbol_kind::S_character_literals: // character_literals
         value.move< std::string > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_field_bytes_value: // field_bytes_value
+        value.move< std::vector<int16_t> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_field_ctype_pairs_value: // field_ctype_pairs_value
+        value.move< std::vector<pair> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_field_chars_value: // field_chars_value
+      case symbol_kind::S_field_strings_value: // field_strings_value
+        value.move< std::vector<std::string> > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_CHARACTER_LITERAL: // CHARACTER_LITERAL
@@ -293,8 +388,40 @@ namespace locale_parser {
     state = that.state;
     switch (that.kind ())
     {
+      case symbol_kind::S_sections: // sections
+        value.copy< Locale * > (that.value);
+        break;
+
       case symbol_kind::S_NUMBER: // NUMBER
         value.copy< int16_t > (that.value);
+        break;
+
+      case symbol_kind::S_section_collate: // section_collate
+        value.copy< lc_collate * > (that.value);
+        break;
+
+      case symbol_kind::S_section_ctype: // section_ctype
+        value.copy< lc_ctype * > (that.value);
+        break;
+
+      case symbol_kind::S_section_messages: // section_messages
+        value.copy< lc_messages * > (that.value);
+        break;
+
+      case symbol_kind::S_section_monetary: // section_monetary
+        value.copy< lc_monetary * > (that.value);
+        break;
+
+      case symbol_kind::S_section_numeric: // section_numeric
+        value.copy< lc_numeric * > (that.value);
+        break;
+
+      case symbol_kind::S_section_time: // section_time
+        value.copy< lc_time * > (that.value);
+        break;
+
+      case symbol_kind::S_field_ctype_single_pair_value: // field_ctype_single_pair_value
+        value.copy< pair > (that.value);
         break;
 
       case symbol_kind::S_CONFIG: // CONFIG
@@ -318,7 +445,22 @@ namespace locale_parser {
       case symbol_kind::S_FIELD_NAME: // FIELD_NAME
       case symbol_kind::S_FIELD_PAPER: // FIELD_PAPER
       case symbol_kind::S_FIELD_TELEPHONE: // FIELD_TELEPHONE
+      case symbol_kind::S_character_value: // character_value
+      case symbol_kind::S_character_literals: // character_literals
         value.copy< std::string > (that.value);
+        break;
+
+      case symbol_kind::S_field_bytes_value: // field_bytes_value
+        value.copy< std::vector<int16_t> > (that.value);
+        break;
+
+      case symbol_kind::S_field_ctype_pairs_value: // field_ctype_pairs_value
+        value.copy< std::vector<pair> > (that.value);
+        break;
+
+      case symbol_kind::S_field_chars_value: // field_chars_value
+      case symbol_kind::S_field_strings_value: // field_strings_value
+        value.copy< std::vector<std::string> > (that.value);
         break;
 
       case symbol_kind::S_CHARACTER_LITERAL: // CHARACTER_LITERAL
@@ -338,8 +480,40 @@ namespace locale_parser {
     state = that.state;
     switch (that.kind ())
     {
+      case symbol_kind::S_sections: // sections
+        value.move< Locale * > (that.value);
+        break;
+
       case symbol_kind::S_NUMBER: // NUMBER
         value.move< int16_t > (that.value);
+        break;
+
+      case symbol_kind::S_section_collate: // section_collate
+        value.move< lc_collate * > (that.value);
+        break;
+
+      case symbol_kind::S_section_ctype: // section_ctype
+        value.move< lc_ctype * > (that.value);
+        break;
+
+      case symbol_kind::S_section_messages: // section_messages
+        value.move< lc_messages * > (that.value);
+        break;
+
+      case symbol_kind::S_section_monetary: // section_monetary
+        value.move< lc_monetary * > (that.value);
+        break;
+
+      case symbol_kind::S_section_numeric: // section_numeric
+        value.move< lc_numeric * > (that.value);
+        break;
+
+      case symbol_kind::S_section_time: // section_time
+        value.move< lc_time * > (that.value);
+        break;
+
+      case symbol_kind::S_field_ctype_single_pair_value: // field_ctype_single_pair_value
+        value.move< pair > (that.value);
         break;
 
       case symbol_kind::S_CONFIG: // CONFIG
@@ -363,7 +537,22 @@ namespace locale_parser {
       case symbol_kind::S_FIELD_NAME: // FIELD_NAME
       case symbol_kind::S_FIELD_PAPER: // FIELD_PAPER
       case symbol_kind::S_FIELD_TELEPHONE: // FIELD_TELEPHONE
+      case symbol_kind::S_character_value: // character_value
+      case symbol_kind::S_character_literals: // character_literals
         value.move< std::string > (that.value);
+        break;
+
+      case symbol_kind::S_field_bytes_value: // field_bytes_value
+        value.move< std::vector<int16_t> > (that.value);
+        break;
+
+      case symbol_kind::S_field_ctype_pairs_value: // field_ctype_pairs_value
+        value.move< std::vector<pair> > (that.value);
+        break;
+
+      case symbol_kind::S_field_chars_value: // field_chars_value
+      case symbol_kind::S_field_strings_value: // field_strings_value
+        value.move< std::vector<std::string> > (that.value);
         break;
 
       case symbol_kind::S_CHARACTER_LITERAL: // CHARACTER_LITERAL
@@ -624,8 +813,40 @@ namespace locale_parser {
          when using variants.  */
       switch (yyr1_[yyn])
     {
+      case symbol_kind::S_sections: // sections
+        yylhs.value.emplace< Locale * > ();
+        break;
+
       case symbol_kind::S_NUMBER: // NUMBER
         yylhs.value.emplace< int16_t > ();
+        break;
+
+      case symbol_kind::S_section_collate: // section_collate
+        yylhs.value.emplace< lc_collate * > ();
+        break;
+
+      case symbol_kind::S_section_ctype: // section_ctype
+        yylhs.value.emplace< lc_ctype * > ();
+        break;
+
+      case symbol_kind::S_section_messages: // section_messages
+        yylhs.value.emplace< lc_messages * > ();
+        break;
+
+      case symbol_kind::S_section_monetary: // section_monetary
+        yylhs.value.emplace< lc_monetary * > ();
+        break;
+
+      case symbol_kind::S_section_numeric: // section_numeric
+        yylhs.value.emplace< lc_numeric * > ();
+        break;
+
+      case symbol_kind::S_section_time: // section_time
+        yylhs.value.emplace< lc_time * > ();
+        break;
+
+      case symbol_kind::S_field_ctype_single_pair_value: // field_ctype_single_pair_value
+        yylhs.value.emplace< pair > ();
         break;
 
       case symbol_kind::S_CONFIG: // CONFIG
@@ -649,7 +870,22 @@ namespace locale_parser {
       case symbol_kind::S_FIELD_NAME: // FIELD_NAME
       case symbol_kind::S_FIELD_PAPER: // FIELD_PAPER
       case symbol_kind::S_FIELD_TELEPHONE: // FIELD_TELEPHONE
+      case symbol_kind::S_character_value: // character_value
+      case symbol_kind::S_character_literals: // character_literals
         yylhs.value.emplace< std::string > ();
+        break;
+
+      case symbol_kind::S_field_bytes_value: // field_bytes_value
+        yylhs.value.emplace< std::vector<int16_t> > ();
+        break;
+
+      case symbol_kind::S_field_ctype_pairs_value: // field_ctype_pairs_value
+        yylhs.value.emplace< std::vector<pair> > ();
+        break;
+
+      case symbol_kind::S_field_chars_value: // field_chars_value
+      case symbol_kind::S_field_strings_value: // field_strings_value
+        yylhs.value.emplace< std::vector<std::string> > ();
         break;
 
       case symbol_kind::S_CHARACTER_LITERAL: // CHARACTER_LITERAL
@@ -671,61 +907,144 @@ namespace locale_parser {
           switch (yyn)
             {
   case 2: // file: locale_file $end
-#line 76 "src/bison_locale.ypp"
+#line 90 "src/bison_locale.ypp"
                          { YYACCEPT; }
-#line 677 "src/bison_locale.cpp"
+#line 913 "src/bison_locale.cpp"
     break;
 
   case 9: // configs: CONFIG TEXT newlines
-#line 93 "src/bison_locale.ypp"
+#line 107 "src/bison_locale.ypp"
                         { locale::set_config(yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::string > ()); }
-#line 683 "src/bison_locale.cpp"
+#line 919 "src/bison_locale.cpp"
     break;
 
   case 10: // configs: configs CONFIG TEXT newlines
-#line 94 "src/bison_locale.ypp"
+#line 108 "src/bison_locale.ypp"
                                 { locale::set_config(yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::string > ()); }
-#line 689 "src/bison_locale.cpp"
+#line 925 "src/bison_locale.cpp"
     break;
 
-  case 11: // section: section_ctype
-#line 98 "src/bison_locale.ypp"
-                 { if(locale::had_section_ctype()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
-#line 695 "src/bison_locale.cpp"
+  case 18: // sections: sections section
+#line 122 "src/bison_locale.ypp"
+   { yylhs.value.as < Locale * > () = yystack_[1].value.as < Locale * > (); }
+#line 931 "src/bison_locale.cpp"
     break;
 
-  case 12: // section: section_collate
-#line 99 "src/bison_locale.ypp"
-                   { if(locale::had_section_collate()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
-#line 701 "src/bison_locale.cpp"
+  case 19: // section_ctype: T_LC_CTYPE EOL COPY STRING EOL END T_LC_CTYPE newlines
+#line 126 "src/bison_locale.ypp"
+                                                          { yylhs.value.as < lc_ctype * > () = new lc_ctype; }
+#line 937 "src/bison_locale.cpp"
     break;
 
-  case 13: // section: section_monetary
-#line 100 "src/bison_locale.ypp"
-                    { if(locale::had_section_monetary()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
-#line 707 "src/bison_locale.cpp"
+  case 25: // field_ctype_pairs_value: field_ctype_single_pair_value
+#line 141 "src/bison_locale.ypp"
+                                 { yylhs.value.as < std::vector<pair> > () = std::vector<pair>{yystack_[0].value.as < pair > ()}; }
+#line 943 "src/bison_locale.cpp"
     break;
 
-  case 14: // section: section_numeric
-#line 101 "src/bison_locale.ypp"
-                   { if(locale::had_section_numeric()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
-#line 713 "src/bison_locale.cpp"
+  case 26: // field_ctype_pairs_value: field_ctype_pairs_value SEMICOLON field_ctype_single_pair_value
+#line 142 "src/bison_locale.ypp"
+                                                                   { yystack_[2].value.as < std::vector<pair> > ().push_back(yystack_[0].value.as < pair > ()); yylhs.value.as < std::vector<pair> > () = yystack_[2].value.as < std::vector<pair> > (); }
+#line 949 "src/bison_locale.cpp"
     break;
 
-  case 15: // section: section_time
-#line 102 "src/bison_locale.ypp"
-                { if(locale::had_section_time()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
-#line 719 "src/bison_locale.cpp"
+  case 27: // field_ctype_pairs_value: field_ctype_pairs_value SEMICOLON ESCAPE EOL field_ctype_single_pair_value
+#line 143 "src/bison_locale.ypp"
+                                                                              { yystack_[4].value.as < std::vector<pair> > ().push_back(yystack_[0].value.as < pair > ()); yylhs.value.as < std::vector<pair> > () = yystack_[4].value.as < std::vector<pair> > (); }
+#line 955 "src/bison_locale.cpp"
     break;
 
-  case 16: // section: section_messages
-#line 103 "src/bison_locale.ypp"
-                    { if(locale::had_section_messages()){locale::get_lexer()->error("Each section can only occur once."); YYERROR;} }
-#line 725 "src/bison_locale.cpp"
+  case 28: // field_ctype_single_pair_value: BRACKET_OPEN character_value COMMA character_value BRACKET_CLOSE
+#line 148 "src/bison_locale.ypp"
+ {
+    auto p = pair{};
+    p.set_left(yystack_[3].value.as < std::string > ());
+    p.set_right(yystack_[1].value.as < std::string > ());
+    yylhs.value.as < pair > () = p;
+ }
+#line 966 "src/bison_locale.cpp"
+    break;
+
+  case 57: // field_chars_value: character_value
+#line 220 "src/bison_locale.ypp"
+                   { yylhs.value.as < std::vector<std::string> > () = std::vector<std::string>{yystack_[0].value.as < std::string > ()}; }
+#line 972 "src/bison_locale.cpp"
+    break;
+
+  case 58: // field_chars_value: field_chars_value SEMICOLON character_value
+#line 221 "src/bison_locale.ypp"
+                                               { yystack_[2].value.as < std::vector<std::string> > ().push_back(yystack_[0].value.as < std::string > ());  }
+#line 978 "src/bison_locale.cpp"
+    break;
+
+  case 59: // field_chars_value: field_chars_value SEMICOLON ESCAPE EOL character_value
+#line 222 "src/bison_locale.ypp"
+                                                          { yystack_[4].value.as < std::vector<std::string> > ().push_back(yystack_[0].value.as < std::string > ()); yylhs.value.as < std::vector<std::string> > () = yystack_[4].value.as < std::vector<std::string> > (); }
+#line 984 "src/bison_locale.cpp"
+    break;
+
+  case 75: // character_value: CHARACTER_NAME
+#line 264 "src/bison_locale.ypp"
+   { yylhs.value.as < std::string > () = yystack_[0].value.as < std::string > (); }
+#line 990 "src/bison_locale.cpp"
+    break;
+
+  case 76: // character_value: character_literals
+#line 265 "src/bison_locale.ypp"
+   { yylhs.value.as < std::string > () = yystack_[0].value.as < std::string > (); }
+#line 996 "src/bison_locale.cpp"
+    break;
+
+  case 77: // field_bytes_value: NUMBER
+#line 269 "src/bison_locale.ypp"
+          { yylhs.value.as < std::vector<int16_t> > () = std::vector<int16_t>{yystack_[0].value.as < int16_t > ()}; }
+#line 1002 "src/bison_locale.cpp"
+    break;
+
+  case 78: // field_bytes_value: field_bytes_value SEMICOLON NUMBER
+#line 270 "src/bison_locale.ypp"
+                                      { yystack_[2].value.as < std::vector<int16_t> > ().push_back(yystack_[0].value.as < int16_t > ()); yylhs.value.as < std::vector<int16_t> > () = yystack_[2].value.as < std::vector<int16_t> > (); }
+#line 1008 "src/bison_locale.cpp"
+    break;
+
+  case 79: // field_bytes_value: field_bytes_value SEMICOLON ESCAPE EOL NUMBER
+#line 271 "src/bison_locale.ypp"
+                                                 { yystack_[4].value.as < std::vector<int16_t> > ().push_back(yystack_[0].value.as < int16_t > ()); yylhs.value.as < std::vector<int16_t> > () = yystack_[4].value.as < std::vector<int16_t> > (); }
+#line 1014 "src/bison_locale.cpp"
+    break;
+
+  case 80: // field_strings_value: STRING
+#line 275 "src/bison_locale.ypp"
+          { yylhs.value.as < std::vector<std::string> > () = std::vector<std::string>{yystack_[0].value.as < std::string > ()}; }
+#line 1020 "src/bison_locale.cpp"
+    break;
+
+  case 81: // field_strings_value: field_strings_value SEMICOLON STRING
+#line 276 "src/bison_locale.ypp"
+                                        { yystack_[2].value.as < std::vector<std::string> > ().push_back(yystack_[0].value.as < std::string > ()); yylhs.value.as < std::vector<std::string> > () = yystack_[2].value.as < std::vector<std::string> > (); }
+#line 1026 "src/bison_locale.cpp"
+    break;
+
+  case 82: // field_strings_value: field_strings_value SEMICOLON ESCAPE EOL STRING
+#line 277 "src/bison_locale.ypp"
+                                                   { yystack_[4].value.as < std::vector<std::string> > ().push_back(yystack_[0].value.as < std::string > ()); yylhs.value.as < std::vector<std::string> > () = yystack_[4].value.as < std::vector<std::string> > (); }
+#line 1032 "src/bison_locale.cpp"
+    break;
+
+  case 83: // character_literals: CHARACTER_LITERAL
+#line 281 "src/bison_locale.ypp"
+                     { yylhs.value.as < std::string > () = std::string{(char)yystack_[0].value.as < uint8_t > ()}; }
+#line 1038 "src/bison_locale.cpp"
+    break;
+
+  case 84: // character_literals: character_literals CHARACTER_LITERAL
+#line 282 "src/bison_locale.ypp"
+                                        { yystack_[1].value.as < std::string > ().push_back((char)yystack_[0].value.as < uint8_t > ()); yylhs.value.as < std::string > () = yystack_[1].value.as < std::string > (); }
+#line 1044 "src/bison_locale.cpp"
     break;
 
 
-#line 729 "src/bison_locale.cpp"
+#line 1048 "src/bison_locale.cpp"
 
             default:
               break;
@@ -1135,15 +1454,15 @@ namespace locale_parser {
   const short
   parser::yyrline_[] =
   {
-       0,    76,    76,    79,    80,    81,    85,    86,    90,    93,
-      94,    98,    99,   100,   101,   102,   103,   107,   108,   112,
-     113,   117,   118,   122,   123,   127,   128,   129,   133,   136,
-     137,   141,   142,   146,   147,   151,   152,   153,   157,   158,
-     162,   163,   164,   168,   169,   173,   174,   175,   179,   180,
-     184,   185,   189,   190,   191,   195,   196,   200,   201,   202,
-     206,   207,   211,   212,   216,   217,   221,   222,   226,   227,
-     231,   232,   236,   237,   241,   244,   245,   249,   250,   251,
-     255,   256,   257,   261,   262
+       0,    90,    90,    93,    94,    95,    99,   100,   104,   107,
+     108,   112,   113,   114,   115,   116,   117,   121,   122,   126,
+     127,   131,   132,   136,   137,   141,   142,   143,   147,   156,
+     157,   161,   162,   166,   167,   171,   172,   173,   177,   178,
+     182,   183,   184,   188,   189,   193,   194,   195,   199,   200,
+     204,   205,   209,   210,   211,   215,   216,   220,   221,   222,
+     226,   227,   231,   232,   236,   237,   241,   242,   246,   247,
+     251,   252,   256,   257,   261,   264,   265,   269,   270,   271,
+     275,   276,   277,   281,   282
   };
 
   void
@@ -1175,9 +1494,9 @@ namespace locale_parser {
 
 
 } // locale_parser
-#line 1179 "src/bison_locale.cpp"
+#line 1498 "src/bison_locale.cpp"
 
-#line 265 "src/bison_locale.ypp"
+#line 285 "src/bison_locale.ypp"
 
 
 namespace locale_parser {
