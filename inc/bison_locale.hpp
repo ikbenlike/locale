@@ -392,6 +392,7 @@ namespace locale_parser {
       char dummy3[sizeof (lc_collate *)];
 
       // section_ctype
+      // definitions_ctype
       char dummy4[sizeof (lc_ctype *)];
 
       // section_messages
@@ -616,38 +617,36 @@ namespace locale_parser {
         S_newlines = 56,                         // newlines
         S_prelude = 57,                          // prelude
         S_configs = 58,                          // configs
-        S_section = 59,                          // section
-        S_sections = 60,                         // sections
-        S_section_ctype = 61,                    // section_ctype
-        S_definitions_ctype = 62,                // definitions_ctype
-        S_single_definition_ctype = 63,          // single_definition_ctype
-        S_field_ctype_pairs_value = 64,          // field_ctype_pairs_value
-        S_field_ctype_single_pair_value = 65,    // field_ctype_single_pair_value
-        S_section_collate = 66,                  // section_collate
-        S_collate_start = 67,                    // collate_start
-        S_order_operands = 68,                   // order_operands
-        S_order_operand = 69,                    // order_operand
-        S_definitions_collate = 70,              // definitions_collate
-        S_single_definition_collate = 71,        // single_definition_collate
-        S_collate_char_specifiers = 72,          // collate_char_specifiers
-        S_collate_char_specifier = 73,           // collate_char_specifier
-        S_section_monetary = 74,                 // section_monetary
-        S_definitions_monetary = 75,             // definitions_monetary
-        S_single_definition_monetary = 76,       // single_definition_monetary
-        S_section_numeric = 77,                  // section_numeric
-        S_field_chars_value = 78,                // field_chars_value
-        S_definitions_numeric = 79,              // definitions_numeric
-        S_single_definition_numeric = 80,        // single_definition_numeric
-        S_section_time = 81,                     // section_time
-        S_definitions_time = 82,                 // definitions_time
-        S_single_definition_time = 83,           // single_definition_time
-        S_section_messages = 84,                 // section_messages
-        S_definitions_messages = 85,             // definitions_messages
-        S_single_definition_messages = 86,       // single_definition_messages
-        S_character_value = 87,                  // character_value
-        S_field_bytes_value = 88,                // field_bytes_value
-        S_field_strings_value = 89,              // field_strings_value
-        S_character_literals = 90                // character_literals
+        S_sections = 59,                         // sections
+        S_section_ctype = 60,                    // section_ctype
+        S_definitions_ctype = 61,                // definitions_ctype
+        S_field_ctype_pairs_value = 62,          // field_ctype_pairs_value
+        S_field_ctype_single_pair_value = 63,    // field_ctype_single_pair_value
+        S_section_collate = 64,                  // section_collate
+        S_collate_start = 65,                    // collate_start
+        S_order_operands = 66,                   // order_operands
+        S_order_operand = 67,                    // order_operand
+        S_definitions_collate = 68,              // definitions_collate
+        S_single_definition_collate = 69,        // single_definition_collate
+        S_collate_char_specifiers = 70,          // collate_char_specifiers
+        S_collate_char_specifier = 71,           // collate_char_specifier
+        S_section_monetary = 72,                 // section_monetary
+        S_definitions_monetary = 73,             // definitions_monetary
+        S_single_definition_monetary = 74,       // single_definition_monetary
+        S_section_numeric = 75,                  // section_numeric
+        S_field_chars_value = 76,                // field_chars_value
+        S_definitions_numeric = 77,              // definitions_numeric
+        S_single_definition_numeric = 78,        // single_definition_numeric
+        S_section_time = 79,                     // section_time
+        S_definitions_time = 80,                 // definitions_time
+        S_single_definition_time = 81,           // single_definition_time
+        S_section_messages = 82,                 // section_messages
+        S_definitions_messages = 83,             // definitions_messages
+        S_single_definition_messages = 84,       // single_definition_messages
+        S_character_value = 85,                  // character_value
+        S_field_bytes_value = 86,                // field_bytes_value
+        S_field_strings_value = 87,              // field_strings_value
+        S_character_literals = 88                // character_literals
       };
     };
 
@@ -695,6 +694,7 @@ namespace locale_parser {
         break;
 
       case symbol_kind::S_section_ctype: // section_ctype
+      case symbol_kind::S_definitions_ctype: // definitions_ctype
         value.move< lc_ctype * > (std::move (that.value));
         break;
 
@@ -987,6 +987,7 @@ switch (yykind)
         break;
 
       case symbol_kind::S_section_ctype: // section_ctype
+      case symbol_kind::S_definitions_ctype: // definitions_ctype
         value.template destroy< lc_ctype * > ();
         break;
 
@@ -2073,7 +2074,7 @@ switch (yykind)
     static const short yypgoto_[];
 
     // YYDEFGOTO[NTERM-NUM].
-    static const signed char yydefgoto_[];
+    static const unsigned char yydefgoto_[];
 
     // YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
     // positive, shift that token.  If negative, reduce the rule whose
@@ -2322,9 +2323,9 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 227,     ///< Last index in yytable_.
-      yynnts_ = 38,  ///< Number of nonterminal symbols.
-      yyfinal_ = 27 ///< Termination state number.
+      yylast_ = 243,     ///< Last index in yytable_.
+      yynnts_ = 36,  ///< Number of nonterminal symbols.
+      yyfinal_ = 26 ///< Termination state number.
     };
 
 
@@ -2405,6 +2406,7 @@ switch (yykind)
         break;
 
       case symbol_kind::S_section_ctype: // section_ctype
+      case symbol_kind::S_definitions_ctype: // definitions_ctype
         value.copy< lc_ctype * > (YY_MOVE (that.value));
         break;
 
@@ -2515,6 +2517,7 @@ switch (yykind)
         break;
 
       case symbol_kind::S_section_ctype: // section_ctype
+      case symbol_kind::S_definitions_ctype: // definitions_ctype
         value.move< lc_ctype * > (YY_MOVE (s.value));
         break;
 
@@ -2646,7 +2649,7 @@ switch (yykind)
 
 
 } // locale_parser
-#line 2650 "inc/bison_locale.hpp"
+#line 2653 "inc/bison_locale.hpp"
 
 
 

@@ -328,7 +328,17 @@ void set_config(std::string conf, std::string value){
     }
 }
 
-lc_ctype *set_field(lc_ctype *category, std::string field, std::vector<std::string> value){
+Locale *saved_locale = nullptr;
+
+void save_locale(Locale *loc){
+    saved_locale = loc;
+}
+
+Locale *get_locale(){
+    return saved_locale;
+}
+
+bool set_field(lc_ctype *category, std::string field, std::vector<std::string> value){
     size_t current_size = 0;
     void (lc_ctype::* setter)(std::vector<std::string>) = &lc_ctype::set_upper;
     if(field == "upper"){
@@ -381,19 +391,19 @@ lc_ctype *set_field(lc_ctype *category, std::string field, std::vector<std::stri
     }
     else {
         lexer->error("Incorrect field '" + field + "'. This is a bug.");
-        return nullptr;
+        return false;
     }
 
     if(current_size){
         lexer->error("Redefining field '" + field + "' in LC_CTYPE.");
-        return nullptr;
+        return false;
     }
 
     (category->*setter)(value);
-    return category;
+    return true;
 }
 
-lc_ctype *set_field(lc_ctype *category, std::string field, std::vector<pair> value){
+bool set_field(lc_ctype *category, std::string field, std::vector<pair> value){
     size_t current_size = 0;
     void (lc_ctype::* setter)(std::vector<pair>) = &lc_ctype::set_toupper;
 
@@ -407,16 +417,16 @@ lc_ctype *set_field(lc_ctype *category, std::string field, std::vector<pair> val
     }
     else {
         lexer->error("Incorrect field '" + field + "'. This is a bug.");
-        return nullptr;
+        return false;
     }
 
     if(current_size){
         lexer->error("Redefining field '" + field + "' in LC_CTYPE.");
-        return nullptr;
+        return false;
     }
 
     (category->*setter)(value);
-    return category;
+    return true;
 }
 
 } //namespace locale

@@ -71,7 +71,7 @@
 %type <std::string> character_literals character_value
 %type <std::vector<int16_t>> field_bytes_value
 %type <std::vector<std::string>> field_chars_value field_strings_value
-%type <lc_ctype *> section_ctype
+%type <lc_ctype *> section_ctype definitions_ctype
 %type <lc_collate *> section_collate
 %type <lc_time *> section_time
 %type <lc_numeric *> section_numeric
@@ -91,8 +91,8 @@ file : locale_file YYEOF { YYACCEPT; } ;
 
 locale_file
  :
- | prelude sections
- | sections
+ | prelude sections { locale::save_locale($2); }
+ | sections { locale::save_locale($1); }
  ;
 
 newlines
@@ -108,33 +108,127 @@ configs
  | configs CONFIG TEXT newlines { locale::set_config($2, $3); }
  ;
 
-section
- : section_ctype
- | section_collate
- | section_monetary
- | section_numeric
- | section_time
- | section_messages
- ;
-
 sections
- : section
- | sections section
+ : section_ctype
+ {
+    auto l = new Locale;
+    if(!locale::set_section(l, &Locale::set_section_ctype, &Locale::section_ctype, $1)){
+        YYERROR;
+    }
+    $$ = l;
+ }
+ | section_collate
+ {
+    auto l = new Locale;
+    if(!locale::set_section(l, &Locale::set_section_collate, &Locale::section_collate, $1)){
+        YYERROR;
+    }
+    $$ = l;
+ }
+ | section_monetary
+ {
+    auto l = new Locale;
+    if(!locale::set_section(l, &Locale::set_section_monetary, &Locale::section_monetary, $1)){
+        YYERROR;
+    }
+    $$ = l;
+ }
+ | section_numeric
+ {
+    auto l = new Locale;
+    if(!locale::set_section(l, &Locale::set_section_numeric, &Locale::section_numeric, $1)){
+        YYERROR;
+    }
+    $$ = l;
+ }
+ | section_time
+ {
+    auto l = new Locale;
+    if(!locale::set_section(l, &Locale::set_section_time, &Locale::section_time, $1)){
+        YYERROR;
+    }
+    $$ = l;
+ }
+ | section_messages
+ {
+    auto l = new Locale;
+    if(!locale::set_section(l, &Locale::set_section_messages, &Locale::section_messages, $1)){
+        YYERROR;
+    }
+    $$ = l;
+ }
+ | sections section_ctype
+ {
+    if(!locale::set_section($1, &Locale::set_section_ctype, &Locale::section_ctype, $2)){
+        YYERROR;
+    }
+    $$ = $1;
+ }
+ | sections section_collate
+ {
+    if(!locale::set_section($1, &Locale::set_section_collate, &Locale::section_collate, $2)){
+        YYERROR;
+    }
+    $$ = $1;
+ }
+ | sections section_monetary
+ {
+    if(!locale::set_section($1, &Locale::set_section_monetary, &Locale::section_monetary, $2)){
+        YYERROR;
+    }
+    $$ = $1;
+ }
+ | sections section_numeric
+ {
+    if(!locale::set_section($1, &Locale::set_section_numeric, &Locale::section_numeric, $2)){
+        YYERROR;
+    }
+    $$ = $1;
+ }
+ | sections section_time
+ {
+    if(!locale::set_section($1, &Locale::set_section_time, &Locale::section_time, $2)){
+        YYERROR;
+    }
+    $$ = $1;
+ }
+ | sections section_messages
+ {
+    if(!locale::set_section($1, &Locale::set_section_messages, &Locale::section_messages, $2)){
+        YYERROR;
+    }
+    $$ = $1;
+ }
  ;
 
 section_ctype
  : T_LC_CTYPE EOL COPY STRING EOL END T_LC_CTYPE newlines { $$ = new lc_ctype; }
- | T_LC_CTYPE EOL definitions_ctype END T_LC_CTYPE newlines
+ | T_LC_CTYPE EOL definitions_ctype END T_LC_CTYPE newlines { $$ = $3; }
  ;
 
 definitions_ctype
- : single_definition_ctype
- | definitions_ctype single_definition_ctype
- ;
-
-single_definition_ctype
  : FIELD_CTYPE_PAIRS field_ctype_pairs_value newlines
+ {
+    auto s = new lc_ctype;
+    if(!locale::set_field(s, $1, $2)) YYERROR;
+    $$ = s;
+ }
  | FIELD_CTYPE_CHARS field_chars_value newlines
+ {
+    auto s = new lc_ctype;
+    if(!locale::set_field(s, $1, $2)) YYERROR;
+    $$ = s;
+ }
+ | definitions_ctype FIELD_CTYPE_PAIRS field_ctype_pairs_value newlines
+ {
+    if(!locale::set_field($1, $2, $3)) YYERROR;
+    $$ = $1;
+ }
+ | definitions_ctype FIELD_CTYPE_CHARS field_chars_value newlines
+ {
+    if(!locale::set_field($1, $2, $3)) YYERROR;
+    $$ = $1;
+ }
  ;
 
 field_ctype_pairs_value
@@ -153,8 +247,8 @@ field_ctype_single_pair_value
  };
 
 section_collate
- : T_LC_COLLATE EOL COPY STRING EOL END T_LC_COLLATE newlines
- | T_LC_COLLATE EOL collate_start definitions_collate ORDER_END EOL END T_LC_COLLATE newlines
+ : T_LC_COLLATE EOL COPY STRING EOL END T_LC_COLLATE newlines { $$ = new lc_collate; }
+ | T_LC_COLLATE EOL collate_start definitions_collate ORDER_END EOL END T_LC_COLLATE newlines { $$ = new lc_collate; }
  ;
 
 collate_start
@@ -196,8 +290,8 @@ collate_char_specifier
  ;
 
 section_monetary
- : T_LC_MONETARY EOL COPY STRING EOL END T_LC_MONETARY newlines
- | T_LC_MONETARY EOL definitions_monetary END T_LC_MONETARY newlines
+ : T_LC_MONETARY EOL COPY STRING EOL END T_LC_MONETARY newlines { $$ = new lc_monetary; }
+ | T_LC_MONETARY EOL definitions_monetary END T_LC_MONETARY newlines { $$ = new lc_monetary; }
  ;
 
 definitions_monetary
@@ -212,13 +306,13 @@ single_definition_monetary
  ;
 
 section_numeric
- : T_LC_NUMERIC EOL COPY STRING EOL END T_LC_NUMERIC newlines
- | T_LC_NUMERIC EOL definitions_numeric END T_LC_NUMERIC newlines
+ : T_LC_NUMERIC EOL COPY STRING EOL END T_LC_NUMERIC newlines { $$ = new lc_numeric; }
+ | T_LC_NUMERIC EOL definitions_numeric END T_LC_NUMERIC newlines { $$ = new lc_numeric; }
  ;
 
 field_chars_value
  : character_value { $$ = std::vector<std::string>{$1}; }
- | field_chars_value SEMICOLON character_value { $1.push_back($3);  }
+ | field_chars_value SEMICOLON character_value { $1.push_back($3); $$ = $1; }
  | field_chars_value SEMICOLON ESCAPE EOL character_value { $1.push_back($5); $$ = $1; }
  ;
 
@@ -233,8 +327,8 @@ single_definition_numeric
  ;
 
 section_time
- : T_LC_TIME EOL COPY STRING EOL END T_LC_TIME newlines
- | T_LC_TIME EOL definitions_time END T_LC_TIME newlines
+ : T_LC_TIME EOL COPY STRING EOL END T_LC_TIME newlines { $$ = new lc_time; }
+ | T_LC_TIME EOL definitions_time END T_LC_TIME newlines { $$ = new lc_time; }
  ;
 
 definitions_time
@@ -248,8 +342,8 @@ single_definition_time
  ;
 
 section_messages
- : T_LC_MESSAGES EOL COPY STRING EOL END T_LC_MESSAGES newlines
- | T_LC_MESSAGES EOL definitions_messages END T_LC_MESSAGES newlines
+ : T_LC_MESSAGES EOL COPY STRING EOL END T_LC_MESSAGES newlines { $$ = new lc_messages; }
+ | T_LC_MESSAGES EOL definitions_messages END T_LC_MESSAGES newlines { $$ = new lc_messages; }
  ;
 
 definitions_messages

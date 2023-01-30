@@ -18,9 +18,21 @@ void init(std::string name, uint8_t *buffer, size_t size);
 LocaleLexer *get_lexer();
 int parse();
 void set_config(std::string conf, std::string value);
+void save_locale(Locale *loc);
+Locale *get_locale();
 
-lc_ctype *set_field(lc_ctype *category, std::string field, std::vector<std::string> value);
-lc_ctype *set_field(lc_ctype *category, std::string field, std::vector<pair> value);
+bool set_field(lc_ctype *category, std::string field, std::vector<std::string> value);
+bool set_field(lc_ctype *category, std::string field, std::vector<pair> value);
+
+template<typename T, typename S, typename G>
+bool set_section(Locale *loc, S setter, G getter, T *section){
+    T empty;
+    if((loc->*getter)().size_of_body() != empty.size_of_body())
+        return false;
+
+    (loc->*setter)(*section);
+    return true;
+}
 
 } //namespace locale
 

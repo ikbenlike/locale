@@ -61,6 +61,9 @@ int main(int argc, char **argv){
     r = locale::parse();
     if(r == 0){
         std::cout << "locale parsing successful" << std::endl;
+        Locale *loc = locale::get_locale();
+        std::cout << "upper size:  " << loc->section_ctype().upper_size() << std::endl;
+        std::cout << "upper[0]: " << loc->section_ctype().upper(0) << std::endl;
     }
     else {
         std::cerr << "locale parsing failed" << std::endl;
