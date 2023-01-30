@@ -385,30 +385,28 @@ namespace locale_parser {
       // sections
       char dummy1[sizeof (Locale *)];
 
-      // NUMBER
-      char dummy2[sizeof (int16_t)];
-
       // section_collate
-      char dummy3[sizeof (lc_collate *)];
+      char dummy2[sizeof (lc_collate *)];
 
       // section_ctype
       // definitions_ctype
-      char dummy4[sizeof (lc_ctype *)];
+      char dummy3[sizeof (lc_ctype *)];
 
       // section_messages
-      char dummy5[sizeof (lc_messages *)];
+      char dummy4[sizeof (lc_messages *)];
 
       // section_monetary
-      char dummy6[sizeof (lc_monetary *)];
+      // definitions_monetary
+      char dummy5[sizeof (lc_monetary *)];
 
       // section_numeric
-      char dummy7[sizeof (lc_numeric *)];
+      char dummy6[sizeof (lc_numeric *)];
 
       // section_time
-      char dummy8[sizeof (lc_time *)];
+      char dummy7[sizeof (lc_time *)];
 
       // field_ctype_single_pair_value
-      char dummy9[sizeof (pair)];
+      char dummy8[sizeof (pair)];
 
       // CONFIG
       // CHARACTER_NAME
@@ -433,20 +431,21 @@ namespace locale_parser {
       // FIELD_TELEPHONE
       // character_value
       // character_literals
-      char dummy10[sizeof (std::string)];
-
-      // field_bytes_value
-      char dummy11[sizeof (std::vector<int16_t>)];
+      char dummy9[sizeof (std::string)];
 
       // field_ctype_pairs_value
-      char dummy12[sizeof (std::vector<pair>)];
+      char dummy10[sizeof (std::vector<pair>)];
 
       // field_chars_value
       // field_strings_value
-      char dummy13[sizeof (std::vector<std::string>)];
+      char dummy11[sizeof (std::vector<std::string>)];
+
+      // field_bytes_value
+      char dummy12[sizeof (std::vector<uint8_t>)];
 
       // CHARACTER_LITERAL
-      char dummy14[sizeof (uint8_t)];
+      // NUMBER
+      char dummy13[sizeof (uint8_t)];
     };
 
     /// The size of the largest semantic type.
@@ -632,21 +631,20 @@ namespace locale_parser {
         S_collate_char_specifier = 71,           // collate_char_specifier
         S_section_monetary = 72,                 // section_monetary
         S_definitions_monetary = 73,             // definitions_monetary
-        S_single_definition_monetary = 74,       // single_definition_monetary
-        S_section_numeric = 75,                  // section_numeric
-        S_field_chars_value = 76,                // field_chars_value
-        S_definitions_numeric = 77,              // definitions_numeric
-        S_single_definition_numeric = 78,        // single_definition_numeric
-        S_section_time = 79,                     // section_time
-        S_definitions_time = 80,                 // definitions_time
-        S_single_definition_time = 81,           // single_definition_time
-        S_section_messages = 82,                 // section_messages
-        S_definitions_messages = 83,             // definitions_messages
-        S_single_definition_messages = 84,       // single_definition_messages
-        S_character_value = 85,                  // character_value
-        S_field_bytes_value = 86,                // field_bytes_value
-        S_field_strings_value = 87,              // field_strings_value
-        S_character_literals = 88                // character_literals
+        S_section_numeric = 74,                  // section_numeric
+        S_field_chars_value = 75,                // field_chars_value
+        S_definitions_numeric = 76,              // definitions_numeric
+        S_single_definition_numeric = 77,        // single_definition_numeric
+        S_section_time = 78,                     // section_time
+        S_definitions_time = 79,                 // definitions_time
+        S_single_definition_time = 80,           // single_definition_time
+        S_section_messages = 81,                 // section_messages
+        S_definitions_messages = 82,             // definitions_messages
+        S_single_definition_messages = 83,       // single_definition_messages
+        S_character_value = 84,                  // character_value
+        S_field_bytes_value = 85,                // field_bytes_value
+        S_field_strings_value = 86,              // field_strings_value
+        S_character_literals = 87                // character_literals
       };
     };
 
@@ -685,10 +683,6 @@ namespace locale_parser {
         value.move< Locale * > (std::move (that.value));
         break;
 
-      case symbol_kind::S_NUMBER: // NUMBER
-        value.move< int16_t > (std::move (that.value));
-        break;
-
       case symbol_kind::S_section_collate: // section_collate
         value.move< lc_collate * > (std::move (that.value));
         break;
@@ -703,6 +697,7 @@ namespace locale_parser {
         break;
 
       case symbol_kind::S_section_monetary: // section_monetary
+      case symbol_kind::S_definitions_monetary: // definitions_monetary
         value.move< lc_monetary * > (std::move (that.value));
         break;
 
@@ -744,10 +739,6 @@ namespace locale_parser {
         value.move< std::string > (std::move (that.value));
         break;
 
-      case symbol_kind::S_field_bytes_value: // field_bytes_value
-        value.move< std::vector<int16_t> > (std::move (that.value));
-        break;
-
       case symbol_kind::S_field_ctype_pairs_value: // field_ctype_pairs_value
         value.move< std::vector<pair> > (std::move (that.value));
         break;
@@ -757,7 +748,12 @@ namespace locale_parser {
         value.move< std::vector<std::string> > (std::move (that.value));
         break;
 
+      case symbol_kind::S_field_bytes_value: // field_bytes_value
+        value.move< std::vector<uint8_t> > (std::move (that.value));
+        break;
+
       case symbol_kind::S_CHARACTER_LITERAL: // CHARACTER_LITERAL
+      case symbol_kind::S_NUMBER: // NUMBER
         value.move< uint8_t > (std::move (that.value));
         break;
 
@@ -789,18 +785,6 @@ namespace locale_parser {
       {}
 #else
       basic_symbol (typename Base::kind_type t, const Locale *& v)
-        : Base (t)
-        , value (v)
-      {}
-#endif
-
-#if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, int16_t&& v)
-        : Base (t)
-        , value (std::move (v))
-      {}
-#else
-      basic_symbol (typename Base::kind_type t, const int16_t& v)
         : Base (t)
         , value (v)
       {}
@@ -903,18 +887,6 @@ namespace locale_parser {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, std::vector<int16_t>&& v)
-        : Base (t)
-        , value (std::move (v))
-      {}
-#else
-      basic_symbol (typename Base::kind_type t, const std::vector<int16_t>& v)
-        : Base (t)
-        , value (v)
-      {}
-#endif
-
-#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, std::vector<pair>&& v)
         : Base (t)
         , value (std::move (v))
@@ -933,6 +905,18 @@ namespace locale_parser {
       {}
 #else
       basic_symbol (typename Base::kind_type t, const std::vector<std::string>& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, std::vector<uint8_t>&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const std::vector<uint8_t>& v)
         : Base (t)
         , value (v)
       {}
@@ -978,10 +962,6 @@ switch (yykind)
         value.template destroy< Locale * > ();
         break;
 
-      case symbol_kind::S_NUMBER: // NUMBER
-        value.template destroy< int16_t > ();
-        break;
-
       case symbol_kind::S_section_collate: // section_collate
         value.template destroy< lc_collate * > ();
         break;
@@ -996,6 +976,7 @@ switch (yykind)
         break;
 
       case symbol_kind::S_section_monetary: // section_monetary
+      case symbol_kind::S_definitions_monetary: // definitions_monetary
         value.template destroy< lc_monetary * > ();
         break;
 
@@ -1037,10 +1018,6 @@ switch (yykind)
         value.template destroy< std::string > ();
         break;
 
-      case symbol_kind::S_field_bytes_value: // field_bytes_value
-        value.template destroy< std::vector<int16_t> > ();
-        break;
-
       case symbol_kind::S_field_ctype_pairs_value: // field_ctype_pairs_value
         value.template destroy< std::vector<pair> > ();
         break;
@@ -1050,7 +1027,12 @@ switch (yykind)
         value.template destroy< std::vector<std::string> > ();
         break;
 
+      case symbol_kind::S_field_bytes_value: // field_bytes_value
+        value.template destroy< std::vector<uint8_t> > ();
+        break;
+
       case symbol_kind::S_CHARACTER_LITERAL: // CHARACTER_LITERAL
+      case symbol_kind::S_NUMBER: // NUMBER
         value.template destroy< uint8_t > ();
         break;
 
@@ -1148,14 +1130,6 @@ switch (yykind)
 #else
       symbol_type (int tok)
         : super_type (token_kind_type (tok))
-#endif
-      {}
-#if 201103L <= YY_CPLUSPLUS
-      symbol_type (int tok, int16_t v)
-        : super_type (token_kind_type (tok), std::move (v))
-#else
-      symbol_type (int tok, const int16_t& v)
-        : super_type (token_kind_type (tok), v)
 #endif
       {}
 #if 201103L <= YY_CPLUSPLUS
@@ -1347,14 +1321,14 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_NUMBER (int16_t v)
+      make_NUMBER (uint8_t v)
       {
         return symbol_type (token::NUMBER, std::move (v));
       }
 #else
       static
       symbol_type
-      make_NUMBER (const int16_t& v)
+      make_NUMBER (const uint8_t& v)
       {
         return symbol_type (token::NUMBER, v);
       }
@@ -2323,8 +2297,8 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 243,     ///< Last index in yytable_.
-      yynnts_ = 36,  ///< Number of nonterminal symbols.
+      yylast_ = 253,     ///< Last index in yytable_.
+      yynnts_ = 35,  ///< Number of nonterminal symbols.
       yyfinal_ = 26 ///< Termination state number.
     };
 
@@ -2397,10 +2371,6 @@ switch (yykind)
         value.copy< Locale * > (YY_MOVE (that.value));
         break;
 
-      case symbol_kind::S_NUMBER: // NUMBER
-        value.copy< int16_t > (YY_MOVE (that.value));
-        break;
-
       case symbol_kind::S_section_collate: // section_collate
         value.copy< lc_collate * > (YY_MOVE (that.value));
         break;
@@ -2415,6 +2385,7 @@ switch (yykind)
         break;
 
       case symbol_kind::S_section_monetary: // section_monetary
+      case symbol_kind::S_definitions_monetary: // definitions_monetary
         value.copy< lc_monetary * > (YY_MOVE (that.value));
         break;
 
@@ -2456,10 +2427,6 @@ switch (yykind)
         value.copy< std::string > (YY_MOVE (that.value));
         break;
 
-      case symbol_kind::S_field_bytes_value: // field_bytes_value
-        value.copy< std::vector<int16_t> > (YY_MOVE (that.value));
-        break;
-
       case symbol_kind::S_field_ctype_pairs_value: // field_ctype_pairs_value
         value.copy< std::vector<pair> > (YY_MOVE (that.value));
         break;
@@ -2469,7 +2436,12 @@ switch (yykind)
         value.copy< std::vector<std::string> > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_field_bytes_value: // field_bytes_value
+        value.copy< std::vector<uint8_t> > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_CHARACTER_LITERAL: // CHARACTER_LITERAL
+      case symbol_kind::S_NUMBER: // NUMBER
         value.copy< uint8_t > (YY_MOVE (that.value));
         break;
 
@@ -2508,10 +2480,6 @@ switch (yykind)
         value.move< Locale * > (YY_MOVE (s.value));
         break;
 
-      case symbol_kind::S_NUMBER: // NUMBER
-        value.move< int16_t > (YY_MOVE (s.value));
-        break;
-
       case symbol_kind::S_section_collate: // section_collate
         value.move< lc_collate * > (YY_MOVE (s.value));
         break;
@@ -2526,6 +2494,7 @@ switch (yykind)
         break;
 
       case symbol_kind::S_section_monetary: // section_monetary
+      case symbol_kind::S_definitions_monetary: // definitions_monetary
         value.move< lc_monetary * > (YY_MOVE (s.value));
         break;
 
@@ -2567,10 +2536,6 @@ switch (yykind)
         value.move< std::string > (YY_MOVE (s.value));
         break;
 
-      case symbol_kind::S_field_bytes_value: // field_bytes_value
-        value.move< std::vector<int16_t> > (YY_MOVE (s.value));
-        break;
-
       case symbol_kind::S_field_ctype_pairs_value: // field_ctype_pairs_value
         value.move< std::vector<pair> > (YY_MOVE (s.value));
         break;
@@ -2580,7 +2545,12 @@ switch (yykind)
         value.move< std::vector<std::string> > (YY_MOVE (s.value));
         break;
 
+      case symbol_kind::S_field_bytes_value: // field_bytes_value
+        value.move< std::vector<uint8_t> > (YY_MOVE (s.value));
+        break;
+
       case symbol_kind::S_CHARACTER_LITERAL: // CHARACTER_LITERAL
+      case symbol_kind::S_NUMBER: // NUMBER
         value.move< uint8_t > (YY_MOVE (s.value));
         break;
 
@@ -2649,7 +2619,7 @@ switch (yykind)
 
 
 } // locale_parser
-#line 2653 "inc/bison_locale.hpp"
+#line 2623 "inc/bison_locale.hpp"
 
 
 

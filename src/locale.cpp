@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <sstream>
+#include <climits>
 
 #include "locale.bragi.hpp"
 #include "lexer.hpp"
@@ -122,6 +123,8 @@ locale_parser::parser::symbol_type LocaleLexer::get_token(){
         int16_t result = 0;
         try {
             result = std::stoi(token, nullptr, 10);
+            if(result < 0)
+                result = CHAR_MAX;
         }
         catch(const std::invalid_argument& e){
             error("Conversion of '" + token + "'failed. This is a bug.");
@@ -426,6 +429,123 @@ bool set_field(lc_ctype *category, std::string field, std::vector<pair> value){
     }
 
     (category->*setter)(value);
+    return true;
+}
+
+bool set_field(lc_monetary *category, std::string field, std::string value){
+    size_t current_size = 0;
+    void (lc_monetary:: *setter)(std::string) = &lc_monetary::set_int_curr_symbol;
+
+    if(field == "int_curr_symbol"){
+        current_size = category->int_curr_symbol().size();
+        setter = &lc_monetary::set_int_curr_symbol;
+    }
+    else if(field == "currency_symbol"){
+        current_size = category->currency_symbol().size();
+        setter = &lc_monetary::set_currency_symbol;
+    }
+    else if(field == "mon_decimal_point"){
+        current_size = category->mon_decimal_point().size();
+        setter = &lc_monetary::set_mon_decimal_point;
+    }
+    else if(field == "mon_thousands_sep"){
+        current_size = category->mon_thousands_sep().size();
+        setter = &lc_monetary::set_mon_thousands_sep;
+    }
+    else if(field == "positive_sign"){
+        current_size = category->positive_sign().size();
+        setter = &lc_monetary::set_positive_sign;
+    }
+    else if(field == "negative_sign"){
+        current_size = category->negative_sign().size();
+        setter = &lc_monetary::set_negative_sign;
+    }
+    else {
+        lexer->error("Incorrect field '" + field + "'. This is a bug.");
+        return false;
+    }
+
+    if(current_size){
+        lexer->error("Redefining field '" + field + "' in LC_MONETARY.");
+        return false;
+    }
+
+    (category->*setter)(value);
+    return true;
+}
+
+bool set_field(lc_monetary *category, std::string field, std::vector<uint8_t> value){
+    size_t current_size = 0;
+    void (lc_monetary:: *setter)(std::vector<uint8_t>) = &lc_monetary::set_mon_grouping;
+
+    if(field == "mon_grouping"){
+        current_size = category->mon_grouping_size();
+        setter = &lc_monetary::set_mon_grouping;
+    }
+    else {
+        lexer->error("Incorrect field '" + field + "'. This is a bug.");
+        return false;
+    }
+
+    if(current_size){
+        lexer->error("Redefining field '" + field + "' in LC_MONETARY.");
+        return false;
+    }
+
+    (category->*setter)(value);
+    return true;
+}
+
+bool set_field(lc_monetary *category, std::string field, uint8_t value){
+    void (lc_monetary::* setter)(uint8_t) = &lc_monetary::set_int_frac_digits;
+
+    if(field == "int_frac_digits"){
+        setter = &lc_monetary::set_int_frac_digits;
+    }
+    else if(field == "frac_digits"){
+        setter = &lc_monetary::set_frac_digits;
+    }
+    else if(field == "p_cs_precedes"){
+        setter = &lc_monetary::set_p_cs_precedes;
+    }
+    else if(field == "p_sep_by_space"){
+        setter = &lc_monetary::set_p_sep_by_space;
+    }
+    else if(field == "n_cs_precedes"){
+        setter = &lc_monetary::set_n_cs_precedes;
+    }
+    else if(field == "n_sep_by_space"){
+        setter = &lc_monetary::set_n_sep_by_space;
+    }
+    else if(field == "p_sign_posn"){
+        setter = &lc_monetary::set_p_sign_posn;
+    }
+    else if(field == "n_sign_posn"){
+        setter = &lc_monetary::set_n_sign_posn;
+    }
+    else if(field == "int_p_cs_precedes"){
+        setter = &lc_monetary::set_int_p_cs_precedes;
+    }
+    else if(field == "int_p_sep_by_space"){
+        setter = &lc_monetary::set_int_p_sep_by_space;
+    }
+    else if(field == "int_n_cs_precedes"){
+        setter = &lc_monetary::set_int_n_cs_precedes;
+    }
+    else if(field == "int_n_sep_by_space"){
+        setter = &lc_monetary::set_int_n_sep_by_space;
+    }
+    else if(field == "int_p_sign_posn"){
+        setter = &lc_monetary::set_int_p_sign_posn;
+    }
+    else if(field == "int_n_sign_posn"){
+        setter = &lc_monetary::set_int_n_sign_posn;
+    }
+    else {
+        lexer->error("Incorrect field '" + field + "'. This is a bug.");
+        return false;
+    }
+
     return true;
 }
 

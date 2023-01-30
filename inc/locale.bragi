@@ -62,7 +62,7 @@ struct lc_monetary {
     string currency_symbol;
     string mon_decimal_point;
     string mon_thousands_sep;
-    string mon_grouping;
+    byte[] mon_grouping;
     string positive_sign;
     string negative_sign;
     byte int_frac_digits;

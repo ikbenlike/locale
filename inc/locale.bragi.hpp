@@ -2048,13 +2048,31 @@ struct lc_monetary {
 		m_mon_thousands_sep = val;
 	}
 
-	std::string &mon_grouping() {
+	std::vector<uint8_t> &mon_grouping() {
 		return m_mon_grouping;
 	}
 
-	void set_mon_grouping(std::string val) {
+	uint8_t mon_grouping(size_t i) {
+		return m_mon_grouping[i];
+	}
+
+	size_t mon_grouping_size() {
+		return m_mon_grouping.size();
+	}
+
+	void set_mon_grouping(std::vector<uint8_t> val) {
 		p_mon_grouping = true;
 		m_mon_grouping = val;
+	}
+
+	void set_mon_grouping(size_t i, uint8_t val) {
+		p_mon_grouping = true;
+		m_mon_grouping[i] = val;
+	}
+
+	void add_mon_grouping(uint8_t v) {
+		p_mon_grouping = true;
+		m_mon_grouping.push_back(v);
 	}
 
 	std::string &positive_sign() {
@@ -2212,7 +2230,9 @@ struct lc_monetary {
 		size += bragi::detail::size_of_varint(m_mon_thousands_sep.size());
 		size += m_mon_thousands_sep.size();
 		size += bragi::detail::size_of_varint(m_mon_grouping.size());
-		size += m_mon_grouping.size();
+		for (size_t i0 = 0; i0 < m_mon_grouping.size(); i0++) {
+			size += 1;
+		}
 		size += bragi::detail::size_of_varint(m_positive_sign.size());
 		size += m_positive_sign.size();
 		size += bragi::detail::size_of_varint(m_negative_sign.size());
@@ -2267,7 +2287,7 @@ struct lc_monetary {
 		if (!sr.write_varint(wr, m_mon_grouping.size()))
 			return false;
 		for (size_t i0 = 0; i0 < m_mon_grouping.size(); i0++) {
-			if (!sr.write_integer<char>(wr, m_mon_grouping[i0]))
+			if (!sr.write_integer<uint8_t>(wr, m_mon_grouping[i0]))
 				return false;
 		}
 		if (!sr.write_varint(wr, m_positive_sign.size()))
@@ -2367,7 +2387,7 @@ struct lc_monetary {
 				return false;
 			m_mon_grouping.resize(size);
 			for (size_t i0 = 0; i0 < size; i0++)
-				if (!de.read_integer<char>(rd, m_mon_grouping[i0]))
+				if (!de.read_integer<uint8_t>(rd, m_mon_grouping[i0]))
 					return false;
 		}
 		p_mon_grouping = true;
@@ -2458,7 +2478,7 @@ private:
 	std::string m_currency_symbol; bool p_currency_symbol;
 	std::string m_mon_decimal_point; bool p_mon_decimal_point;
 	std::string m_mon_thousands_sep; bool p_mon_thousands_sep;
-	std::string m_mon_grouping; bool p_mon_grouping;
+	std::vector<uint8_t> m_mon_grouping; bool p_mon_grouping;
 	std::string m_positive_sign; bool p_positive_sign;
 	std::string m_negative_sign; bool p_negative_sign;
 	uint8_t m_int_frac_digits; bool p_int_frac_digits;

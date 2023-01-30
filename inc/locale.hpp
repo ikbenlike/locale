@@ -23,6 +23,9 @@ Locale *get_locale();
 
 bool set_field(lc_ctype *category, std::string field, std::vector<std::string> value);
 bool set_field(lc_ctype *category, std::string field, std::vector<pair> value);
+bool set_field(lc_monetary *category, std::string field, std::string value);
+bool set_field(lc_monetary *category, std::string field, std::vector<uint8_t> value);
+bool set_field(lc_monetary *category, std::string field, uint8_t value);
 
 template<typename T, typename S, typename G>
 bool set_section(Locale *loc, S setter, G getter, T *section){

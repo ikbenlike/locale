@@ -20,7 +20,7 @@
 %token <uint8_t> CHARACTER_LITERAL
 %token EOL
 %token <std::string> STRING
-%token <int16_t> NUMBER
+%token <uint8_t> NUMBER
 %token SEMICOLON
 %token BRACKET_OPEN
 %token BRACKET_CLOSE
@@ -69,14 +69,14 @@
 %type <pair> field_ctype_single_pair_value
 %type <std::vector<pair>> field_ctype_pairs_value
 %type <std::string> character_literals character_value
-%type <std::vector<int16_t>> field_bytes_value
+%type <std::vector<uint8_t>> field_bytes_value
 %type <std::vector<std::string>> field_chars_value field_strings_value
 %type <lc_ctype *> section_ctype definitions_ctype
 %type <lc_collate *> section_collate
 %type <lc_time *> section_time
 %type <lc_numeric *> section_numeric
 %type <lc_messages *> section_messages
-%type <lc_monetary *> section_monetary
+%type <lc_monetary *> section_monetary definitions_monetary
 %type <Locale *> sections
 
 %code {
@@ -291,18 +291,49 @@ collate_char_specifier
 
 section_monetary
  : T_LC_MONETARY EOL COPY STRING EOL END T_LC_MONETARY newlines { $$ = new lc_monetary; }
- | T_LC_MONETARY EOL definitions_monetary END T_LC_MONETARY newlines { $$ = new lc_monetary; }
+ | T_LC_MONETARY EOL definitions_monetary END T_LC_MONETARY newlines { $$ = $3; }
  ;
 
 definitions_monetary
- : single_definition_monetary
- | definitions_monetary single_definition_monetary
- ;
-
-single_definition_monetary
  : FIELD_MONETARY_STRING STRING EOL
+ {
+    auto s = new lc_monetary;
+    locale::set_field(s, $1, $2);
+    $$ = s;
+ }
  | FIELD_MONETARY_SINGLE_BYTE NUMBER EOL
+ {
+    auto s = new lc_monetary;
+    locale::set_field(s, $1, $2);
+    $$ = s;
+ }
  | FIELD_MONETARY_BYTES field_bytes_value EOL
+ {
+    auto s = new lc_monetary;
+    locale::set_field(s, $1, $2);
+    $$ = s;
+ }
+ | definitions_monetary FIELD_MONETARY_STRING STRING EOL
+ {
+    if(!locale::set_field($1, $2, $3)){
+        YYERROR;
+    }
+    $$ = $1;
+ }
+ | definitions_monetary FIELD_MONETARY_SINGLE_BYTE NUMBER EOL
+ {
+    if(!locale::set_field($1, $2, $3)){
+        YYERROR;
+    }
+    $$ = $1;
+ }
+ | definitions_monetary FIELD_MONETARY_BYTES field_bytes_value EOL
+ {
+    if(!locale::set_field($1, $2, $3)){
+        YYERROR;
+    }
+    $$ = $1;
+ }
  ;
 
 section_numeric
@@ -360,7 +391,7 @@ character_value
  ;
 
 field_bytes_value
- : NUMBER { $$ = std::vector<int16_t>{$1}; }
+ : NUMBER { $$ = std::vector<uint8_t>{$1}; }
  | field_bytes_value SEMICOLON NUMBER { $1.push_back($3); $$ = $1; }
  | field_bytes_value SEMICOLON ESCAPE EOL NUMBER { $1.push_back($5); $$ = $1; }
  ;
