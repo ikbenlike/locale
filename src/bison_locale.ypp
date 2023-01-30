@@ -73,9 +73,9 @@
 %type <std::vector<std::string>> field_chars_value field_strings_value
 %type <lc_ctype *> section_ctype definitions_ctype
 %type <lc_collate *> section_collate
-%type <lc_time *> section_time
-%type <lc_numeric *> section_numeric
-%type <lc_messages *> section_messages
+%type <lc_time *> section_time definitions_time
+%type <lc_numeric *> section_numeric definitions_numeric
+%type <lc_messages *> section_messages definitions_messages
 %type <lc_monetary *> section_monetary definitions_monetary
 %type <Locale *> sections
 
@@ -338,56 +338,102 @@ definitions_monetary
 
 section_numeric
  : T_LC_NUMERIC EOL COPY STRING EOL END T_LC_NUMERIC newlines { $$ = new lc_numeric; }
- | T_LC_NUMERIC EOL definitions_numeric END T_LC_NUMERIC newlines { $$ = new lc_numeric; }
+ | T_LC_NUMERIC EOL definitions_numeric END T_LC_NUMERIC newlines { $$ = $3; }
+ ;
+
+definitions_numeric
+ : FIELD_NUMERIC_STRING STRING EOL
+ {
+    auto s = new lc_numeric;
+    locale::set_field(s, $1, $2);
+    $$ = s;
+ }
+ | FIELD_NUMERIC_BYTES field_bytes_value EOL
+ {
+    auto s = new lc_numeric;
+    locale::set_field(s, $1, $2);
+    $$ = s;
+ }
+ | definitions_numeric FIELD_NUMERIC_STRING STRING EOL
+ {
+    if(!locale::set_field($1, $2, $3)){
+        YYERROR;
+    }
+    $$ = $1;
+ }
+ | definitions_numeric FIELD_NUMERIC_BYTES field_bytes_value EOL
+ {
+    if(!locale::set_field($1, $2, $3)){
+        YYERROR;
+    }
+    $$ = $1;
+ }
+ ;
+
+section_time
+ : T_LC_TIME EOL COPY STRING EOL END T_LC_TIME newlines { $$ = new lc_time; }
+ | T_LC_TIME EOL definitions_time END T_LC_TIME newlines { $$ = $3; }
+ ;
+
+definitions_time
+ : FIELD_TIME_STRING STRING EOL
+ {
+    auto s = new lc_time;
+    locale::set_field(s, $1, $2);
+    $$ = s;
+ }
+ | FIELD_TIME_MULTIPLE_STRINGS field_strings_value EOL
+ {
+    auto s = new lc_time;
+    locale::set_field(s, $1, $2);
+    $$ = s;
+ }
+ | definitions_time FIELD_TIME_STRING STRING EOL
+ {
+    if(!locale::set_field($1, $2, $3)){
+        YYERROR;
+    }
+    $$ = $1;
+ }
+ | definitions_time FIELD_TIME_MULTIPLE_STRINGS field_strings_value EOL
+ {
+    if(!locale::set_field($1, $2, $3)){
+        YYERROR;
+    }
+    $$ = $1;
+ }
+ ;
+
+section_messages
+ : T_LC_MESSAGES EOL COPY STRING EOL END T_LC_MESSAGES newlines { $$ = new lc_messages; }
+ | T_LC_MESSAGES EOL definitions_messages END T_LC_MESSAGES newlines { $$ = $3; }
+ ;
+
+definitions_messages
+ : FIELD_MESSAGES STRING EOL
+ {
+    auto s = new lc_messages;
+    locale::set_field(s, $1, $2);
+    $$ = s;
+ }
+ | definitions_messages FIELD_MESSAGES STRING EOL
+ {
+    if(!locale::set_field($1, $2, $3)){
+        YYERROR;
+    }
+    $$ = $1;
+ }
+ ;
+
+character_value
+ : CHARACTER_NAME
+ | character_literals
  ;
 
 field_chars_value
  : character_value { $$ = std::vector<std::string>{$1}; }
  | field_chars_value SEMICOLON character_value { $1.push_back($3); $$ = $1; }
  | field_chars_value SEMICOLON ESCAPE EOL character_value { $1.push_back($5); $$ = $1; }
- ;
-
-definitions_numeric
- : single_definition_numeric
- | definitions_numeric single_definition_numeric
- ;
-
-single_definition_numeric
- : FIELD_NUMERIC_STRING STRING EOL
- | FIELD_NUMERIC_BYTES field_bytes_value EOL
- ;
-
-section_time
- : T_LC_TIME EOL COPY STRING EOL END T_LC_TIME newlines { $$ = new lc_time; }
- | T_LC_TIME EOL definitions_time END T_LC_TIME newlines { $$ = new lc_time; }
- ;
-
-definitions_time
- : single_definition_time
- | definitions_time single_definition_time
- ;
-
-single_definition_time
- : FIELD_TIME_STRING STRING EOL
- | FIELD_TIME_MULTIPLE_STRINGS field_strings_value EOL
- ;
-
-section_messages
- : T_LC_MESSAGES EOL COPY STRING EOL END T_LC_MESSAGES newlines { $$ = new lc_messages; }
- | T_LC_MESSAGES EOL definitions_messages END T_LC_MESSAGES newlines { $$ = new lc_messages; }
- ;
-
-definitions_messages
- : single_definition_messages
- | definitions_messages single_definition_messages
- ;
-
-single_definition_messages
- : FIELD_MESSAGES STRING EOL ;
-
-character_value
- : CHARACTER_NAME
- | character_literals
  ;
 
 field_bytes_value

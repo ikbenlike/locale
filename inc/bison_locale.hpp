@@ -393,6 +393,7 @@ namespace locale_parser {
       char dummy3[sizeof (lc_ctype *)];
 
       // section_messages
+      // definitions_messages
       char dummy4[sizeof (lc_messages *)];
 
       // section_monetary
@@ -400,9 +401,11 @@ namespace locale_parser {
       char dummy5[sizeof (lc_monetary *)];
 
       // section_numeric
+      // definitions_numeric
       char dummy6[sizeof (lc_numeric *)];
 
       // section_time
+      // definitions_time
       char dummy7[sizeof (lc_time *)];
 
       // field_ctype_single_pair_value
@@ -632,19 +635,16 @@ namespace locale_parser {
         S_section_monetary = 72,                 // section_monetary
         S_definitions_monetary = 73,             // definitions_monetary
         S_section_numeric = 74,                  // section_numeric
-        S_field_chars_value = 75,                // field_chars_value
-        S_definitions_numeric = 76,              // definitions_numeric
-        S_single_definition_numeric = 77,        // single_definition_numeric
-        S_section_time = 78,                     // section_time
-        S_definitions_time = 79,                 // definitions_time
-        S_single_definition_time = 80,           // single_definition_time
-        S_section_messages = 81,                 // section_messages
-        S_definitions_messages = 82,             // definitions_messages
-        S_single_definition_messages = 83,       // single_definition_messages
-        S_character_value = 84,                  // character_value
-        S_field_bytes_value = 85,                // field_bytes_value
-        S_field_strings_value = 86,              // field_strings_value
-        S_character_literals = 87                // character_literals
+        S_definitions_numeric = 75,              // definitions_numeric
+        S_section_time = 76,                     // section_time
+        S_definitions_time = 77,                 // definitions_time
+        S_section_messages = 78,                 // section_messages
+        S_definitions_messages = 79,             // definitions_messages
+        S_character_value = 80,                  // character_value
+        S_field_chars_value = 81,                // field_chars_value
+        S_field_bytes_value = 82,                // field_bytes_value
+        S_field_strings_value = 83,              // field_strings_value
+        S_character_literals = 84                // character_literals
       };
     };
 
@@ -693,6 +693,7 @@ namespace locale_parser {
         break;
 
       case symbol_kind::S_section_messages: // section_messages
+      case symbol_kind::S_definitions_messages: // definitions_messages
         value.move< lc_messages * > (std::move (that.value));
         break;
 
@@ -702,10 +703,12 @@ namespace locale_parser {
         break;
 
       case symbol_kind::S_section_numeric: // section_numeric
+      case symbol_kind::S_definitions_numeric: // definitions_numeric
         value.move< lc_numeric * > (std::move (that.value));
         break;
 
       case symbol_kind::S_section_time: // section_time
+      case symbol_kind::S_definitions_time: // definitions_time
         value.move< lc_time * > (std::move (that.value));
         break;
 
@@ -972,6 +975,7 @@ switch (yykind)
         break;
 
       case symbol_kind::S_section_messages: // section_messages
+      case symbol_kind::S_definitions_messages: // definitions_messages
         value.template destroy< lc_messages * > ();
         break;
 
@@ -981,10 +985,12 @@ switch (yykind)
         break;
 
       case symbol_kind::S_section_numeric: // section_numeric
+      case symbol_kind::S_definitions_numeric: // definitions_numeric
         value.template destroy< lc_numeric * > ();
         break;
 
       case symbol_kind::S_section_time: // section_time
+      case symbol_kind::S_definitions_time: // definitions_time
         value.template destroy< lc_time * > ();
         break;
 
@@ -2297,8 +2303,8 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 253,     ///< Last index in yytable_.
-      yynnts_ = 35,  ///< Number of nonterminal symbols.
+      yylast_ = 273,     ///< Last index in yytable_.
+      yynnts_ = 32,  ///< Number of nonterminal symbols.
       yyfinal_ = 26 ///< Termination state number.
     };
 
@@ -2381,6 +2387,7 @@ switch (yykind)
         break;
 
       case symbol_kind::S_section_messages: // section_messages
+      case symbol_kind::S_definitions_messages: // definitions_messages
         value.copy< lc_messages * > (YY_MOVE (that.value));
         break;
 
@@ -2390,10 +2397,12 @@ switch (yykind)
         break;
 
       case symbol_kind::S_section_numeric: // section_numeric
+      case symbol_kind::S_definitions_numeric: // definitions_numeric
         value.copy< lc_numeric * > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_section_time: // section_time
+      case symbol_kind::S_definitions_time: // definitions_time
         value.copy< lc_time * > (YY_MOVE (that.value));
         break;
 
@@ -2490,6 +2499,7 @@ switch (yykind)
         break;
 
       case symbol_kind::S_section_messages: // section_messages
+      case symbol_kind::S_definitions_messages: // definitions_messages
         value.move< lc_messages * > (YY_MOVE (s.value));
         break;
 
@@ -2499,10 +2509,12 @@ switch (yykind)
         break;
 
       case symbol_kind::S_section_numeric: // section_numeric
+      case symbol_kind::S_definitions_numeric: // definitions_numeric
         value.move< lc_numeric * > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_section_time: // section_time
+      case symbol_kind::S_definitions_time: // definitions_time
         value.move< lc_time * > (YY_MOVE (s.value));
         break;
 
@@ -2619,7 +2631,7 @@ switch (yykind)
 
 
 } // locale_parser
-#line 2623 "inc/bison_locale.hpp"
+#line 2635 "inc/bison_locale.hpp"
 
 
 

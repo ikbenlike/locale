@@ -546,6 +546,185 @@ bool set_field(lc_monetary *category, std::string field, uint8_t value){
         return false;
     }
 
+    (category->*setter)(value);
+    return true;
+}
+
+bool set_field(lc_time *category, std::string field, std::vector<std::string> value){
+    size_t current_size = 0;
+    void (lc_time::* setter)(std::vector<std::string>) = &lc_time::set_day;
+
+    if(field == "day"){
+        current_size = category->day_size();
+        setter = &lc_time::set_day;
+    }
+    else if(field == "abday"){
+        current_size = category->abday_size();
+        setter = &lc_time::set_abday;
+    }
+    else if(field == "mon"){
+        current_size = category->mon_size();
+        setter = &lc_time::set_mon;
+    }
+    else if(field == "abmon"){
+        current_size = category->abmon_size();
+        setter = &lc_time::set_abmon;
+    }
+    else if(field == "am_pm"){
+        current_size = category->am_pm_size();
+        setter = &lc_time::set_am_pm;
+    }
+    else if(field == "alt_digits"){
+        current_size = category->alt_digits_size();
+        setter = &lc_time::set_alt_digits;
+    }
+    else {
+        lexer->error("Incorrect field '" + field + "'. This is a bug.");
+        return false;
+    }
+
+    if(current_size){
+        lexer->error("Redefining field '" + field + "' in LC_TIME.");
+        return false;
+    }
+
+    (category->*setter)(value);
+    return true;
+}
+
+bool set_field(lc_time *category, std::string field, std::string value){
+    size_t current_size = 0;
+    void (lc_time::* setter)(std::string) = &lc_time::set_d_t_fmt;
+
+    if(field == "d_t_fmt"){
+        current_size = category->d_t_fmt().size();
+        setter = &lc_time::set_d_t_fmt;
+    }
+    else if(field == "d_fmt"){
+        current_size = category->d_fmt().size();
+        setter = &lc_time::set_d_fmt;
+    }
+    else if(field == "t_fmt"){
+        current_size = category->t_fmt().size();
+        setter = &lc_time::set_t_fmt;
+    }
+    else if(field == "t_fmt_ampm"){
+        current_size = category->t_fmt_ampm().size();
+        setter = &lc_time::set_t_fmt_ampm;
+    }
+    else if(field == "date_fmt"){
+        current_size = category->date_fmt().size();
+        setter = &lc_time::set_date_fmt;
+    }
+    else if(field == "era"){
+        current_size = category->era().size();
+        setter = &lc_time::set_era;
+    }
+    else if(field == "era_d_fmt"){
+        current_size = category->era_d_fmt().size();
+        setter = &lc_time::set_era_d_fmt;
+    }
+    else if(field == "era_t_fmt"){
+        current_size = category->era_t_fmt().size();
+        setter = &lc_time::set_era_t_fmt;
+    }
+    else if(field == "era_d_t_fmt"){
+        current_size = category->era_d_t_fmt().size();
+        setter = &lc_time::set_era_d_t_fmt;
+    }
+    else {
+        lexer->error("Incorrect field '" + field + "'. This is a bug.");
+        return false;
+    }
+
+    if(current_size){
+        lexer->error("Redefining field '" + field + "' in LC_TIME.");
+        return false;
+    }
+
+    (category->*setter)(value);
+    return true;
+}
+
+bool set_field(lc_numeric *category, std::string field, std::string value){
+    size_t current_size = 0;
+    void (lc_numeric::* setter)(std::string) = &lc_numeric::set_decimal_point;
+
+    if(field == "decimal_point"){
+        current_size = category->decimal_point().size();
+        setter = &lc_numeric::set_decimal_point;
+    }
+    else if(field == "thousands_sep"){
+        current_size = category->thousands_sep().size();
+        setter = &lc_numeric::set_thousands_sep;
+    }
+    else {
+        lexer->error("Incorrect field '" + field + "'. This is a bug.");
+        return false;
+    }
+
+    if(current_size){
+        lexer->error("Redefining field '" + field + "' in LC_NUMERIC.");
+        return false;
+    }
+
+    (category->*setter)(value);
+    return true;
+}
+
+bool set_field(lc_numeric *category, std::string field, std::vector<uint8_t> value){
+    size_t current_size = 0;
+    void (lc_numeric::* setter)(std::vector<uint8_t>) = &lc_numeric::set_grouping;
+
+    if(field == "grouping"){
+        current_size = category->grouping_size();
+        setter = &lc_numeric::set_grouping;
+    }
+    else {
+        lexer->error("Incorrect field '" + field + "'. This is a bug.");
+        return false;
+    }
+
+    if(current_size){
+        lexer->error("Redefining field '" + field + "' in LC_NUMERIC.");
+        return false;
+    }
+
+    (category->*setter)(value);
+    return true;
+}
+
+bool set_field(lc_messages *category, std::string field, std::string value){
+    size_t current_size = 0;
+    void (lc_messages::* setter)(std::string) = &lc_messages::set_yesexpr;
+
+    if(field == "yesexpr"){
+        current_size = category->yesexpr().size();
+        setter = &lc_messages::set_yesexpr;
+    }
+    else if(field == "noexpr"){
+        current_size = category->noexpr().size();
+        setter = &lc_messages::set_noexpr;
+    }
+    else if(field == "yesstr"){
+        current_size = category->yesstr().size();
+        setter = &lc_messages::set_yesstr;
+    }
+    else if(field == "nostr"){
+        current_size = category->nostr().size();
+        setter = &lc_messages::set_nostr;
+    }
+    else {
+        lexer->error("Incorrect field '" + field + "'. This is a bug.");
+        return false;
+    }
+
+    if(current_size){
+        lexer->error("Redefining field '" + field + "' in LC_MESSAGES.");
+        return false;
+    }
+
+    (category->*setter)(value);
     return true;
 }
 

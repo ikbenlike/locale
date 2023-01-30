@@ -64,6 +64,10 @@ int main(int argc, char **argv){
         Locale *loc = locale::get_locale();
         std::cout << "upper size:  " << loc->section_ctype().upper_size() << std::endl;
         std::cout << "upper[0]: " << loc->section_ctype().upper(0) << std::endl;
+        std::cout << "mon_decimal_point: " << loc->section_monetary().mon_decimal_point() << std::endl;
+        std::cout << "day[0]: " << loc->section_time().day(0) << std::endl;
+        std::cout << "decimal_point: " << loc->section_numeric().decimal_point() << std::endl;
+        std::cout << "yesstr: " << loc->section_messages().yesstr() << std::endl;
     }
     else {
         std::cerr << "locale parsing failed" << std::endl;

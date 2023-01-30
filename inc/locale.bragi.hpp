@@ -1748,13 +1748,31 @@ struct lc_numeric {
 		m_thousands_sep = val;
 	}
 
-	std::string &grouping() {
+	std::vector<uint8_t> &grouping() {
 		return m_grouping;
 	}
 
-	void set_grouping(std::string val) {
+	uint8_t grouping(size_t i) {
+		return m_grouping[i];
+	}
+
+	size_t grouping_size() {
+		return m_grouping.size();
+	}
+
+	void set_grouping(std::vector<uint8_t> val) {
 		p_grouping = true;
 		m_grouping = val;
+	}
+
+	void set_grouping(size_t i, uint8_t val) {
+		p_grouping = true;
+		m_grouping[i] = val;
+	}
+
+	void add_grouping(uint8_t v) {
+		p_grouping = true;
+		m_grouping.push_back(v);
 	}
 
 	size_t size_of_body() {
@@ -1764,7 +1782,9 @@ struct lc_numeric {
 		size += bragi::detail::size_of_varint(m_thousands_sep.size());
 		size += m_thousands_sep.size();
 		size += bragi::detail::size_of_varint(m_grouping.size());
-		size += m_grouping.size();
+		for (size_t i0 = 0; i0 < m_grouping.size(); i0++) {
+			size += 1;
+		}
 
 		return size;
 	}
@@ -1789,7 +1809,7 @@ struct lc_numeric {
 		if (!sr.write_varint(wr, m_grouping.size()))
 			return false;
 		for (size_t i0 = 0; i0 < m_grouping.size(); i0++) {
-			if (!sr.write_integer<char>(wr, m_grouping[i0]))
+			if (!sr.write_integer<uint8_t>(wr, m_grouping[i0]))
 				return false;
 		}
 		return true;
@@ -1827,7 +1847,7 @@ struct lc_numeric {
 				return false;
 			m_grouping.resize(size);
 			for (size_t i0 = 0; i0 < size; i0++)
-				if (!de.read_integer<char>(rd, m_grouping[i0]))
+				if (!de.read_integer<uint8_t>(rd, m_grouping[i0]))
 					return false;
 		}
 		p_grouping = true;
@@ -1838,7 +1858,7 @@ struct lc_numeric {
 private:
 	std::string m_decimal_point; bool p_decimal_point;
 	std::string m_thousands_sep; bool p_thousands_sep;
-	std::string m_grouping; bool p_grouping;
+	std::vector<uint8_t> m_grouping; bool p_grouping;
 }; // struct lc_numeric
 
 struct lc_messages {

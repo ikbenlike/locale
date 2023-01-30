@@ -47,7 +47,7 @@ struct lc_time {
 struct lc_numeric {
     string decimal_point;
     string thousands_sep;
-    string grouping;
+    byte[] grouping;
 }
 
 struct lc_messages {
