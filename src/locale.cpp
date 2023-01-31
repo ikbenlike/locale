@@ -108,6 +108,12 @@ locale_parser::parser::symbol_type LocaleLexer::get_token(){
 
         return locale_parser::parser::make_STRING(token);
     }
+    else if(peek(0) == '.' && peek(1) == '.' && peek(2) == '.'){
+        read();
+        read();
+        read();
+        return locale_parser::parser::make_ELLIPSIS();
+    }
     else if(isdigit(peek(0)) || (peek(0) == '-' && isdigit(peek(1)))){
         do {
             token += read();
