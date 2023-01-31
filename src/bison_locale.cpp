@@ -54,7 +54,7 @@
 
 
 // Unqualified %code blocks.
-#line 82 "src/bison_locale.ypp"
+#line 83 "src/bison_locale.ypp"
 
     namespace locale_parser {
         parser::symbol_type locale_parserlex();
@@ -917,37 +917,37 @@ namespace locale_parser {
           switch (yyn)
             {
   case 2: // file: locale_file $end
-#line 90 "src/bison_locale.ypp"
+#line 91 "src/bison_locale.ypp"
                          { YYACCEPT; }
 #line 923 "src/bison_locale.cpp"
     break;
 
   case 4: // locale_file: prelude sections
-#line 94 "src/bison_locale.ypp"
+#line 95 "src/bison_locale.ypp"
                     { locale::save_locale(yystack_[0].value.as < Locale * > ()); }
 #line 929 "src/bison_locale.cpp"
     break;
 
   case 5: // locale_file: sections
-#line 95 "src/bison_locale.ypp"
+#line 96 "src/bison_locale.ypp"
             { locale::save_locale(yystack_[0].value.as < Locale * > ()); }
 #line 935 "src/bison_locale.cpp"
     break;
 
   case 9: // configs: CONFIG TEXT newlines
-#line 107 "src/bison_locale.ypp"
+#line 108 "src/bison_locale.ypp"
                         { locale::set_config(yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::string > ()); }
 #line 941 "src/bison_locale.cpp"
     break;
 
   case 10: // configs: configs CONFIG TEXT newlines
-#line 108 "src/bison_locale.ypp"
+#line 109 "src/bison_locale.ypp"
                                 { locale::set_config(yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::string > ()); }
 #line 947 "src/bison_locale.cpp"
     break;
 
   case 11: // sections: section_ctype
-#line 113 "src/bison_locale.ypp"
+#line 114 "src/bison_locale.ypp"
  {
     auto l = new Locale;
     if(!locale::set_section(l, &Locale::set_section_ctype, &Locale::section_ctype, yystack_[0].value.as < lc_ctype * > ())){
@@ -959,7 +959,7 @@ namespace locale_parser {
     break;
 
   case 12: // sections: section_collate
-#line 121 "src/bison_locale.ypp"
+#line 122 "src/bison_locale.ypp"
  {
     auto l = new Locale;
     if(!locale::set_section(l, &Locale::set_section_collate, &Locale::section_collate, yystack_[0].value.as < lc_collate * > ())){
@@ -971,7 +971,7 @@ namespace locale_parser {
     break;
 
   case 13: // sections: section_monetary
-#line 129 "src/bison_locale.ypp"
+#line 130 "src/bison_locale.ypp"
  {
     auto l = new Locale;
     if(!locale::set_section(l, &Locale::set_section_monetary, &Locale::section_monetary, yystack_[0].value.as < lc_monetary * > ())){
@@ -983,7 +983,7 @@ namespace locale_parser {
     break;
 
   case 14: // sections: section_numeric
-#line 137 "src/bison_locale.ypp"
+#line 138 "src/bison_locale.ypp"
  {
     auto l = new Locale;
     if(!locale::set_section(l, &Locale::set_section_numeric, &Locale::section_numeric, yystack_[0].value.as < lc_numeric * > ())){
@@ -995,7 +995,7 @@ namespace locale_parser {
     break;
 
   case 15: // sections: section_time
-#line 145 "src/bison_locale.ypp"
+#line 146 "src/bison_locale.ypp"
  {
     auto l = new Locale;
     if(!locale::set_section(l, &Locale::set_section_time, &Locale::section_time, yystack_[0].value.as < lc_time * > ())){
@@ -1007,7 +1007,7 @@ namespace locale_parser {
     break;
 
   case 16: // sections: section_messages
-#line 153 "src/bison_locale.ypp"
+#line 154 "src/bison_locale.ypp"
  {
     auto l = new Locale;
     if(!locale::set_section(l, &Locale::set_section_messages, &Locale::section_messages, yystack_[0].value.as < lc_messages * > ())){
@@ -1019,7 +1019,7 @@ namespace locale_parser {
     break;
 
   case 17: // sections: sections section_ctype
-#line 161 "src/bison_locale.ypp"
+#line 162 "src/bison_locale.ypp"
  {
     if(!locale::set_section(yystack_[1].value.as < Locale * > (), &Locale::set_section_ctype, &Locale::section_ctype, yystack_[0].value.as < lc_ctype * > ())){
         YYERROR;
@@ -1030,7 +1030,7 @@ namespace locale_parser {
     break;
 
   case 18: // sections: sections section_collate
-#line 168 "src/bison_locale.ypp"
+#line 169 "src/bison_locale.ypp"
  {
     if(!locale::set_section(yystack_[1].value.as < Locale * > (), &Locale::set_section_collate, &Locale::section_collate, yystack_[0].value.as < lc_collate * > ())){
         YYERROR;
@@ -1041,7 +1041,7 @@ namespace locale_parser {
     break;
 
   case 19: // sections: sections section_monetary
-#line 175 "src/bison_locale.ypp"
+#line 176 "src/bison_locale.ypp"
  {
     if(!locale::set_section(yystack_[1].value.as < Locale * > (), &Locale::set_section_monetary, &Locale::section_monetary, yystack_[0].value.as < lc_monetary * > ())){
         YYERROR;
@@ -1052,7 +1052,7 @@ namespace locale_parser {
     break;
 
   case 20: // sections: sections section_numeric
-#line 182 "src/bison_locale.ypp"
+#line 183 "src/bison_locale.ypp"
  {
     if(!locale::set_section(yystack_[1].value.as < Locale * > (), &Locale::set_section_numeric, &Locale::section_numeric, yystack_[0].value.as < lc_numeric * > ())){
         YYERROR;
@@ -1063,7 +1063,7 @@ namespace locale_parser {
     break;
 
   case 21: // sections: sections section_time
-#line 189 "src/bison_locale.ypp"
+#line 190 "src/bison_locale.ypp"
  {
     if(!locale::set_section(yystack_[1].value.as < Locale * > (), &Locale::set_section_time, &Locale::section_time, yystack_[0].value.as < lc_time * > ())){
         YYERROR;
@@ -1074,7 +1074,7 @@ namespace locale_parser {
     break;
 
   case 22: // sections: sections section_messages
-#line 196 "src/bison_locale.ypp"
+#line 197 "src/bison_locale.ypp"
  {
     if(!locale::set_section(yystack_[1].value.as < Locale * > (), &Locale::set_section_messages, &Locale::section_messages, yystack_[0].value.as < lc_messages * > ())){
         YYERROR;
@@ -1085,19 +1085,19 @@ namespace locale_parser {
     break;
 
   case 23: // section_ctype: T_LC_CTYPE EOL COPY STRING EOL END T_LC_CTYPE newlines
-#line 205 "src/bison_locale.ypp"
+#line 206 "src/bison_locale.ypp"
                                                           { yylhs.value.as < lc_ctype * > () = new lc_ctype; }
 #line 1091 "src/bison_locale.cpp"
     break;
 
   case 24: // section_ctype: T_LC_CTYPE EOL definitions_ctype END T_LC_CTYPE newlines
-#line 206 "src/bison_locale.ypp"
+#line 207 "src/bison_locale.ypp"
                                                             { yylhs.value.as < lc_ctype * > () = yystack_[3].value.as < lc_ctype * > (); }
 #line 1097 "src/bison_locale.cpp"
     break;
 
   case 25: // definitions_ctype: FIELD_CTYPE_PAIRS field_ctype_pairs_value newlines
-#line 211 "src/bison_locale.ypp"
+#line 212 "src/bison_locale.ypp"
  {
     auto s = new lc_ctype;
     if(!locale::set_field(s, yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::vector<pair> > ())) YYERROR;
@@ -1107,7 +1107,7 @@ namespace locale_parser {
     break;
 
   case 26: // definitions_ctype: FIELD_CTYPE_CHARS field_chars_value newlines
-#line 217 "src/bison_locale.ypp"
+#line 218 "src/bison_locale.ypp"
  {
     auto s = new lc_ctype;
     if(!locale::set_field(s, yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::vector<std::string> > ())) YYERROR;
@@ -1117,7 +1117,7 @@ namespace locale_parser {
     break;
 
   case 27: // definitions_ctype: definitions_ctype FIELD_CTYPE_PAIRS field_ctype_pairs_value newlines
-#line 223 "src/bison_locale.ypp"
+#line 224 "src/bison_locale.ypp"
  {
     if(!locale::set_field(yystack_[3].value.as < lc_ctype * > (), yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::vector<pair> > ())) YYERROR;
     yylhs.value.as < lc_ctype * > () = yystack_[3].value.as < lc_ctype * > ();
@@ -1126,7 +1126,7 @@ namespace locale_parser {
     break;
 
   case 28: // definitions_ctype: definitions_ctype FIELD_CTYPE_CHARS field_chars_value newlines
-#line 228 "src/bison_locale.ypp"
+#line 229 "src/bison_locale.ypp"
  {
     if(!locale::set_field(yystack_[3].value.as < lc_ctype * > (), yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::vector<std::string> > ())) YYERROR;
     yylhs.value.as < lc_ctype * > () = yystack_[3].value.as < lc_ctype * > ();
@@ -1135,25 +1135,25 @@ namespace locale_parser {
     break;
 
   case 29: // field_ctype_pairs_value: field_ctype_single_pair_value
-#line 235 "src/bison_locale.ypp"
+#line 236 "src/bison_locale.ypp"
                                  { yylhs.value.as < std::vector<pair> > () = std::vector<pair>{yystack_[0].value.as < pair > ()}; }
 #line 1141 "src/bison_locale.cpp"
     break;
 
   case 30: // field_ctype_pairs_value: field_ctype_pairs_value SEMICOLON field_ctype_single_pair_value
-#line 236 "src/bison_locale.ypp"
+#line 237 "src/bison_locale.ypp"
                                                                    { yystack_[2].value.as < std::vector<pair> > ().push_back(yystack_[0].value.as < pair > ()); yylhs.value.as < std::vector<pair> > () = yystack_[2].value.as < std::vector<pair> > (); }
 #line 1147 "src/bison_locale.cpp"
     break;
 
   case 31: // field_ctype_pairs_value: field_ctype_pairs_value SEMICOLON ESCAPE EOL field_ctype_single_pair_value
-#line 237 "src/bison_locale.ypp"
+#line 238 "src/bison_locale.ypp"
                                                                               { yystack_[4].value.as < std::vector<pair> > ().push_back(yystack_[0].value.as < pair > ()); yylhs.value.as < std::vector<pair> > () = yystack_[4].value.as < std::vector<pair> > (); }
 #line 1153 "src/bison_locale.cpp"
     break;
 
   case 32: // field_ctype_single_pair_value: BRACKET_OPEN character_value COMMA character_value BRACKET_CLOSE
-#line 242 "src/bison_locale.ypp"
+#line 243 "src/bison_locale.ypp"
  {
     auto p = pair{};
     p.set_left(yystack_[3].value.as < std::string > ());
@@ -1164,31 +1164,31 @@ namespace locale_parser {
     break;
 
   case 33: // section_collate: T_LC_COLLATE EOL COPY STRING EOL END T_LC_COLLATE newlines
-#line 250 "src/bison_locale.ypp"
+#line 251 "src/bison_locale.ypp"
                                                               { yylhs.value.as < lc_collate * > () = new lc_collate; }
 #line 1170 "src/bison_locale.cpp"
     break;
 
   case 34: // section_collate: T_LC_COLLATE EOL collate_start definitions_collate ORDER_END EOL END T_LC_COLLATE newlines
-#line 251 "src/bison_locale.ypp"
+#line 252 "src/bison_locale.ypp"
                                                                                               { yylhs.value.as < lc_collate * > () = new lc_collate; }
 #line 1176 "src/bison_locale.cpp"
     break;
 
   case 52: // section_monetary: T_LC_MONETARY EOL COPY STRING EOL END T_LC_MONETARY newlines
-#line 293 "src/bison_locale.ypp"
+#line 294 "src/bison_locale.ypp"
                                                                 { yylhs.value.as < lc_monetary * > () = new lc_monetary; }
 #line 1182 "src/bison_locale.cpp"
     break;
 
   case 53: // section_monetary: T_LC_MONETARY EOL definitions_monetary END T_LC_MONETARY newlines
-#line 294 "src/bison_locale.ypp"
+#line 295 "src/bison_locale.ypp"
                                                                      { yylhs.value.as < lc_monetary * > () = yystack_[3].value.as < lc_monetary * > (); }
 #line 1188 "src/bison_locale.cpp"
     break;
 
   case 54: // definitions_monetary: FIELD_MONETARY_STRING STRING EOL
-#line 299 "src/bison_locale.ypp"
+#line 300 "src/bison_locale.ypp"
  {
     auto s = new lc_monetary;
     locale::set_field(s, yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::string > ());
@@ -1198,7 +1198,7 @@ namespace locale_parser {
     break;
 
   case 55: // definitions_monetary: FIELD_MONETARY_SINGLE_BYTE NUMBER EOL
-#line 305 "src/bison_locale.ypp"
+#line 306 "src/bison_locale.ypp"
  {
     auto s = new lc_monetary;
     locale::set_field(s, yystack_[2].value.as < std::string > (), yystack_[1].value.as < uint8_t > ());
@@ -1208,7 +1208,7 @@ namespace locale_parser {
     break;
 
   case 56: // definitions_monetary: FIELD_MONETARY_BYTES field_bytes_value EOL
-#line 311 "src/bison_locale.ypp"
+#line 312 "src/bison_locale.ypp"
  {
     auto s = new lc_monetary;
     locale::set_field(s, yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::vector<uint8_t> > ());
@@ -1218,7 +1218,7 @@ namespace locale_parser {
     break;
 
   case 57: // definitions_monetary: definitions_monetary FIELD_MONETARY_STRING STRING EOL
-#line 317 "src/bison_locale.ypp"
+#line 318 "src/bison_locale.ypp"
  {
     if(!locale::set_field(yystack_[3].value.as < lc_monetary * > (), yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::string > ())){
         YYERROR;
@@ -1229,7 +1229,7 @@ namespace locale_parser {
     break;
 
   case 58: // definitions_monetary: definitions_monetary FIELD_MONETARY_SINGLE_BYTE NUMBER EOL
-#line 324 "src/bison_locale.ypp"
+#line 325 "src/bison_locale.ypp"
  {
     if(!locale::set_field(yystack_[3].value.as < lc_monetary * > (), yystack_[2].value.as < std::string > (), yystack_[1].value.as < uint8_t > ())){
         YYERROR;
@@ -1240,7 +1240,7 @@ namespace locale_parser {
     break;
 
   case 59: // definitions_monetary: definitions_monetary FIELD_MONETARY_BYTES field_bytes_value EOL
-#line 331 "src/bison_locale.ypp"
+#line 332 "src/bison_locale.ypp"
  {
     if(!locale::set_field(yystack_[3].value.as < lc_monetary * > (), yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::vector<uint8_t> > ())){
         YYERROR;
@@ -1251,19 +1251,19 @@ namespace locale_parser {
     break;
 
   case 60: // section_numeric: T_LC_NUMERIC EOL COPY STRING EOL END T_LC_NUMERIC newlines
-#line 340 "src/bison_locale.ypp"
+#line 341 "src/bison_locale.ypp"
                                                               { yylhs.value.as < lc_numeric * > () = new lc_numeric; }
 #line 1257 "src/bison_locale.cpp"
     break;
 
   case 61: // section_numeric: T_LC_NUMERIC EOL definitions_numeric END T_LC_NUMERIC newlines
-#line 341 "src/bison_locale.ypp"
+#line 342 "src/bison_locale.ypp"
                                                                   { yylhs.value.as < lc_numeric * > () = yystack_[3].value.as < lc_numeric * > (); }
 #line 1263 "src/bison_locale.cpp"
     break;
 
   case 62: // definitions_numeric: FIELD_NUMERIC_STRING STRING EOL
-#line 346 "src/bison_locale.ypp"
+#line 347 "src/bison_locale.ypp"
  {
     auto s = new lc_numeric;
     locale::set_field(s, yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::string > ());
@@ -1273,7 +1273,7 @@ namespace locale_parser {
     break;
 
   case 63: // definitions_numeric: FIELD_NUMERIC_BYTES field_bytes_value EOL
-#line 352 "src/bison_locale.ypp"
+#line 353 "src/bison_locale.ypp"
  {
     auto s = new lc_numeric;
     locale::set_field(s, yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::vector<uint8_t> > ());
@@ -1283,7 +1283,7 @@ namespace locale_parser {
     break;
 
   case 64: // definitions_numeric: definitions_numeric FIELD_NUMERIC_STRING STRING EOL
-#line 358 "src/bison_locale.ypp"
+#line 359 "src/bison_locale.ypp"
  {
     if(!locale::set_field(yystack_[3].value.as < lc_numeric * > (), yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::string > ())){
         YYERROR;
@@ -1294,7 +1294,7 @@ namespace locale_parser {
     break;
 
   case 65: // definitions_numeric: definitions_numeric FIELD_NUMERIC_BYTES field_bytes_value EOL
-#line 365 "src/bison_locale.ypp"
+#line 366 "src/bison_locale.ypp"
  {
     if(!locale::set_field(yystack_[3].value.as < lc_numeric * > (), yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::vector<uint8_t> > ())){
         YYERROR;
@@ -1305,19 +1305,19 @@ namespace locale_parser {
     break;
 
   case 66: // section_time: T_LC_TIME EOL COPY STRING EOL END T_LC_TIME newlines
-#line 374 "src/bison_locale.ypp"
+#line 375 "src/bison_locale.ypp"
                                                         { yylhs.value.as < lc_time * > () = new lc_time; }
 #line 1311 "src/bison_locale.cpp"
     break;
 
   case 67: // section_time: T_LC_TIME EOL definitions_time END T_LC_TIME newlines
-#line 375 "src/bison_locale.ypp"
+#line 376 "src/bison_locale.ypp"
                                                          { yylhs.value.as < lc_time * > () = yystack_[3].value.as < lc_time * > (); }
 #line 1317 "src/bison_locale.cpp"
     break;
 
   case 68: // definitions_time: FIELD_TIME_STRING STRING EOL
-#line 380 "src/bison_locale.ypp"
+#line 381 "src/bison_locale.ypp"
  {
     auto s = new lc_time;
     locale::set_field(s, yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::string > ());
@@ -1327,7 +1327,7 @@ namespace locale_parser {
     break;
 
   case 69: // definitions_time: FIELD_TIME_MULTIPLE_STRINGS field_strings_value EOL
-#line 386 "src/bison_locale.ypp"
+#line 387 "src/bison_locale.ypp"
  {
     auto s = new lc_time;
     locale::set_field(s, yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::vector<std::string> > ());
@@ -1337,7 +1337,7 @@ namespace locale_parser {
     break;
 
   case 70: // definitions_time: definitions_time FIELD_TIME_STRING STRING EOL
-#line 392 "src/bison_locale.ypp"
+#line 393 "src/bison_locale.ypp"
  {
     if(!locale::set_field(yystack_[3].value.as < lc_time * > (), yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::string > ())){
         YYERROR;
@@ -1348,7 +1348,7 @@ namespace locale_parser {
     break;
 
   case 71: // definitions_time: definitions_time FIELD_TIME_MULTIPLE_STRINGS field_strings_value EOL
-#line 399 "src/bison_locale.ypp"
+#line 400 "src/bison_locale.ypp"
  {
     if(!locale::set_field(yystack_[3].value.as < lc_time * > (), yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::vector<std::string> > ())){
         YYERROR;
@@ -1359,19 +1359,19 @@ namespace locale_parser {
     break;
 
   case 72: // section_messages: T_LC_MESSAGES EOL COPY STRING EOL END T_LC_MESSAGES newlines
-#line 408 "src/bison_locale.ypp"
+#line 409 "src/bison_locale.ypp"
                                                                 { yylhs.value.as < lc_messages * > () = new lc_messages; }
 #line 1365 "src/bison_locale.cpp"
     break;
 
   case 73: // section_messages: T_LC_MESSAGES EOL definitions_messages END T_LC_MESSAGES newlines
-#line 409 "src/bison_locale.ypp"
+#line 410 "src/bison_locale.ypp"
                                                                      { yylhs.value.as < lc_messages * > () = yystack_[3].value.as < lc_messages * > (); }
 #line 1371 "src/bison_locale.cpp"
     break;
 
   case 74: // definitions_messages: FIELD_MESSAGES STRING EOL
-#line 414 "src/bison_locale.ypp"
+#line 415 "src/bison_locale.ypp"
  {
     auto s = new lc_messages;
     locale::set_field(s, yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::string > ());
@@ -1381,7 +1381,7 @@ namespace locale_parser {
     break;
 
   case 75: // definitions_messages: definitions_messages FIELD_MESSAGES STRING EOL
-#line 420 "src/bison_locale.ypp"
+#line 421 "src/bison_locale.ypp"
  {
     if(!locale::set_field(yystack_[3].value.as < lc_messages * > (), yystack_[2].value.as < std::string > (), yystack_[1].value.as < std::string > ())){
         YYERROR;
@@ -1392,85 +1392,91 @@ namespace locale_parser {
     break;
 
   case 76: // character_value: CHARACTER_NAME
-#line 437 "src/bison_locale.ypp"
-   { yylhs.value.as < std::string > () = yystack_[0].value.as < std::string > (); }
-#line 1398 "src/bison_locale.cpp"
+#line 431 "src/bison_locale.ypp"
+ {
+    auto o_char = locale::lookup_character(yystack_[0].value.as < std::string > ());
+    if(!o_char.has_value()){
+        YYERROR;
+    }
+    yylhs.value.as < std::string > () = *o_char;
+ }
+#line 1404 "src/bison_locale.cpp"
     break;
 
   case 77: // character_value: character_literals
 #line 438 "src/bison_locale.ypp"
    { yylhs.value.as < std::string > () = yystack_[0].value.as < std::string > (); }
-#line 1404 "src/bison_locale.cpp"
+#line 1410 "src/bison_locale.cpp"
     break;
 
   case 78: // field_chars_value: character_value
 #line 442 "src/bison_locale.ypp"
                    { yylhs.value.as < std::vector<std::string> > () = std::vector<std::string>{yystack_[0].value.as < std::string > ()}; }
-#line 1410 "src/bison_locale.cpp"
+#line 1416 "src/bison_locale.cpp"
     break;
 
   case 79: // field_chars_value: field_chars_value SEMICOLON character_value
 #line 443 "src/bison_locale.ypp"
                                                { yystack_[2].value.as < std::vector<std::string> > ().push_back(yystack_[0].value.as < std::string > ()); yylhs.value.as < std::vector<std::string> > () = yystack_[2].value.as < std::vector<std::string> > (); }
-#line 1416 "src/bison_locale.cpp"
+#line 1422 "src/bison_locale.cpp"
     break;
 
   case 80: // field_chars_value: field_chars_value SEMICOLON ESCAPE EOL character_value
 #line 444 "src/bison_locale.ypp"
                                                           { yystack_[4].value.as < std::vector<std::string> > ().push_back(yystack_[0].value.as < std::string > ()); yylhs.value.as < std::vector<std::string> > () = yystack_[4].value.as < std::vector<std::string> > (); }
-#line 1422 "src/bison_locale.cpp"
+#line 1428 "src/bison_locale.cpp"
     break;
 
   case 81: // field_bytes_value: NUMBER
 #line 448 "src/bison_locale.ypp"
           { yylhs.value.as < std::vector<uint8_t> > () = std::vector<uint8_t>{yystack_[0].value.as < uint8_t > ()}; }
-#line 1428 "src/bison_locale.cpp"
+#line 1434 "src/bison_locale.cpp"
     break;
 
   case 82: // field_bytes_value: field_bytes_value SEMICOLON NUMBER
 #line 449 "src/bison_locale.ypp"
                                       { yystack_[2].value.as < std::vector<uint8_t> > ().push_back(yystack_[0].value.as < uint8_t > ()); yylhs.value.as < std::vector<uint8_t> > () = yystack_[2].value.as < std::vector<uint8_t> > (); }
-#line 1434 "src/bison_locale.cpp"
+#line 1440 "src/bison_locale.cpp"
     break;
 
   case 83: // field_bytes_value: field_bytes_value SEMICOLON ESCAPE EOL NUMBER
 #line 450 "src/bison_locale.ypp"
                                                  { yystack_[4].value.as < std::vector<uint8_t> > ().push_back(yystack_[0].value.as < uint8_t > ()); yylhs.value.as < std::vector<uint8_t> > () = yystack_[4].value.as < std::vector<uint8_t> > (); }
-#line 1440 "src/bison_locale.cpp"
+#line 1446 "src/bison_locale.cpp"
     break;
 
   case 84: // field_strings_value: STRING
 #line 454 "src/bison_locale.ypp"
           { yylhs.value.as < std::vector<std::string> > () = std::vector<std::string>{yystack_[0].value.as < std::string > ()}; }
-#line 1446 "src/bison_locale.cpp"
+#line 1452 "src/bison_locale.cpp"
     break;
 
   case 85: // field_strings_value: field_strings_value SEMICOLON STRING
 #line 455 "src/bison_locale.ypp"
                                         { yystack_[2].value.as < std::vector<std::string> > ().push_back(yystack_[0].value.as < std::string > ()); yylhs.value.as < std::vector<std::string> > () = yystack_[2].value.as < std::vector<std::string> > (); }
-#line 1452 "src/bison_locale.cpp"
+#line 1458 "src/bison_locale.cpp"
     break;
 
   case 86: // field_strings_value: field_strings_value SEMICOLON ESCAPE EOL STRING
 #line 456 "src/bison_locale.ypp"
                                                    { yystack_[4].value.as < std::vector<std::string> > ().push_back(yystack_[0].value.as < std::string > ()); yylhs.value.as < std::vector<std::string> > () = yystack_[4].value.as < std::vector<std::string> > (); }
-#line 1458 "src/bison_locale.cpp"
+#line 1464 "src/bison_locale.cpp"
     break;
 
   case 87: // character_literals: CHARACTER_LITERAL
 #line 460 "src/bison_locale.ypp"
                      { yylhs.value.as < std::string > () = std::string{(char)yystack_[0].value.as < uint8_t > ()}; }
-#line 1464 "src/bison_locale.cpp"
+#line 1470 "src/bison_locale.cpp"
     break;
 
   case 88: // character_literals: character_literals CHARACTER_LITERAL
 #line 461 "src/bison_locale.ypp"
                                         { yystack_[1].value.as < std::string > ().push_back((char)yystack_[0].value.as < uint8_t > ()); yylhs.value.as < std::string > () = yystack_[1].value.as < std::string > (); }
-#line 1470 "src/bison_locale.cpp"
+#line 1476 "src/bison_locale.cpp"
     break;
 
 
-#line 1474 "src/bison_locale.cpp"
+#line 1480 "src/bison_locale.cpp"
 
             default:
               break;
@@ -1806,43 +1812,43 @@ namespace locale_parser {
   const signed char
   parser::yystos_[] =
   {
-       0,     3,    14,    15,    16,    17,    18,    19,    54,    55,
-      57,    58,    59,    60,    64,    72,    74,    76,    78,    13,
-       6,     6,     6,     6,     6,     6,     0,     0,    59,     3,
-      60,    64,    72,    74,    76,    78,     6,    56,    26,    27,
-      43,    61,    43,    46,    65,    29,    43,    79,    30,    31,
-      32,    43,    73,    33,    34,    43,    75,    35,    36,    43,
-      77,    13,     6,    10,    62,    63,     4,     5,    80,    81,
-      84,     7,    26,    27,    44,     7,     6,    48,    49,    52,
-      66,    67,     4,    50,    68,    69,     7,     7,    29,    44,
-       7,     8,     8,    82,     7,    30,    31,    32,    44,     7,
-      82,     7,    33,    34,    44,     7,     7,    83,     7,    35,
-      36,    44,    56,    80,     9,    56,     9,    56,     5,     6,
-      62,    81,    14,     6,     6,     9,     4,     6,     7,    51,
-      70,    71,     6,    47,    69,     6,     6,     7,    16,     6,
-       6,     6,     9,     6,     7,     8,    82,    17,     6,     6,
-       6,     7,    82,    18,     6,     6,     9,     6,     7,    83,
-      19,    12,    45,    63,    45,    80,    44,    56,    56,    56,
-      44,    67,     6,     9,     6,    44,     6,    56,     8,    45,
-      44,     6,     6,     6,    56,    44,     6,     6,    56,     7,
-      45,    44,     6,     6,    56,    80,     6,     6,    14,    15,
-      71,    44,    16,     6,    17,    18,     6,    19,    11,    63,
-      80,    56,    56,    15,    56,     8,    56,    56,     7,    56,
-      56
+       0,     3,    14,    15,    16,    17,    18,    19,    55,    56,
+      58,    59,    60,    61,    65,    73,    75,    77,    79,    13,
+       6,     6,     6,     6,     6,     6,     0,     0,    60,     3,
+      61,    65,    73,    75,    77,    79,     6,    57,    26,    27,
+      43,    62,    43,    46,    66,    29,    43,    80,    30,    31,
+      32,    43,    74,    33,    34,    43,    76,    35,    36,    43,
+      78,    13,     6,    10,    63,    64,     4,     5,    81,    82,
+      85,     7,    26,    27,    44,     7,     6,    48,    49,    52,
+      67,    68,     4,    50,    69,    70,     7,     7,    29,    44,
+       7,     8,     8,    83,     7,    30,    31,    32,    44,     7,
+      83,     7,    33,    34,    44,     7,     7,    84,     7,    35,
+      36,    44,    57,    81,     9,    57,     9,    57,     5,     6,
+      63,    82,    14,     6,     6,     9,     4,     6,     7,    51,
+      71,    72,     6,    47,    70,     6,     6,     7,    16,     6,
+       6,     6,     9,     6,     7,     8,    83,    17,     6,     6,
+       6,     7,    83,    18,     6,     6,     9,     6,     7,    84,
+      19,    12,    45,    64,    45,    81,    44,    57,    57,    57,
+      44,    68,     6,     9,     6,    44,     6,    57,     8,    45,
+      44,     6,     6,     6,    57,    44,     6,     6,    57,     7,
+      45,    44,     6,     6,    57,    81,     6,     6,    14,    15,
+      72,    44,    16,     6,    17,    18,     6,    19,    11,    64,
+      81,    57,    57,    15,    57,     8,    57,    57,     7,    57,
+      57
   };
 
   const signed char
   parser::yyr1_[] =
   {
-       0,    53,    54,    55,    55,    55,    56,    56,    57,    58,
-      58,    59,    59,    59,    59,    59,    59,    59,    59,    59,
-      59,    59,    59,    60,    60,    61,    61,    61,    61,    62,
-      62,    62,    63,    64,    64,    65,    65,    66,    66,    67,
-      67,    67,    68,    68,    69,    69,    69,    70,    70,    71,
-      71,    71,    72,    72,    73,    73,    73,    73,    73,    73,
-      74,    74,    75,    75,    75,    75,    76,    76,    77,    77,
-      77,    77,    78,    78,    79,    79,    80,    80,    81,    81,
-      81,    82,    82,    82,    83,    83,    83,    84,    84
+       0,    54,    55,    56,    56,    56,    57,    57,    58,    59,
+      59,    60,    60,    60,    60,    60,    60,    60,    60,    60,
+      60,    60,    60,    61,    61,    62,    62,    62,    62,    63,
+      63,    63,    64,    65,    65,    66,    66,    67,    67,    68,
+      68,    68,    69,    69,    70,    70,    70,    71,    71,    72,
+      72,    72,    73,    73,    74,    74,    74,    74,    74,    74,
+      75,    75,    76,    76,    76,    76,    77,    77,    78,    78,
+      78,    78,    79,    79,    80,    80,    81,    81,    82,    82,
+      82,    83,    83,    83,    84,    84,    84,    85,    85
   };
 
   const signed char
@@ -1878,17 +1884,17 @@ namespace locale_parser {
   "FIELD_TIME_STRING", "FIELD_TIME_MULTIPLE_STRINGS", "FIELD_ADDRESS",
   "FIELD_IDENTIFICATION", "FIELD_MEASUREMENT", "FIELD_NAME", "FIELD_PAPER",
   "FIELD_TELEPHONE", "COPY", "END", "ESCAPE", "ORDER_START", "ORDER_END",
-  "FORWARD", "BACKWARD", "UNDEFINED", "IGNORE", "POSITION", "$accept",
-  "file", "locale_file", "newlines", "prelude", "configs", "sections",
-  "section_ctype", "definitions_ctype", "field_ctype_pairs_value",
-  "field_ctype_single_pair_value", "section_collate", "collate_start",
-  "order_operands", "order_operand", "definitions_collate",
-  "single_definition_collate", "collate_char_specifiers",
-  "collate_char_specifier", "section_monetary", "definitions_monetary",
-  "section_numeric", "definitions_numeric", "section_time",
-  "definitions_time", "section_messages", "definitions_messages",
-  "character_value", "field_chars_value", "field_bytes_value",
-  "field_strings_value", "character_literals", YY_NULLPTR
+  "FORWARD", "BACKWARD", "UNDEFINED", "IGNORE", "POSITION", "ELLIPSIS",
+  "$accept", "file", "locale_file", "newlines", "prelude", "configs",
+  "sections", "section_ctype", "definitions_ctype",
+  "field_ctype_pairs_value", "field_ctype_single_pair_value",
+  "section_collate", "collate_start", "order_operands", "order_operand",
+  "definitions_collate", "single_definition_collate",
+  "collate_char_specifiers", "collate_char_specifier", "section_monetary",
+  "definitions_monetary", "section_numeric", "definitions_numeric",
+  "section_time", "definitions_time", "section_messages",
+  "definitions_messages", "character_value", "field_chars_value",
+  "field_bytes_value", "field_strings_value", "character_literals", YY_NULLPTR
   };
 #endif
 
@@ -1897,14 +1903,14 @@ namespace locale_parser {
   const short
   parser::yyrline_[] =
   {
-       0,    90,    90,    93,    94,    95,    99,   100,   104,   107,
-     108,   112,   120,   128,   136,   144,   152,   160,   167,   174,
-     181,   188,   195,   205,   206,   210,   216,   222,   227,   235,
-     236,   237,   241,   250,   251,   255,   256,   260,   261,   265,
-     266,   267,   271,   272,   276,   277,   278,   282,   283,   287,
-     288,   289,   293,   294,   298,   304,   310,   316,   323,   330,
-     340,   341,   345,   351,   357,   364,   374,   375,   379,   385,
-     391,   398,   408,   409,   413,   419,   437,   438,   442,   443,
+       0,    91,    91,    94,    95,    96,   100,   101,   105,   108,
+     109,   113,   121,   129,   137,   145,   153,   161,   168,   175,
+     182,   189,   196,   206,   207,   211,   217,   223,   228,   236,
+     237,   238,   242,   251,   252,   256,   257,   261,   262,   266,
+     267,   268,   272,   273,   277,   278,   279,   283,   284,   288,
+     289,   290,   294,   295,   299,   305,   311,   317,   324,   331,
+     341,   342,   346,   352,   358,   365,   375,   376,   380,   386,
+     392,   399,   409,   410,   414,   420,   430,   438,   442,   443,
      444,   448,   449,   450,   454,   455,   456,   460,   461
   };
 
@@ -1937,7 +1943,7 @@ namespace locale_parser {
 
 
 } // locale_parser
-#line 1941 "src/bison_locale.cpp"
+#line 1947 "src/bison_locale.cpp"
 
 #line 464 "src/bison_locale.ypp"
 

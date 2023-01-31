@@ -65,6 +65,7 @@
 %token UNDEFINED
 %token IGNORE
 %token POSITION
+%token ELLIPSIS
 
 %type <pair> field_ctype_single_pair_value
 %type <std::vector<pair>> field_ctype_pairs_value
@@ -427,6 +428,13 @@ definitions_messages
 
 character_value
  : CHARACTER_NAME
+ {
+    auto o_char = locale::lookup_character($1);
+    if(!o_char.has_value()){
+        YYERROR;
+    }
+    $$ = *o_char;
+ }
  | character_literals
  ;
 

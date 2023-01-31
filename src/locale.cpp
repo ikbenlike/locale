@@ -40,14 +40,7 @@ locale_parser::parser::symbol_type LocaleLexer::get_token(){
             return locale_parser::parser::make_LOCALE_PARSERerror();
         }
 
-        auto o_def = charmap::get_definition(token);
-        if(!o_def.has_value()){
-            error("Character with name '" + token + "' not found.");
-            return locale_parser::parser::make_LOCALE_PARSERerror();
-        }
-        auto val = o_def->bytes;
-
-        return locale_parser::parser::make_CHARACTER_NAME(std::string(val.begin(), val.end()));
+        return locale_parser::parser::make_CHARACTER_NAME(token);
     }
     else if(peek(0) == m_escape_char){
         size_t radix = 10;
@@ -726,6 +719,16 @@ bool set_field(lc_messages *category, std::string field, std::string value){
 
     (category->*setter)(value);
     return true;
+}
+
+std::optional<std::string> lookup_character(std::string name){
+    auto o_def = charmap::get_definition(name);
+    if(!o_def.has_value()){
+        lexer->error("Character with name '" + name + "' not found.");
+        return {};
+    }
+    std::vector<uint8_t> value = o_def->bytes;
+    return std::string(value.begin(), value.end());
 }
 
 } //namespace locale

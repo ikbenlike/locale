@@ -32,6 +32,8 @@ bool set_field(lc_numeric *category, std::string field, std::string value);
 bool set_field(lc_numeric *category, std::string field, std::vector<uint8_t> value);
 bool set_field(lc_messages *category, std::string field, std::string value);
 
+std::optional<std::string> lookup_character(std::string name);
+
 template<typename T, typename S, typename G>
 bool set_section(Locale *loc, S setter, G getter, T *section){
     T empty;

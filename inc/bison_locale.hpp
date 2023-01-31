@@ -541,7 +541,8 @@ namespace locale_parser {
     BACKWARD = 304,                // BACKWARD
     UNDEFINED = 305,               // UNDEFINED
     IGNORE = 306,                  // IGNORE
-    POSITION = 307                 // POSITION
+    POSITION = 307,                // POSITION
+    ELLIPSIS = 308                 // ELLIPSIS
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -558,7 +559,7 @@ namespace locale_parser {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 53, ///< Number of tokens.
+        YYNTOKENS = 54, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // "end of file"
         S_YYerror = 1,                           // error
@@ -613,38 +614,39 @@ namespace locale_parser {
         S_UNDEFINED = 50,                        // UNDEFINED
         S_IGNORE = 51,                           // IGNORE
         S_POSITION = 52,                         // POSITION
-        S_YYACCEPT = 53,                         // $accept
-        S_file = 54,                             // file
-        S_locale_file = 55,                      // locale_file
-        S_newlines = 56,                         // newlines
-        S_prelude = 57,                          // prelude
-        S_configs = 58,                          // configs
-        S_sections = 59,                         // sections
-        S_section_ctype = 60,                    // section_ctype
-        S_definitions_ctype = 61,                // definitions_ctype
-        S_field_ctype_pairs_value = 62,          // field_ctype_pairs_value
-        S_field_ctype_single_pair_value = 63,    // field_ctype_single_pair_value
-        S_section_collate = 64,                  // section_collate
-        S_collate_start = 65,                    // collate_start
-        S_order_operands = 66,                   // order_operands
-        S_order_operand = 67,                    // order_operand
-        S_definitions_collate = 68,              // definitions_collate
-        S_single_definition_collate = 69,        // single_definition_collate
-        S_collate_char_specifiers = 70,          // collate_char_specifiers
-        S_collate_char_specifier = 71,           // collate_char_specifier
-        S_section_monetary = 72,                 // section_monetary
-        S_definitions_monetary = 73,             // definitions_monetary
-        S_section_numeric = 74,                  // section_numeric
-        S_definitions_numeric = 75,              // definitions_numeric
-        S_section_time = 76,                     // section_time
-        S_definitions_time = 77,                 // definitions_time
-        S_section_messages = 78,                 // section_messages
-        S_definitions_messages = 79,             // definitions_messages
-        S_character_value = 80,                  // character_value
-        S_field_chars_value = 81,                // field_chars_value
-        S_field_bytes_value = 82,                // field_bytes_value
-        S_field_strings_value = 83,              // field_strings_value
-        S_character_literals = 84                // character_literals
+        S_ELLIPSIS = 53,                         // ELLIPSIS
+        S_YYACCEPT = 54,                         // $accept
+        S_file = 55,                             // file
+        S_locale_file = 56,                      // locale_file
+        S_newlines = 57,                         // newlines
+        S_prelude = 58,                          // prelude
+        S_configs = 59,                          // configs
+        S_sections = 60,                         // sections
+        S_section_ctype = 61,                    // section_ctype
+        S_definitions_ctype = 62,                // definitions_ctype
+        S_field_ctype_pairs_value = 63,          // field_ctype_pairs_value
+        S_field_ctype_single_pair_value = 64,    // field_ctype_single_pair_value
+        S_section_collate = 65,                  // section_collate
+        S_collate_start = 66,                    // collate_start
+        S_order_operands = 67,                   // order_operands
+        S_order_operand = 68,                    // order_operand
+        S_definitions_collate = 69,              // definitions_collate
+        S_single_definition_collate = 70,        // single_definition_collate
+        S_collate_char_specifiers = 71,          // collate_char_specifiers
+        S_collate_char_specifier = 72,           // collate_char_specifier
+        S_section_monetary = 73,                 // section_monetary
+        S_definitions_monetary = 74,             // definitions_monetary
+        S_section_numeric = 75,                  // section_numeric
+        S_definitions_numeric = 76,              // definitions_numeric
+        S_section_time = 77,                     // section_time
+        S_definitions_time = 78,                 // definitions_time
+        S_section_messages = 79,                 // section_messages
+        S_definitions_messages = 80,             // definitions_messages
+        S_character_value = 81,                  // character_value
+        S_field_chars_value = 82,                // field_chars_value
+        S_field_bytes_value = 83,                // field_bytes_value
+        S_field_strings_value = 84,              // field_strings_value
+        S_character_literals = 85                // character_literals
       };
     };
 
@@ -1999,6 +2001,21 @@ switch (yykind)
         return symbol_type (token::POSITION);
       }
 #endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_ELLIPSIS ()
+      {
+        return symbol_type (token::ELLIPSIS);
+      }
+#else
+      static
+      symbol_type
+      make_ELLIPSIS ()
+      {
+        return symbol_type (token::ELLIPSIS);
+      }
+#endif
 
 
   private:
@@ -2352,10 +2369,10 @@ switch (yykind)
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
       35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
-      45,    46,    47,    48,    49,    50,    51,    52
+      45,    46,    47,    48,    49,    50,    51,    52,    53
     };
     // Last valid token kind.
-    const int code_max = 307;
+    const int code_max = 308;
 
     if (t <= 0)
       return symbol_kind::S_YYEOF;
@@ -2631,7 +2648,7 @@ switch (yykind)
 
 
 } // locale_parser
-#line 2635 "inc/bison_locale.hpp"
+#line 2652 "inc/bison_locale.hpp"
 
 
 
