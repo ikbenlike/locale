@@ -66,6 +66,9 @@
 %token IGNORE
 %token POSITION
 %token ELLIPSIS
+%token COLLATING_ELEMENT
+%token COLLATING_SYMBOL
+%token FROM
 
 %type <pair> field_ctype_single_pair_value
 %type <std::vector<pair>> field_ctype_pairs_value
@@ -250,6 +253,7 @@ field_ctype_single_pair_value
 section_collate
  : T_LC_COLLATE EOL COPY STRING EOL END T_LC_COLLATE newlines { $$ = new lc_collate; }
  | T_LC_COLLATE EOL collate_start definitions_collate ORDER_END EOL END T_LC_COLLATE newlines { $$ = new lc_collate; }
+ | T_LC_COLLATE EOL definitions_pre_collate collate_start definitions_collate ORDER_END EOL END T_LC_COLLATE newlines
  ;
 
 collate_start
@@ -266,6 +270,16 @@ order_operand
  : FORWARD
  | BACKWARD
  | POSITION
+ ;
+
+definitions_pre_collate
+ : definition_pre_collate
+ | definitions_pre_collate newlines definition_pre_collate
+ ;
+
+definition_pre_collate
+ : COLLATING_SYMBOL CHARACTER_NAME
+ | COLLATING_ELEMENT CHARACTER_NAME FROM STRING
  ;
 
 definitions_collate

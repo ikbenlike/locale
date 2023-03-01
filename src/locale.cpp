@@ -198,6 +198,18 @@ locale_parser::parser::symbol_type LocaleLexer::get_token(){
         else if(token == "backward"){
             return locale_parser::parser::make_BACKWARD();
         }
+        else if(token == "position"){
+            return locale_parser::parser::make_POSITION();
+        }
+        else if(token == "collating-element"){
+            return locale_parser::parser::make_COLLATING_ELEMENT();
+        }
+        else if(token == "collating-symbol"){
+            return locale_parser::parser::make_COLLATING_SYMBOL();
+        }
+        else if(token == "from"){
+            return locale_parser::parser::make_FROM();
+        }
         else if(token == "tolower" || token == "toupper"){
             return locale_parser::parser::make_FIELD_CTYPE_PAIRS(token);
         }
